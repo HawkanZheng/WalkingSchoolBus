@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="project.cmpt276.virdee.balraj.walkingschoolbus.mainMenu">
+    tools:context="project.cmpt276.androidui.walkingschoolbus.mainMenu">
 
 </android.support.constraint.ConstraintLayout>

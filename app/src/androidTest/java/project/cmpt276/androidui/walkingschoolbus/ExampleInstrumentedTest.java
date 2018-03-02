@@ -1,4 +1,4 @@
-package project.cmpt276.virdee.balraj.walkingschoolbus;
+package project.cmpt276.androidui.walkingschoolbus;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

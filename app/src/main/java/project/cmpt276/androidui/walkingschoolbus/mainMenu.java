@@ -1,4 +1,4 @@
-package project.cmpt276.virdee.balraj.walkingschoolbus;
+package project.cmpt276.androidui.walkingschoolbus;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
