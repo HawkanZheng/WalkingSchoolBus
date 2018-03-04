@@ -5,10 +5,8 @@ package project.cmpt276.model.walkingschoolbus;
  */
 
 public class GoogleMapsInterface {
-
+    private int radius;
     /*
-    *
-    * int radius
     *
     * getCurrentLocation
     *

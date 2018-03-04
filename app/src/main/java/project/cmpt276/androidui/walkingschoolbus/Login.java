@@ -20,15 +20,11 @@ public class Login extends AppCompatActivity {
     private void setUpSkipButton()
     {
         Button button = (Button) findViewById(R.id.skip);
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent intent = new Intent(Login.this, mainMenu.class);
-
+                Intent intent = new Intent(Login.this, MapsActivity.class);
                 startActivity(intent);
-
             }
         });
 
@@ -43,8 +39,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(Login.this, signUp.class);
-
+                Intent intent = new Intent(Login.this, MapsActivity.class);
                 startActivity(intent);
 
             }
