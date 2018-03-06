@@ -6,12 +6,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import project.cmpt276.model.walkingschoolbus.GoogleMapsInterface;
+
 public class Login extends AppCompatActivity {
+
+    public GoogleMapsInterface gmaps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        gmaps = GoogleMapsInterface.getInstance(this);
         setUpSkipButton();
         setUpSignUpButton();
     }
