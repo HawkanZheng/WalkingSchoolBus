@@ -15,9 +15,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_CYAN;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_GREEN;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+
+    // Pin Types
+    private final float GROUP_TYPE = HUE_RED;
+    private final float USER_TYPE = HUE_GREEN;
+    private final float START_TYPE = HUE_BLUE;
+
 
     private GoogleMap mMap;
     private static int markerId = 1;
@@ -35,7 +44,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         LatLng origin = new LatLng(0, 0);
-        mMap.addMarker(placeMarkerAtLocation(origin));
+        mMap.addMarker(placeMarkerAtLocation(origin, GROUP_TYPE, "Origin"));
 
         // TODO: pin groups to map
         /*
@@ -49,7 +58,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(final LatLng latLng) {
-                mMap.addMarker(new MarkerOptions().position(latLng).title("Custom Marker " + markerId++));
+                mMap.addMarker(placeMarkerAtLocation(latLng, USER_TYPE, "Custom Marker " + markerId++));
             }
         });
 
@@ -66,9 +75,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     // TODO: convert this to accept a group object which translates into a pin
-    public MarkerOptions placeMarkerAtLocation(LatLng location){
+    // string temporary, info should be extracted from group class
+    public MarkerOptions placeMarkerAtLocation(LatLng location, float type, String title){
         // TODO: pin should be customized to show related information
-        return new MarkerOptions().position(location).title("Origin").icon(BitmapDescriptorFactory.defaultMarker(HUE_CYAN));
+        return new MarkerOptions().position(location).title(title).icon(BitmapDescriptorFactory.defaultMarker(type));
     }
 
 
