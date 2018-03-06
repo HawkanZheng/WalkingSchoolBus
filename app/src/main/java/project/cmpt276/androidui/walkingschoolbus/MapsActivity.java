@@ -1,5 +1,6 @@
 package project.cmpt276.androidui.walkingschoolbus;
 
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
@@ -8,9 +9,13 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_CYAN;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -30,7 +35,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         LatLng origin = new LatLng(0, 0);
-        mMap.addMarker(new MarkerOptions().position(origin).title("Origin"));
+        mMap.addMarker(placeMarkerAtLocation(origin));
         //Place Marker when long pressing on map.
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
@@ -40,6 +45,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         //Allow something to happen when a marker is clicked.
+        // TODO: show path from start location to end location on pin clicked
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -48,6 +54,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return false;
             }
         });
+    }
+
+    // TODO: convert this to accept a group object which translates into a pin
+    public MarkerOptions placeMarkerAtLocation(LatLng location){
+        // TODO: pin should be customized to show related information
+        return new MarkerOptions().position(location).title("Origin").icon(BitmapDescriptorFactory.defaultMarker(HUE_CYAN));
     }
 
 }
