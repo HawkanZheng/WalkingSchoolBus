@@ -7,8 +7,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
-import android.widget.Toast;
-
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
@@ -17,9 +15,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 /**
  * Created by Jerry on 2018-03-02.
  */
-import android.location.Location;
 
-import com.google.android.gms.maps.model.LatLng;
 
 public class GoogleMapsInterface {
     private int radius;
@@ -29,6 +25,14 @@ public class GoogleMapsInterface {
 
     private static GoogleMapsInterface mapsInterface;
 
+
+
+    private GoogleMapsInterface(Context c){
+        context = c;
+        locationService = LocationServices.getFusedLocationProviderClient(c);
+        initializeDeviceLocation();
+    }
+
     public static GoogleMapsInterface getInstance(Context c){
         if(mapsInterface == null){
             mapsInterface = new GoogleMapsInterface(c);
@@ -36,10 +40,9 @@ public class GoogleMapsInterface {
         return mapsInterface;
     }
 
-    private GoogleMapsInterface(Context c){
-        context = c;
-        locationService = LocationServices.getFusedLocationProviderClient(c);
-        initializeDeviceLocation();
+
+    public LatLng getDeviceLocation(){
+        return deviceLocation;
     }
 
     public int getRadius() {
@@ -54,7 +57,6 @@ public class GoogleMapsInterface {
             this.radius = 100;
         }
     }
-
     // Computes if a location is within the radius of the person's current location
     public boolean isLocationInRadius(LatLng currentLocation, LatLng groupMeetLocation){
         // Needed to store the computed value
@@ -68,6 +70,7 @@ public class GoogleMapsInterface {
 
     }
 
+    //Checks for consent by the user to use their locational data.
     private void checkPermission(){
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -76,6 +79,7 @@ public class GoogleMapsInterface {
         }
     }
 
+    //Calculate user's location
     private void initializeDeviceLocation() {
         checkPermission();
         locationService.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
@@ -85,9 +89,6 @@ public class GoogleMapsInterface {
                 deviceLocation = new LatLng(lat, lng);
             }
         });
-    }
-    public LatLng getDeviceLocation(){
-       return deviceLocation;
     }
 
     /*

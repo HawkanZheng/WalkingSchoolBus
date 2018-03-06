@@ -61,6 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         */
 
+        //Moves the camera to your location and pins it.
         LatLng yourLoc = gMapsInterface.getDeviceLocation();
         mMap.addMarker(new MarkerOptions().position(yourLoc).title("Origin"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(yourLoc,15.0f));
