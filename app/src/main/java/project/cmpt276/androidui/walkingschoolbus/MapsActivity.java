@@ -36,6 +36,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         LatLng origin = new LatLng(0, 0);
         mMap.addMarker(placeMarkerAtLocation(origin));
+
+        // TODO: pin groups to map
+        /*
+            server call to get all groups
+            for group in groups:
+                if group is in current location radius - > pin to map
+
+        */
+
         //Place Marker when long pressing on map.
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
@@ -61,6 +70,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // TODO: pin should be customized to show related information
         return new MarkerOptions().position(location).title("Origin").icon(BitmapDescriptorFactory.defaultMarker(HUE_CYAN));
     }
+
 
 }
 
