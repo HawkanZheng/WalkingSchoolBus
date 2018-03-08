@@ -6,12 +6,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import project.cmpt276.model.walkingschoolbus.GoogleMapsInterface;
+
 public class Login extends AppCompatActivity {
+
+    public GoogleMapsInterface gmaps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        gmaps = GoogleMapsInterface.getInstance(this);
         setUpSkipButton();
         setUpSignUpButton();
     }
@@ -20,15 +25,11 @@ public class Login extends AppCompatActivity {
     private void setUpSkipButton()
     {
         Button button = (Button) findViewById(R.id.skip);
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent intent = new Intent(Login.this, mainMenu.class);
-
+                Intent intent = new Intent(Login.this, MapsActivity.class);
                 startActivity(intent);
-
             }
         });
 
@@ -43,8 +44,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(Login.this, signUp.class);
-
+                Intent intent = new Intent(Login.this, MapsActivity.class);
                 startActivity(intent);
 
             }
