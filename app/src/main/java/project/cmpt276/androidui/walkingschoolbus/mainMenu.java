@@ -1,5 +1,7 @@
 package project.cmpt276.androidui.walkingschoolbus;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,7 +30,7 @@ public class mainMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), null);
+        proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), getIntent().getStringExtra("Token"));
 
 
         setupMonitorUserButton();
@@ -62,4 +64,11 @@ public class mainMenu extends AppCompatActivity {
         TextView view = findViewById(R.id.displayUserView);
         view.setText(user.toString());
     }
+
+    public static Intent makeIntent(Context context, String token) {
+        Intent intent = new Intent(context, mainMenu.class);
+        intent.putExtra("Token", token);
+        return intent;
+    }
 }
+

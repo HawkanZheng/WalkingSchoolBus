@@ -85,10 +85,7 @@ public class Login extends AppCompatActivity {
 
 
 
-            Intent intent = new Intent(Login.this, mainMenu.class);
-            //intent.putExtra("token",token);
 
-            startActivity(intent);
 
 
         });
@@ -98,6 +95,8 @@ public class Login extends AppCompatActivity {
         // Replace the current proxy with one that uses the token!
         Log.w(TAG, "   --> NOW HAVE TOKEN: " + token);
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), token);
+        Intent intent = mainMenu.makeIntent(Login.this, token);
+        startActivity(intent);
     }
 
     private void onReceiveError(Error error){
