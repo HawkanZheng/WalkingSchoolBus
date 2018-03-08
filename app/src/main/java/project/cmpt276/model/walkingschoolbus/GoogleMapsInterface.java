@@ -12,6 +12,15 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
+
 /**
  * Created by Jerry on 2018-03-02.
  */
@@ -90,6 +99,66 @@ public class GoogleMapsInterface {
             }
         });
     }
+
+    // Constructs google url to create a path
+    public String getDirectionsUrl(LatLng origin, LatLng dest){
+
+        // Construct the URL request
+        String originUrl = "origin=" + origin.latitude + "," + origin.longitude;
+        String destUrl = "destination=" + dest.latitude + "," + dest.longitude;
+
+        // -- Options Params -- //
+        // Mode of transportation
+        String mode = "mode=walking";
+
+        String params = originUrl + "&" + destUrl + "&" + mode;
+
+        // TODO: Move API key
+        String constructedURL = "https://maps.googleapis.com/maps/api/directions/json?" + params + "&key=AIzaSyA6LfimFEM754npAhMt6A_QG4gpeHXlrdg";
+
+        return constructedURL;
+    }
+
+    // Download JSON data from google api
+    public String downloadUrl(String strUrl) throws IOException {
+        String data = "";
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
+        try {
+            URL url = new URL(strUrl);
+
+            // Creating an http connection to communicate with url
+            urlConnection = (HttpURLConnection) url.openConnection();
+
+            // Connecting to url
+            urlConnection.connect();
+
+            // Reading data from url
+            iStream = urlConnection.getInputStream();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+
+            StringBuffer sb = new StringBuffer();
+
+            String line = "";
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+            data = sb.toString();
+            Log.d("downloadUrl", data.toString());
+            br.close();
+
+        } catch (Exception e) {
+            Log.d("Exception", e.toString());
+        } finally {
+            iStream.close();
+            urlConnection.disconnect();
+        }
+        return data;
+    }
+
+
 
     /*
     *
