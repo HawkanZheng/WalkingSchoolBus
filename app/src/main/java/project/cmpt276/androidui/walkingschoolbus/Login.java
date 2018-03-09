@@ -28,7 +28,7 @@ public class Login extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Login.this, MapsActivity.class);
+                Intent intent = new Intent(Login.this, mainMenu.class);
                 startActivity(intent);
             }
         });
@@ -38,13 +38,13 @@ public class Login extends AppCompatActivity {
     private void setUpSignUpButton()
     {
 
-        Button button = (Button) findViewById(R.id.skip);
+        Button button = (Button) findViewById(R.id.createUser);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(Login.this, MapsActivity.class);
+                Intent intent = new Intent(Login.this, signUp.class);
                 startActivity(intent);
 
             }
