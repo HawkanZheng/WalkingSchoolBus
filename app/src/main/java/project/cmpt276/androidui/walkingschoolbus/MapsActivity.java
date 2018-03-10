@@ -1,17 +1,28 @@
 package project.cmpt276.androidui.walkingschoolbus;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -31,7 +42,7 @@ import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_GREEN;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,ActivityCompat.OnRequestPermissionsResultCallback{
 
     // Pin Types
     private final float GROUP_TYPE = HUE_RED;
@@ -41,10 +52,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     // Waypoints for path
     List<Polyline> polylines = new ArrayList<Polyline>();
 
-
+    //Un-instantiated Objects
     private GoogleMap mMap;
-    private static int markerId = 1;
     private GoogleMapsInterface gMapsInterface;
+    private FusedLocationProviderClient locationService;
+    private LatLng deviceLocation;
+    private LocationRequest locationRequest;
+    private LocationCallback locationCallback;
+    private LocationSettingsRequest locationSettings;
+    private Circle singleCircle;
+
+    //Variables in use
+    private static final int LOCATION_PERMISSION_REQUESTCODE = 076;
+    private final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
+    private static int markerId = 1;
+    private static final long LOCATION_UPDATE_RATE_IN_MS = 10000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Map stuffs
@@ -53,21 +75,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        locationService = LocationServices.getFusedLocationProviderClient(this);
         gMapsInterface =  GoogleMapsInterface.getInstance(this);
+        createLocationRequest();
+        createLocationCallback();
+        createLocationSettings();
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         LatLng origin = new LatLng(0, 0);
-        mMap.addMarker(placeMarkerAtLocation(origin, GROUP_TYPE, "Origin"));
+        //mMap.addMarker(placeMarkerAtLocation(origin, GROUP_TYPE, "Origin"));
 
+        // TODO: pin groups to map
+        /*
+            server call to get all groups
+            for group in groups:
+                if group is in current location radius - > pin to map
 
+        */
         //Moves the camera to your location and pins it.
-        LatLng yourLoc = gMapsInterface.getDeviceLocation();
-        mMap.addMarker(new MarkerOptions().position(yourLoc).title("Origin"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(yourLoc,15.0f));
-
+        addUserBlip();
         // TODO: pin groups to map
         /*
             server call to get all groups
@@ -93,7 +122,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 clearLines();
                 // Clicking a Marker will display the coordinates of the marker.
-                String URL = gMapsInterface.getDirectionsUrl(gMapsInterface.getDeviceLocation(),marker.getPosition());
+                String URL = gMapsInterface.getDirectionsUrl(deviceLocation,marker.getPosition());
                 DownloadDataFromUrl DownloadDataFromUrl = new DownloadDataFromUrl();
 
                 DownloadDataFromUrl.execute(URL);
@@ -102,6 +131,95 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case LOCATION_PERMISSION_REQUESTCODE: {
+                if (grantResults.length == 1 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    addUserBlip();
+                } else {
+                    ActivityCompat.requestPermissions(this,perms ,LOCATION_PERMISSION_REQUESTCODE);
+                    Toast.makeText(this, "Please enable device location", Toast.LENGTH_LONG);
+                }
+                return;
+            }
+        }
+    }
+
+    private void addUserBlip() {
+        if (ActivityCompat.checkSelfPermission(this, perms[0]) == PackageManager.PERMISSION_GRANTED) {
+            //This sets up a user location blip.
+            mMap.setMyLocationEnabled(true);
+        } else {
+            //Prompt user for access to their device's location.
+            ActivityCompat.requestPermissions(this, perms, LOCATION_PERMISSION_REQUESTCODE);
+        }
+    }
+
+    //This places a marker at user's last known location... Maybe implement the panic button to drop a last known location as well?
+    private void placeLastLocationMarker(Location location){
+        deviceLocation = gMapsInterface.calculateDeviceLocation(location);
+        Toast.makeText(MapsActivity.this,"Adding marker at " + deviceLocation.latitude + ", " + deviceLocation.longitude, Toast.LENGTH_LONG).show();
+        mMap.addMarker(new MarkerOptions().position(deviceLocation).title("Your location"));
+    }
+
+    /**
+     * createLocationRequest, createLocationCallback, createLocationSettings, startLocationUpdates and onResume follows the Android Training Guide.
+     * https://developer.android.com/training/location/receive-location-updates.html
+     **/
+
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        startLocationUpdates();
+    }
+    
+    //Initialize the locationRequest object.
+    private void createLocationRequest(){
+        locationRequest = new LocationRequest()
+                //High accuracy may be power consuming according to the API
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(LOCATION_UPDATE_RATE_IN_MS);
+    }
+
+    //Create the listener to listen to locational updates and update the map accordingly.
+    private void createLocationCallback(){
+        locationCallback = new LocationCallback(){
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+                Location lastLocation = locationResult.getLastLocation();
+                deviceLocation = gMapsInterface.calculateDeviceLocation(lastLocation);
+                if(singleCircle == null){
+                    //If there is no circle, make one.
+                    singleCircle = gMapsInterface.generateRadius(mMap, deviceLocation,Color.RED);
+                } else{
+                    //otherwise, recenter the circle.
+                    singleCircle.setCenter(deviceLocation);
+                }
+            }
+        };
+    }
+
+    //Create the location request settings
+    private void createLocationSettings() {
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(locationRequest);
+        locationSettings = builder.build();
+    }
+
+    //Begin listening for updates.
+    private void startLocationUpdates(){
+        if (ActivityCompat.checkSelfPermission(this, perms[0]) == PackageManager.PERMISSION_GRANTED) {
+            locationService.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
+        }else {
+            //Prompt user for access to their device's location.
+            ActivityCompat.requestPermissions(this, perms, LOCATION_PERMISSION_REQUESTCODE);
+        }
     }
 
     // TODO: convert this to accept a group object which translates into a pin
@@ -119,7 +237,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         polylines.clear();
     }
-
 
 
     // -- Classes needed to map routes asynchronously -- //

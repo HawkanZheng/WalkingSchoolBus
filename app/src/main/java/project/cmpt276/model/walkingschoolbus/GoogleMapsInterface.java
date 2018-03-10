@@ -1,16 +1,15 @@
 package project.cmpt276.model.walkingschoolbus;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,27 +18,22 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import javax.net.ssl.HttpsURLConnection;
-
 /**
  * Created by Jerry on 2018-03-02.
  */
 
 
 public class GoogleMapsInterface {
-    private int radius;
     private Context context;
     private FusedLocationProviderClient locationService;
-    private LatLng deviceLocation;
-
+    private int radius = 100;
     private static GoogleMapsInterface mapsInterface;
-
-
+    private static final float CIRCLE_THICKNESS = 2.0f;
+    private static Circle userProximity;
 
     private GoogleMapsInterface(Context c){
         context = c;
         locationService = LocationServices.getFusedLocationProviderClient(c);
-        initializeDeviceLocation();
     }
 
     public static GoogleMapsInterface getInstance(Context c){
@@ -47,11 +41,6 @@ public class GoogleMapsInterface {
             mapsInterface = new GoogleMapsInterface(c);
         }
         return mapsInterface;
-    }
-
-
-    public LatLng getDeviceLocation(){
-        return deviceLocation;
     }
 
     public int getRadius() {
@@ -66,6 +55,7 @@ public class GoogleMapsInterface {
             this.radius = 100;
         }
     }
+
     // Computes if a location is within the radius of the person's current location
     public boolean isLocationInRadius(LatLng currentLocation, LatLng groupMeetLocation){
         // Needed to store the computed value
@@ -79,25 +69,16 @@ public class GoogleMapsInterface {
 
     }
 
-    //Checks for consent by the user to use their locational data.
-    private void checkPermission(){
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions((Activity)context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},514);
-            Log.i("Interface_Maps", "Denied access to user's location");
-        }
+    public LatLng calculateDeviceLocation(Location l){
+        double lat = l.getLatitude();
+        double lng = l.getLongitude();
+        return new LatLng(lat, lng);
     }
 
-    //Calculate user's location
-    private void initializeDeviceLocation() {
-        checkPermission();
-        locationService.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override public void onSuccess(Location location) {
-                double lat = location.getLatitude();
-                double lng = location.getLongitude();
-                deviceLocation = new LatLng(lat, lng);
-            }
-        });
+    public Circle generateRadius(GoogleMap map, LatLng location,int outline){
+        CircleOptions options = new CircleOptions().center(location).strokeWidth(CIRCLE_THICKNESS).radius(this.radius).strokeColor(outline);
+        Circle userRadius = map.addCircle(options);
+        return userRadius;
     }
 
     // Constructs google url to create a path

@@ -16,7 +16,6 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        gmaps = GoogleMapsInterface.getInstance(this);
         setUpSkipButton();
         setUpSignUpButton();
     }
@@ -43,7 +42,6 @@ public class Login extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent intent = new Intent(Login.this, MapsActivity.class);
                 startActivity(intent);
 
