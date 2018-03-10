@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+
 import project.cmpt276.model.walkingschoolbus.GoogleMapsInterface;
 
 public class Login extends AppCompatActivity {
@@ -28,8 +29,10 @@ public class Login extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Login.this, mainMenu.class);
+
+                Intent intent = new Intent(Login.this, menu.class);
                 startActivity(intent);
+
             }
         });
 

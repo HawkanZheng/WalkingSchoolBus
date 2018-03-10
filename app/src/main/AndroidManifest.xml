@@ -11,7 +11,7 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality. 
     -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -21,9 +21,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Login">
+
             <!-- This makes it so the activity launched is the map activity -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -37,13 +39,13 @@
         You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
         <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyDkdFsxTGliprgz0eQCNbLDvRtbIfUa9hQ"/>
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDkdFsxTGliprgz0eQCNbLDvRtbIfUa9hQ" />
 
         <activity
-        android:name=".MapsActivity"
-        android:label="@string/app_name">
-        </activity>
+            android:name=".MapsActivity"
+            android:label="@string/app_name"></activity>
+        <activity android:name=".menu"></activity>
     </application>
 
 </manifest>
