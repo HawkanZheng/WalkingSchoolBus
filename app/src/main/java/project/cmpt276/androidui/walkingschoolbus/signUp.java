@@ -21,11 +21,13 @@ public class signUp extends AppCompatActivity {
     private WGServerProxy proxy;
     private static final String TAG = "Test";
     private long userId = 0;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        user = User.getInstance();
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), null);
         setupSignUpBtn();
     }
@@ -36,7 +38,6 @@ public class signUp extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Build new user
-                User user = new User();
                 EditText newName = findViewById(R.id.signUpName);
                 String name = newName.getText().toString();
                 EditText newEmail = findViewById(R.id.signUpEmail);

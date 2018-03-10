@@ -1,6 +1,7 @@
 package project.cmpt276.server.walkingschoolbus;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -11,6 +12,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
+import project.cmpt276.androidui.walkingschoolbus.Login;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -55,9 +57,9 @@ public class ProxyBuilder {
         receivedTokenCallback = callback;
     }
 
-    private  static SimpleCallback<Error> receivedErrorCallback;
+    private  static SimpleCallback<String> receivedErrorCallback;
 
-    public static void setOnErrorCallback(SimpleCallback<Error> callback){
+    public static void setOnErrorCallback(SimpleCallback<String> callback){
         receivedErrorCallback = callback;
 
     }
@@ -169,8 +171,14 @@ public class ProxyBuilder {
             private void showFailure(String message) {
                 Log.e("ProxyBuilder", message);
                 if (context != null) {
+                    //receivedTokenCallback.callback(null);
                     Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+
                 }
+                //Intent intent = Login.makeIntent(context);
+                //startActivity(intent);
+
+
             }
         });
     }

@@ -16,6 +16,27 @@ public class User {
     private List<User> monitoredByUsers = new ArrayList<>();
     private List<User> monitorsUsers = new ArrayList<>();
     private List<Void> walkingGroups = new ArrayList<>();   // <-- TO BE IMPLEMENTED
+    private List<Group> memberOfGroups = new ArrayList<>();
+    private List<Group> leadsGroups = new ArrayList<>();
+    /*
+    Singleton Support
+     */
+    private static User instance;
+    private User(){
+        //Private to prevent anyone else from instantiating
+    }
+    public static User getInstance(){
+        if (instance == null){
+            instance = new User();
+        }
+
+        return instance;
+
+    }
+
+    public static void setUser(User user){
+        instance = user;
+    }
 
     private String href;
 
@@ -81,6 +102,22 @@ public class User {
 
     public void setHref(String href) {
         this.href = href;
+    }
+
+    public List<Group> getMemberOfGroups() {
+        return memberOfGroups;
+    }
+
+    public void setMemberOfGroups(List<Group> memberOfGroups) {
+        this.memberOfGroups = memberOfGroups;
+    }
+
+    public List<Group> getLeadsGroups() {
+        return leadsGroups;
+    }
+
+    public void setLeadsGroups(List<Group> leadsGroups) {
+        this.leadsGroups = leadsGroups;
     }
 
     @Override
