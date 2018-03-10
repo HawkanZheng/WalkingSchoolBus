@@ -1,6 +1,8 @@
 package project.cmpt276.androidui.walkingschoolbus;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -31,7 +33,9 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -44,6 +48,12 @@ import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,ActivityCompat.OnRequestPermissionsResultCallback{
 
+    //TODO: Interface with group class
+    // Server called data
+    // group groupData[];
+    // group groupInRadius[];
+
+
     // Pin Types
     private final float GROUP_TYPE = HUE_RED;
     private final float USER_TYPE = HUE_GREEN;
@@ -51,6 +61,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     // Waypoints for path
     List<Polyline> polylines = new ArrayList<Polyline>();
+    private List<Double> latsWaypoints;
+    private List<Double> lngsWaypoints;
 
     //Un-instantiated Objects
     private GoogleMap mMap;
@@ -67,6 +79,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
     private static int markerId = 1;
     private static final long LOCATION_UPDATE_RATE_IN_MS = 10000;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Map stuffs
@@ -88,20 +102,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng origin = new LatLng(0, 0);
         //mMap.addMarker(placeMarkerAtLocation(origin, GROUP_TYPE, "Origin"));
 
-        // TODO: pin groups to map
-        /*
-            server call to get all groups
-            for group in groups:
-                if group is in current location radius - > pin to map
-
-        */
         //Moves the camera to your location and pins it.
         addUserBlip();
-        // TODO: pin groups to map
+        // TODO: pin groups to map // extract this to a function // This is pseudo code
         /*
-            server call to get all groups
-            for group in groups:
-                if group is in current location radius - > pin to map
+            groupData = server call to get all groups
+            for(group grp : groupData):
+                if(isLocationInRadius(LatLng currentLocation, LatLng grp)){
+                    groupInRadius.add(grp)
+                    Marker marker = nMap.addMarker(...(grp.LatLng, Colour, Message))
+                    marker.setTag(grp)
+                }
 
         */
 
@@ -121,6 +132,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public boolean onMarkerClick(Marker marker) {
 
                 clearLines();
+
+                //TODO: click on a marker in the radius and show its path // This is pseudo code
+                /*
+                    group grp = marker.getTag()
+                    mapSelectedGroupPath mapSelectedGroupPath = new mapSelectedGroupPath();
+                    mapSelectedGroupPath.execute(grp.LIST_OF_LatLng)
+
+                */
                 // Clicking a Marker will display the coordinates of the marker.
                 String URL = gMapsInterface.getDirectionsUrl(deviceLocation,marker.getPosition());
                 DownloadDataFromUrl DownloadDataFromUrl = new DownloadDataFromUrl();
@@ -177,7 +196,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onResume();
         startLocationUpdates();
     }
-    
+
     //Initialize the locationRequest object.
     private void createLocationRequest(){
         locationRequest = new LocationRequest()
@@ -239,10 +258,45 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+
+    // Created draw a path via waypoints
+    private abstract class mapSelectedGroupPath extends AsyncTask<LatLng, Void, ArrayList<LatLng>>{
+        @Override
+        protected ArrayList<LatLng> doInBackground(LatLng... waypoints){
+            ArrayList<LatLng> mapableWaypoints = new ArrayList<LatLng>(Arrays.asList(waypoints[0]));
+            return mapableWaypoints;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<LatLng> waypointsToBeMapped){
+            PolylineOptions lineOptions = null;
+
+            for(int i=0; i<waypointsToBeMapped.size(); i++){
+                lineOptions = new PolylineOptions();
+
+                lineOptions.addAll(waypointsToBeMapped);
+                lineOptions.width(10);
+                lineOptions.color(Color.RED);
+
+                // Drawing polyline in the Google Map for the i-th route
+                if(lineOptions != null) {
+                    polylines.add(mMap.addPolyline(lineOptions));
+                }
+                else{
+                    Log.i("OnPostExecute","Could not draw");
+                }
+            }
+
+        }
+    }
+
+
     // -- Classes needed to map routes asynchronously -- //
     // -- Code courtesy of  Anupam Chugh -- //
     // -- Full write up found here: https://www.journaldev.com/13373/android-google-map-drawing-route-two-points -- //
 
+
+    // -- Class used to create new groups -- //
     // Fetches data from url passed
     private class DownloadDataFromUrl extends AsyncTask<String, Void, String> {
         @Override
@@ -314,16 +368,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 // Fetching i-th route
                 List<HashMap<String, String>> path = result.get(i);
 
+                // Initialize the lat/lng arrays to store waypoints
+                latsWaypoints = new ArrayList<Double>();
+                lngsWaypoints = new ArrayList<Double>();
+
                 // Fetching all the points in i-th route
                 for (int j = 0; j < path.size(); j++) {
                     HashMap<String, String> point = path.get(j);
 
                     double lat = Double.parseDouble(point.get("lat"));
                     double lng = Double.parseDouble(point.get("lng"));
+
+                    createLatLngList(lat,lng);
                     LatLng position = new LatLng(lat, lng);
 
                     points.add(position);
                 }
+                Log.i("Lats", latsWaypoints.toString());
+                Log.i("Lngs", lngsWaypoints.toString());
 
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
@@ -337,14 +399,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // Drawing polyline in the Google Map for the i-th route
             if(lineOptions != null) {
                 polylines.add(mMap.addPolyline(lineOptions));
-
-
             }
             else {
                 Log.d("onPostExecute","without Polylines drawn");
             }
         }
     }
+
+    private void createLatLngList(double lat, double lng){
+        latsWaypoints.add(lat);
+        lngsWaypoints.add(lng);
+    }
+
+    // TODO: Creates a new group
+    private void pushNewGroupToServer(){
+        // from Group Class
+        // creatNewGroup(latsWaypoints, lngsWaypoints);
+    }
+
+    // Makes an Intent for other activities to call
+    // launches Maps activity
+    public static Intent makeIntentForMapsActivity(Context context){
+        return new Intent(context, MapsActivity.class);
+    }
+
 
 }
 
