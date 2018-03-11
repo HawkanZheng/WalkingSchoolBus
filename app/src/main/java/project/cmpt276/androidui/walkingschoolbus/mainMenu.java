@@ -53,25 +53,25 @@ public class mainMenu extends AppCompatActivity {
 
     }
 
-//    private void setupTestGroupButton() {
-//        Button button = findViewById(R.id.groupTestBtn);
-//
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //createGroup();
-//                //getGroup(Long.valueOf(21));
-//                //
-////                deleteGroup();
-//               getGroups();
-//                //getGroupMembers();
-//                //addNewMember();
-//                //updateGroup(Long.valueOf(18));
-//                //deleteGroupMember();
-//
-//            }
-//        });
-//    }
+    private void setupTestGroupButton() {
+        Button button = findViewById(R.id.groupTestBtn);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //createGroup();
+                //getGroup(Long.valueOf(21));
+                //
+//                deleteGroup();
+               getGroups();
+                //getGroupMembers();
+                //addNewMember();
+                //updateGroup(Long.valueOf(18));
+                //deleteGroupMember();
+
+            }
+        });
+    }
 
     private void deleteGroupMember() {
         Call<Void> caller = proxy.deleteGroupMember(Long.valueOf(19), user.getId());
@@ -155,23 +155,23 @@ public class mainMenu extends AppCompatActivity {
 //        list.setAdapter(adapter);
 //    }
 
-//    private void setupTestButton() {
-//        Button button = findViewById(R.id.monitorUserBtn);
-//        button.setOnClickListener(view -> {
-//
-//            Call<List<User>> caller = proxy.getUsers();
-//            ProxyBuilder.callProxy(mainMenu.this,caller, returnedUsers -> response(returnedUsers));
-//
-//            //addUserToMonitor("anothertest@gmail.com");
-//            stopMonitoringUser("test@sfu.ca");
-//
-//
-//
-//
-//
-//        });
-//
-//    }
+    private void setupTestButton() {
+        Button button = findViewById(R.id.monitorUserBtn);
+        button.setOnClickListener(view -> {
+
+            Call<List<User>> caller = proxy.getUsers();
+            ProxyBuilder.callProxy(mainMenu.this,caller, returnedUsers -> response(returnedUsers));
+
+            //addUserToMonitor("anothertest@gmail.com");
+            stopMonitoringUser("test@sfu.ca");
+
+
+
+
+
+        });
+
+    }
 
     private void stopMonitoringUser(String email) {
         Call<User> userCaller = proxy.getUserByEmail(email);

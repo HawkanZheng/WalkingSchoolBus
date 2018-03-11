@@ -5,8 +5,9 @@
       <module fileurl="file://C:\Users\Jerry\AndroidStudioProjects\walkinggroupapp\WalkingSchoolBus.iml" filepath="C:\Users\Jerry\AndroidStudioProjects\walkinggroupapp\WalkingSchoolBus.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://C:\Users\Jerry\AndroidStudioProjects\walkinggroupapp\app\app.iml" filepath="C:\Users\Jerry\AndroidStudioProjects\walkinggroupapp\app\app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/walkinggroupapp.iml" filepath="$PROJECT_DIR$/.idea/walkinggroupapp.iml" />
       <module fileurl="file://E:\AndroidStudioProjects\walkinggroupapp\walkinggroupapp.iml" filepath="E:\AndroidStudioProjects\walkinggroupapp\walkinggroupapp.iml" />
+      <module fileurl="file://E:\AndroidStudioProjects\walkinggroupapp3\.idea\walkinggroupapp.iml" filepath="E:\AndroidStudioProjects\walkinggroupapp3\.idea\walkinggroupapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/walkinggroupapp3.iml" filepath="$PROJECT_DIR$/walkinggroupapp3.iml" />
     </modules>
   </component>
 </project>
