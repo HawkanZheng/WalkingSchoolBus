@@ -17,14 +17,20 @@ import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
 import retrofit2.Call;
 
+import project.cmpt276.model.walkingschoolbus.GoogleMapsInterface;
+
 public class Login extends AppCompatActivity {
     private WGServerProxy proxy;
     private static final String TAG = "Test";
     private User user;
+
+    public GoogleMapsInterface gmaps;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        gmaps = GoogleMapsInterface.getInstance(this);
 
         user = User.getInstance();
 
@@ -35,20 +41,20 @@ public class Login extends AppCompatActivity {
         setUpNewUserButton();
     }
 
-    private void setUpNewUserButton() {
-        Button button = findViewById(R.id.newUserBtn);
 
+    private void setUpSkipButton()
+    {
+        Button button = (Button) findViewById(R.id.skip);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = signUp.makeIntent(Login.this);
+                Intent intent = new Intent(Login.this, MapsActivity.class);
                 startActivity(intent);
             }
         });
     }
 
-//
-    private void setUpSkipButton()
+    private void setUpSignUpButton()
     {
         Button button = (Button) findViewById(R.id.skip);
 
@@ -56,8 +62,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(Login.this, mainMenu.class);
-
+                Intent intent = new Intent(Login.this, MapsActivity.class);
                 startActivity(intent);
 
             }
