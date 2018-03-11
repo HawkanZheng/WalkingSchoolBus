@@ -30,9 +30,9 @@ public class Login extends AppCompatActivity {
 
         //Build server proxy
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), null);
-        setUpSkipButton();
-        setUpLoginButton();
-        setUpNewUserButton();
+//        setUpSkipButton();
+//        setUpLoginButton();
+//        setUpNewUserButton();
     }
 
     private void setUpNewUserButton() {
@@ -47,55 +47,55 @@ public class Login extends AppCompatActivity {
         });
     }
 
+//
+//    private void setUpSkipButton()
+//    {
+//        Button button = (Button) findViewById(R.id.skip);
+//
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                Intent intent = new Intent(Login.this, mainMenu.class);
+//
+//                startActivity(intent);
+//
+//            }
+//        });
+//
+//    }
 
-    private void setUpSkipButton()
-    {
-        Button button = (Button) findViewById(R.id.skip);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(Login.this, mainMenu.class);
-
-                startActivity(intent);
-
-            }
-        });
-
-    }
-
-    private void setUpLoginButton()
-    {
-
-        Button button = (Button) findViewById(R.id.loginBtn);
-
-        button.setOnClickListener((View view) -> {
-            EditText userName = findViewById(R.id.userName);
-            String email = userName.getText().toString();
-
-            EditText password = findViewById(R.id.enterPassWord);
-            String pw = password.getText().toString();
-            //Set new user
-            user.setEmail(email);
-            user.setPassword(pw);
-
-            ProxyBuilder.setOnTokenReceiveCallback(this::onReceiveToken);
-
-            //ProxyBuilder.setOnErrorCallback(this::onReceiveError);
-
-            Call<Void> caller = proxy.login(user);
-            ProxyBuilder.callProxy(Login.this, caller, this::response);
-
-//            Intent intent = mainMenu.makeIntent(Login.this, newToken);
-//            startActivity(intent);
-
-
-
-
-
-        });
-    }
+//    private void setUpLoginButton()
+//    {
+//
+//        Button button = (Button) findViewById(R.id.loginBtn);
+//
+//        button.setOnClickListener((View view) -> {
+//            EditText userName = findViewById(R.id.userName);
+//            String email = userName.getText().toString();
+//
+//            EditText password = findViewById(R.id.enterPassWord);
+//            String pw = password.getText().toString();
+//            //Set new user
+//            user.setEmail(email);
+//            user.setPassword(pw);
+//
+//            ProxyBuilder.setOnTokenReceiveCallback(this::onReceiveToken);
+//
+//            //ProxyBuilder.setOnErrorCallback(this::onReceiveError);
+//
+//            Call<Void> caller = proxy.login(user);
+//            ProxyBuilder.callProxy(Login.this, caller, this::response);
+//
+////            Intent intent = mainMenu.makeIntent(Login.this, newToken);
+////            startActivity(intent);
+//
+//
+//
+//
+//
+//        });
+//    }
 
 //    @Override
 //    protected void onPause() {

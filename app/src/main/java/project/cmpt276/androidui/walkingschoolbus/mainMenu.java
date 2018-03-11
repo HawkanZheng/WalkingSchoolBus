@@ -48,30 +48,30 @@ public class mainMenu extends AppCompatActivity {
 
        groupList = GroupCollection.getInstance();
 
-        setupTestButton();
-        setupTestGroupButton();
+//        setupTestButton();
+//        setupTestGroupButton();
 
     }
 
-    private void setupTestGroupButton() {
-        Button button = findViewById(R.id.groupTestBtn);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //createGroup();
-                //getGroup(Long.valueOf(21));
-                //
-//                deleteGroup();
-               getGroups();
-                //getGroupMembers();
-                //addNewMember();
-                //updateGroup(Long.valueOf(18));
-                //deleteGroupMember();
-
-            }
-        });
-    }
+//    private void setupTestGroupButton() {
+//        Button button = findViewById(R.id.groupTestBtn);
+//
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //createGroup();
+//                //getGroup(Long.valueOf(21));
+//                //
+////                deleteGroup();
+//               getGroups();
+//                //getGroupMembers();
+//                //addNewMember();
+//                //updateGroup(Long.valueOf(18));
+//                //deleteGroupMember();
+//
+//            }
+//        });
+//    }
 
     private void deleteGroupMember() {
         Call<Void> caller = proxy.deleteGroupMember(Long.valueOf(19), user.getId());
@@ -119,7 +119,7 @@ public class mainMenu extends AppCompatActivity {
             groupList.addGroup(group);
 
         }
-        populateList();
+//        populateList();
 
     }
 
@@ -141,37 +141,37 @@ public class mainMenu extends AppCompatActivity {
     }
 
 
-    private void populateList() {
-        //Create the list
-        String[] groups = groupList.getGroupDetails();
-        //Build Adapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,           //Context for the activity
-                R.layout.user_list,      //Layout used
-                groups);               //Groups/Users displayed
+//    private void populateList() {
+//        //Create the list
+//        String[] groups = groupList.getGroupDetails();
+//        //Build Adapter
+//        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+//                this,           //Context for the activity
+//                R.layout.user_list,      //Layout used
+//                groups);               //Groups/Users displayed
+//
+//        //Configure the list view
+//        ListView list = findViewById(R.id.testListView);
+//        list.setAdapter(adapter);
+//    }
 
-        //Configure the list view
-        ListView list = findViewById(R.id.testListView);
-        list.setAdapter(adapter);
-    }
-
-    private void setupTestButton() {
-        Button button = findViewById(R.id.monitorUserBtn);
-        button.setOnClickListener(view -> {
-
-            Call<List<User>> caller = proxy.getUsers();
-            ProxyBuilder.callProxy(mainMenu.this,caller, returnedUsers -> response(returnedUsers));
-
-            //addUserToMonitor("anothertest@gmail.com");
-            stopMonitoringUser("test@sfu.ca");
-
-
-
-
-
-        });
-
-    }
+//    private void setupTestButton() {
+//        Button button = findViewById(R.id.monitorUserBtn);
+//        button.setOnClickListener(view -> {
+//
+//            Call<List<User>> caller = proxy.getUsers();
+//            ProxyBuilder.callProxy(mainMenu.this,caller, returnedUsers -> response(returnedUsers));
+//
+//            //addUserToMonitor("anothertest@gmail.com");
+//            stopMonitoringUser("test@sfu.ca");
+//
+//
+//
+//
+//
+//        });
+//
+//    }
 
     private void stopMonitoringUser(String email) {
         Call<User> userCaller = proxy.getUserByEmail(email);
