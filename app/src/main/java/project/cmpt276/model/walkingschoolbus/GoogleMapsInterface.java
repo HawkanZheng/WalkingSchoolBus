@@ -6,10 +6,14 @@ import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -74,11 +78,21 @@ public class GoogleMapsInterface {
         double lng = l.getLongitude();
         return new LatLng(lat, lng);
     }
-
+    
     public Circle generateRadius(GoogleMap map, LatLng location,int outline){
         CircleOptions options = new CircleOptions().center(location).strokeWidth(CIRCLE_THICKNESS).radius(this.radius).strokeColor(outline);
         Circle userRadius = map.addCircle(options);
         return userRadius;
+    }
+
+    //Generalized custom marker.
+    public MarkerOptions makeMarker(LatLng location, float type, String title){
+        return new MarkerOptions().position(location).icon(BitmapDescriptorFactory.defaultMarker(type)).title(title);
+    }
+
+    //Generalized camera settings.
+    public CameraUpdate cameraSettings(LatLng location, float zoomLevel){
+        return CameraUpdateFactory.newLatLngZoom(location,zoomLevel);
     }
 
     // Constructs google url to create a path

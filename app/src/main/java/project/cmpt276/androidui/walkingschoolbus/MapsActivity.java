@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -30,10 +31,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -55,11 +56,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     // Pin Types
+    //Pin Types
     private final float GROUP_TYPE = HUE_RED;
     private final float USER_TYPE = HUE_GREEN;
     private final float START_TYPE = HUE_BLUE;
-
-    // Waypoints for path
+    //Waypoints for path
     List<Polyline> polylines = new ArrayList<Polyline>();
     private List<Double> latsWaypoints;
     private List<Double> lngsWaypoints;
@@ -72,7 +73,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
     private LocationSettingsRequest locationSettings;
-    private Circle singleCircle;
+    private Circle userRadius;
 
     //Variables in use
     private static final int LOCATION_PERMISSION_REQUESTCODE = 076;
@@ -121,7 +122,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(final LatLng latLng) {
-                mMap.addMarker(placeMarkerAtLocation(latLng, USER_TYPE, "Custom Marker " + markerId++));
+                FragmentManager manager = getSupportFragmentManager();
+                CustomizeMarkerFragment markerShop = new CustomizeMarkerFragment();
+                markerShop.setMap(mMap,latLng);
+                markerShop.show(manager,"MesageDialog");
             }
         });
 
@@ -172,6 +176,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (ActivityCompat.checkSelfPermission(this, perms[0]) == PackageManager.PERMISSION_GRANTED) {
             //This sets up a user location blip.
             mMap.setMyLocationEnabled(true);
+            locationService.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    deviceLocation = gMapsInterface.calculateDeviceLocation(location);
+                    mMap.moveCamera(gMapsInterface.cameraSettings(deviceLocation,15.0f));
+                }
+            });
+
         } else {
             //Prompt user for access to their device's location.
             ActivityCompat.requestPermissions(this, perms, LOCATION_PERMISSION_REQUESTCODE);
@@ -213,12 +225,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 super.onLocationResult(locationResult);
                 Location lastLocation = locationResult.getLastLocation();
                 deviceLocation = gMapsInterface.calculateDeviceLocation(lastLocation);
-                if(singleCircle == null){
+                if(userRadius == null){
                     //If there is no circle, make one.
-                    singleCircle = gMapsInterface.generateRadius(mMap, deviceLocation,Color.RED);
+                    userRadius = gMapsInterface.generateRadius(mMap, deviceLocation,Color.RED);
                 } else{
                     //otherwise, recenter the circle.
-                    singleCircle.setCenter(deviceLocation);
+                    userRadius.setCenter(deviceLocation);
                 }
             }
         };
