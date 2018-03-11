@@ -15,6 +15,7 @@ import java.lang.reflect.Proxy;
 import java.util.List;
 
 import project.cmpt276.model.walkingschoolbus.Group;
+import project.cmpt276.model.walkingschoolbus.GroupCollection;
 import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
@@ -25,6 +26,7 @@ public class mainMenu extends AppCompatActivity {
     private static final String TAG = "Test";
 //    private long userId = 0;
     private User user;
+    private GroupCollection groupList;
 
 
 
@@ -41,7 +43,10 @@ public class mainMenu extends AppCompatActivity {
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), getIntent().getStringExtra("Token"));
 
         user = User.getInstance();
+
         Log.i(TAG, ""+user.toString());
+
+       groupList = GroupCollection.getInstance();
 
         setupTestButton();
         setupTestGroupButton();
@@ -58,10 +63,10 @@ public class mainMenu extends AppCompatActivity {
                 //getGroup(Long.valueOf(21));
                 //
 //                deleteGroup();
-//                getGroups();
+               getGroups();
                 //getGroupMembers();
-                addNewMember();
-                updateGroup(Long.valueOf(18));
+                //addNewMember();
+                //updateGroup(Long.valueOf(18));
                 //deleteGroupMember();
 
             }
@@ -107,13 +112,14 @@ public class mainMenu extends AppCompatActivity {
     }
 
     private void groupsResponse(List<Group> returnedGroups) {
-        String[] groups = new String[returnedGroups.size()];
+
         Log.w(TAG, "All Groups:");
-        for (int i = 0; i < returnedGroups.size(); i++ ) {
-            Log.w(TAG, "    Group: " + returnedGroups.get(i).toString());
-            groups[i] = returnedGroups.get(i).toString();
+        for (Group group : returnedGroups) {
+//            Log.w(TAG, "    Group: " + group.toString());
+            groupList.addGroup(group);
 
         }
+        populateList();
 
     }
 
@@ -135,19 +141,19 @@ public class mainMenu extends AppCompatActivity {
     }
 
 
-//    private void populateList(String[] users) {
-//        //Create the list of pot
-//
-//        //Build Adapter
-//        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-//                this,           //Context for the activity
-//                R.layout.user_list,      //Layout used
-//                users);               //Pots displayed
-//
-//        //Configure the list view
-//        ListView list = findViewById(R.id.testListView);
-//        list.setAdapter(adapter);
-//    }
+    private void populateList() {
+        //Create the list
+        String[] groups = groupList.getGroupDetails();
+        //Build Adapter
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,           //Context for the activity
+                R.layout.user_list,      //Layout used
+                groups);               //Groups/Users displayed
+
+        //Configure the list view
+        ListView list = findViewById(R.id.testListView);
+        list.setAdapter(adapter);
+    }
 
     private void setupTestButton() {
         Button button = findViewById(R.id.monitorUserBtn);
