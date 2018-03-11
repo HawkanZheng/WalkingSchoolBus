@@ -38,7 +38,7 @@ public class Login extends AppCompatActivity {
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), null);
         setUpSkipButton();
         setUpLoginButton();
-        setUpNewUserButton();
+        setUpSignUpButton();
     }
 
 

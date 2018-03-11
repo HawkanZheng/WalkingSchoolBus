@@ -35,6 +35,9 @@ public interface WGServerProxy {
     @GET("/users/byEmail")
     Call<User> getUserByEmail(@Query("email") String email);
 
+    @DELETE("/users/{id}")
+    Call<Void> deleteUser();
+
     /**
      * MORE GOES HERE:
      * - Monitoring

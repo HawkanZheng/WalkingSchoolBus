@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * Simple User class to store the data the server expects and returns.
- * (Incomplete: Needs support for monitoring and groups).
+
  */
 public class User {
     private Long id;

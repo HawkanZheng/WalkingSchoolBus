@@ -14,23 +14,6 @@ public class Group {
     private Long id;
     private String href;
     private String groupDescription;
-
-    public List<Double> getRouteLatArray() {
-        return routeLatArray;
-    }
-
-    public void addRouteLatArray(Double coordinate) {
-        this.routeLatArray.add(coordinate);
-    }
-
-    public List<Double> getRouteLngArray() {
-        return routeLngArray;
-    }
-
-    public void addRouteLngArray(Double coordinate) {
-        this.routeLngArray.add(coordinate);
-    }
-
     private List<Double> routeLatArray = new ArrayList<>();
     private List<Double> routeLngArray = new ArrayList<>();
     private User leader;
@@ -62,6 +45,29 @@ public class Group {
         this.memberUsers = memberUsers;
     }
 
+    public List<Double> getRouteLatArray() {
+        return routeLatArray;
+    }
+
+    public List<Double> getRouteLngArray() {
+        return routeLngArray;
+    }
+
+
+    public void setRouteLatArray(List<Double> routeLatArray) {
+        this.routeLatArray = routeLatArray;
+    }
+
+    public void setRouteLngArray(List<Double> routeLngArray) {
+        this.routeLngArray = routeLngArray;
+    }
+    public void addRouteLatArray(Double coordinate) {
+        this.routeLatArray.add(coordinate);
+    }
+
+    public void addRouteLngArray(Double coordinate) {
+        this.routeLngArray.add(coordinate);
+    }
 
 
 
