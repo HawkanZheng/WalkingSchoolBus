@@ -1,5 +1,7 @@
 package project.cmpt276.model.walkingschoolbus;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +17,7 @@ public class User {
 
     private List<User> monitoredByUsers = new ArrayList<>();
     private List<User> monitorsUsers = new ArrayList<>();
-    private List<Void> walkingGroups = new ArrayList<>();   // <-- TO BE IMPLEMENTED
+    private List<Group> walkingGroups = new ArrayList<>();   // <-- TO BE IMPLEMENTED
     private List<Group> memberOfGroups = new ArrayList<>();
     private List<Group> leadsGroups = new ArrayList<>();
     /*
@@ -36,6 +38,7 @@ public class User {
 
     public static void setUser(User user){
         instance = user;
+
     }
 
     private String href;
@@ -47,7 +50,7 @@ public class User {
     public void setId(Long id) {
         this.id = id;
     }
-
+    @JsonIgnore
     public String getName() {
         return name;
     }
@@ -63,7 +66,7 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-
+    
     public String getPassword() {
         return password;
     }
@@ -71,7 +74,7 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
+    @JsonIgnore
     public List<User> getMonitoredByUsers() {
         return monitoredByUsers;
     }
@@ -79,7 +82,7 @@ public class User {
     public void setMonitoredByUsers(List<User> monitoredByUsers) {
         this.monitoredByUsers = monitoredByUsers;
     }
-
+    @JsonIgnore
     public List<User> getMonitorsUsers() {
         return monitorsUsers;
     }
@@ -87,12 +90,12 @@ public class User {
     public void setMonitorsUsers(List<User> monitorsUsers) {
         this.monitorsUsers = monitorsUsers;
     }
-
-    public List<Void> getWalkingGroups() {
+    @JsonIgnore
+    public List<Group> getWalkingGroups() {
         return walkingGroups;
     }
 
-    public void setWalkingGroups(List<Void> walkingGroups) {
+    public void setWalkingGroups(List<Group> walkingGroups) {
         this.walkingGroups = walkingGroups;
     }
 
@@ -103,7 +106,7 @@ public class User {
     public void setHref(String href) {
         this.href = href;
     }
-
+    @JsonIgnore
     public List<Group> getMemberOfGroups() {
         return memberOfGroups;
     }
@@ -111,7 +114,7 @@ public class User {
     public void setMemberOfGroups(List<Group> memberOfGroups) {
         this.memberOfGroups = memberOfGroups;
     }
-
+    @JsonIgnore
     public List<Group> getLeadsGroups() {
         return leadsGroups;
     }

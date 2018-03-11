@@ -21,7 +21,6 @@ public class Login extends AppCompatActivity {
     private WGServerProxy proxy;
     private static final String TAG = "Test";
     private User user;
-    private String newToken;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,12 +115,12 @@ public class Login extends AppCompatActivity {
         // Replace the current proxy with one that uses the token!
         Log.w(TAG, "   --> NOW HAVE TOKEN: " + token);
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), token);
-        newToken = token;
+
 
         Call<User> caller = proxy.getUserByEmail(user.getEmail());
         ProxyBuilder.callProxy(Login.this, caller, returnedUser -> response(returnedUser));
 
-        Intent intent = mainMenu.makeIntent(Login.this, newToken);
+        Intent intent = mainMenu.makeIntent(Login.this, token);
         startActivity(intent);
 
 
@@ -142,8 +141,9 @@ public class Login extends AppCompatActivity {
 
     private void response(User returnedUser){
         User.setUser(returnedUser);
+        user = User.getInstance();
 
-        Log.w(TAG, "After Singleton test, server replied with User: " + returnedUser.toString());
+        Log.w(TAG, "After Singleton test, server replied with User: " + user.toString());
     }
 
     public static Intent makeIntent(Context context){
