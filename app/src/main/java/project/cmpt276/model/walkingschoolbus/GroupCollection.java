@@ -9,6 +9,7 @@ import java.util.List;
 
 public class GroupCollection {
 
+
     private List<Group> groups = new ArrayList<>();
 
     /*
@@ -52,6 +53,9 @@ public class GroupCollection {
             details[i] = group.toString();
         }
         return details;
+    }
+    public List<Group> getGroups() {
+        return groups;
     }
 
 }

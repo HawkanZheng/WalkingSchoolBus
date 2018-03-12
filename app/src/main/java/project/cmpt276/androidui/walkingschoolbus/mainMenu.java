@@ -46,7 +46,8 @@ public class mainMenu extends AppCompatActivity {
 
         Log.i(TAG, ""+user.toString());
 
-       groupList = GroupCollection.getInstance();
+        groupList = GroupCollection.getInstance();
+        getGroups();
 
 //        setupTestButton();
 //        setupTestGroupButton();
@@ -63,7 +64,7 @@ public class mainMenu extends AppCompatActivity {
                 //getGroup(Long.valueOf(21));
                 //
 //                deleteGroup();
-               getGroups();
+               //getGroups();
                 //getGroupMembers();
                 //addNewMember();
                 //updateGroup(Long.valueOf(18));
