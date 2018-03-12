@@ -6,10 +6,11 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
-         location permissions for the 'MyLocation' functionality. 
+         location permissions for the 'MyLocation' functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
@@ -39,6 +40,9 @@
         <meta-data
         android:name="com.google.android.geo.API_KEY"
         android:value="AIzaSyDkdFsxTGliprgz0eQCNbLDvRtbIfUa9hQ"/>
+        <activity
+            android:name=".mainMenu"
+        />
 
         <activity
         android:name=".MapsActivity"

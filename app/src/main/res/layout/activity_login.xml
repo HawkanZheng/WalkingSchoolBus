@@ -10,35 +10,55 @@
         android:id="@+id/skip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="44dp"
+        android:layout_marginEnd="16dp"
         android:text="skip login"
-        tools:layout_editor_absoluteX="245dp"
-        tools:layout_editor_absoluteY="419dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/newUserBtn" />
 
     <EditText
         android:id="@+id/userName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="39dp"
+        android:layout_marginTop="92dp"
         android:ems="10"
         android:hint="User Name"
         android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="39dp"
-        tools:layout_editor_absoluteY="92dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/enterPassWord"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
-        tools:layout_editor_absoluteX="39dp"
-        tools:layout_editor_absoluteY="160dp" />
+        app:layout_constraintStart_toStartOf="@+id/userName"
+        app:layout_constraintTop_toBottomOf="@+id/userName" />
 
     <Button
-        android:id="@+id/createUser"
+        android:id="@+id/loginBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign Up"
-        tools:layout_editor_absoluteX="39dp"
-        tools:layout_editor_absoluteY="419dp" />
+        android:layout_marginBottom="44dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="16dp"
+        android:text="Login"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/newUserBtn"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/newUserBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New User"
+        app:layout_constraintBaseline_toBaselineOf="@+id/skip"
+        app:layout_constraintEnd_toStartOf="@+id/skip"
+        app:layout_constraintStart_toEndOf="@+id/loginBtn" />
 </android.support.constraint.ConstraintLayout>
