@@ -7,7 +7,7 @@
     tools:context="project.cmpt276.androidui.walkingschoolbus.Login">
 
     <Button
-        android:id="@+id/skip"
+        android:id="@+id/loginBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="44dp"
@@ -60,7 +60,7 @@
         android:layout_marginStart="39dp"
         android:textColor="@android:color/holo_red_dark"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/skip"
+        app:layout_constraintEnd_toEndOf="@+id/loginBtn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userName" />
 </android.support.constraint.ConstraintLayout>

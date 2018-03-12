@@ -10,11 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import android.widget.EditText;
-import android.widget.TextView;
-
-import java.util.List;
-
 import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
@@ -54,7 +49,7 @@ public class Login extends AppCompatActivity {
 
     private void setUpSkipButton()
     {
-        Button button = (Button) findViewById(R.id.skip);
+        Button button = (Button) findViewById(R.id.loginBtn);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,7 +59,7 @@ public class Login extends AppCompatActivity {
                 if(!errorCheck())
                 {
                     //look for the user in the server and proceed accordingly
-                    Intent intent = new Intent(Login.this, menu.class);
+                    Intent intent = new Intent(Login.this, mainMenu.class);
                     startActivity(intent);
                 }
 
@@ -129,6 +124,8 @@ public class Login extends AppCompatActivity {
     {
         userName = getUserName.getText().toString();
         password = getPassword.getText().toString();
+        user.setEmail(userName);
+        user.setPassword(password);
 
     }
 
@@ -146,26 +143,23 @@ public class Login extends AppCompatActivity {
         Button button = (Button) findViewById(R.id.loginBtn);
 
         button.setOnClickListener((View view) -> {
-            EditText userName = findViewById(R.id.userName);
-            String email = userName.getText().toString();
 
-            EditText password = findViewById(R.id.enterPassWord);
-            String pw = password.getText().toString();
-            //Set new user
-            user.setEmail(email);
-            user.setPassword(pw);
+            setUserInfo();
 
-            ProxyBuilder.setOnTokenReceiveCallback(this::onReceiveToken);
+            if(!errorCheck()) {
 
-            //ProxyBuilder.setOnErrorCallback(this::onReceiveError);
+                //Set new user
+                ProxyBuilder.setOnTokenReceiveCallback(this::onReceiveToken);
 
-            Call<Void> caller = proxy.login(user);
-            ProxyBuilder.callProxy(Login.this, caller, this::response);
+                //ProxyBuilder.setOnErrorCallback(this::onReceiveError);
+
+                Call<Void> caller = proxy.login(user);
+                ProxyBuilder.callProxy(Login.this, caller, this::response);
 
 //            Intent intent = mainMenu.makeIntent(Login.this, newToken);
 //            startActivity(intent);
 
-
+            }
 
 
 

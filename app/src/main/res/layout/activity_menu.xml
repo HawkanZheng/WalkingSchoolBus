@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="project.cmpt276.androidui.walkingschoolbus.menu">
+    tools:context="project.cmpt276.androidui.walkingschoolbus.mainMenu">
 
     <Button
         android:id="@+id/goToMap"
