@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
 import java.util.List;
 
 import project.cmpt276.model.walkingschoolbus.Group;
@@ -50,7 +51,7 @@ public class mainMenu extends AppCompatActivity {
         getGroups();
 
 //        setupTestButton();
-//        setupTestGroupButton();
+       setupTestGroupButton();
 
     }
 
@@ -62,12 +63,11 @@ public class mainMenu extends AppCompatActivity {
             public void onClick(View view) {
                 //createGroup();
                 //getGroup(Long.valueOf(21));
-                //
-//                deleteGroup();
-               //getGroups();
+                //deleteGroup();
+                //getGroups();
                 //getGroupMembers();
                 //addNewMember();
-                //updateGroup(Long.valueOf(18));
+                //updateGroup(Long.valueOf(20));
                 //deleteGroupMember();
 
             }
@@ -116,7 +116,7 @@ public class mainMenu extends AppCompatActivity {
 
         Log.w(TAG, "All Groups:");
         for (Group group : returnedGroups) {
-//            Log.w(TAG, "    Group: " + group.toString());
+            Log.w(TAG, "    Group: " + group.toString());
             groupList.addGroup(group);
 
         }
@@ -131,8 +131,11 @@ public class mainMenu extends AppCompatActivity {
 
     private void createGroup() {
         Group group = new Group();
-        group.setGroupDescription("Test 2");
+        group.setId(-1);
+        group.setGroupDescription("Test 4");
         group.setLeader(user);
+        group.setRouteLatArray(Arrays.asList(Double.valueOf(115.2344), Double.valueOf(225.3432)));
+        group.setRouteLngArray(Arrays.asList(Double.valueOf(142.6621), Double.valueOf(265.3455)));
         Call<Group> caller = proxy.createGroup(group);
         ProxyBuilder.callProxy(mainMenu.this, caller, returnedGroup -> groupResponse(returnedGroup));
     }
