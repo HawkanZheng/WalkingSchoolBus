@@ -50,7 +50,7 @@ public class User {
     public void setId(Long id) {
         this.id = id;
     }
-    @JsonIgnore
+    //@JsonIgnore
     public String getName() {
         return name;
     }

@@ -24,7 +24,7 @@ import retrofit2.Call;
 public class mainMenu extends AppCompatActivity {
     private WGServerProxy proxy;
     private static final String TAG = "Test";
-//    private long userId = 0;
+    //    private long userId = 0;
     private User user;
     private GroupCollection groupList;
 
@@ -46,7 +46,8 @@ public class mainMenu extends AppCompatActivity {
 
         Log.i(TAG, ""+user.toString());
 
-       groupList = GroupCollection.getInstance();
+        groupList = GroupCollection.getInstance();
+        setUpMapButton();
 
 //        setupTestButton();
 //        setupTestGroupButton();
@@ -63,7 +64,7 @@ public class mainMenu extends AppCompatActivity {
                 //getGroup(Long.valueOf(21));
                 //
 //                deleteGroup();
-               getGroups();
+                getGroups();
                 //getGroupMembers();
                 //addNewMember();
                 //updateGroup(Long.valueOf(18));
@@ -217,5 +218,20 @@ public class mainMenu extends AppCompatActivity {
         intent.putExtra("Token", token);
         return intent;
     }
+
+    private void setUpMapButton()
+    {
+        Button button = (Button) findViewById(R.id.goToMap);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mainMenu.this, MapsActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
 }
+
+
 

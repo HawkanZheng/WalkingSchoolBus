@@ -7,25 +7,26 @@
     tools:context="project.cmpt276.androidui.walkingschoolbus.Login">
 
     <Button
-        android:id="@+id/skip"
+        android:id="@+id/loginBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="44dp"
-        android:layout_marginEnd="16dp"
-        android:text="skip login"
+        android:layout_marginEnd="41dp"
+        android:text="Login"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/newUserBtn" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
         android:id="@+id/userName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
         android:layout_marginStart="39dp"
         android:layout_marginTop="92dp"
         android:ems="10"
         android:hint="User Name"
         android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/loginErrorMessages"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,24 +42,25 @@
         app:layout_constraintTop_toBottomOf="@+id/userName" />
 
     <Button
-        android:id="@+id/loginBtn"
+        android:id="@+id/createUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="44dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginStart="16dp"
-        android:text="Login"
+        android:layout_marginStart="39dp"
+        android:text="Sign Up"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/newUserBtn"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/newUserBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New User"
-        app:layout_constraintBaseline_toBaselineOf="@+id/skip"
-        app:layout_constraintEnd_toStartOf="@+id/skip"
-        app:layout_constraintStart_toEndOf="@+id/loginBtn" />
+    <TextView
+        android:id="@+id/loginErrorMessages"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="104dp"
+        android:layout_marginEnd="37dp"
+        android:layout_marginStart="39dp"
+        android:textColor="@android:color/holo_red_dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/loginBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userName" />
 </android.support.constraint.ConstraintLayout>
