@@ -38,11 +38,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import project.cmpt276.model.walkingschoolbus.GoogleMapsInterface;
 import project.cmpt276.model.walkingschoolbus.Group;
 import project.cmpt276.model.walkingschoolbus.GroupCollection;
 import project.cmpt276.model.walkingschoolbus.MapsJsonParser;
+import project.cmpt276.model.walkingschoolbus.fragmentDataCollection;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_GREEN;
@@ -63,6 +65,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     // Vars to Create a new group
+    fragmentDataCollection fragmentData = fragmentDataCollection.getInstance();
     private Marker userSelectedStart;
     private Marker getUserSelectedEnd;
 
@@ -120,6 +123,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 CustomizeMarkerFragment markerShop = new CustomizeMarkerFragment();
                 markerShop.setMap(mMap,latLng);
                 markerShop.show(manager,"MesageDialog");
+
+                clearDisplayInfo();
             }
         });
 
@@ -131,24 +136,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 clearDisplayInfo();
 
-                // Grabs the group objected tagged to the marker
-                Group grp = (Group) marker.getTag();
+                Log.i("ConditionMarker", "" + marker.getId());
+                Log.i("ConditionStart","" + (fragmentData.getStartMarker().getId()));
+                Log.i("ConditionEnd","" + (fragmentData.getEndMarker().getId()));
 
-                if(grp != null){
-                    // Draws a path from the Group start location to the end location
-                    mapSelectedGroupPath mapSelectedGroupPath = new mapSelectedGroupPath();
-                    mapSelectedGroupPath.execute(grp);
+                // Select Start location marker
+                if(Objects.equals(marker.getId(), fragmentData.getStartMarker().getId())){
+                    // Clicking a Marker will display the coordinates of the marker.
+                    String URL = gMapsInterface.getDirectionsUrl(marker.getPosition(),fragmentData.getEndMarker().getPosition());
+                    DownloadDataFromUrl DownloadDataFromUrl = new DownloadDataFromUrl();
+
+                    DownloadDataFromUrl.execute(URL);
                 }
-                else{
-                    Log.i("onMarkerClicked", "Group Invalid");
+
+                // Select a group marker
+                else if(!Objects.equals(fragmentData.getEndMarker().getId(), marker.getId())){
+                    // Grabs the group objected tagged to the marker
+                    Group grp = (Group) marker.getTag();
+
+                    if(grp != null){
+                        // Draws a path from the Group start location to the end location
+                        mapSelectedGroupPath mapSelectedGroupPath = new mapSelectedGroupPath();
+                        mapSelectedGroupPath.execute(grp);
+                    }
+                    else{
+                        Log.i("onMarkerClicked", "Group Invalid");
+                    }
                 }
-
-
-                // Clicking a Marker will display the coordinates of the marker.
-                String URL = gMapsInterface.getDirectionsUrl(deviceLocation,marker.getPosition());
-                DownloadDataFromUrl DownloadDataFromUrl = new DownloadDataFromUrl();
-
-                DownloadDataFromUrl.execute(URL);
 
                 Toast.makeText(MapsActivity.this, marker.getPosition().toString(), Toast.LENGTH_SHORT).show();
                 return false;
@@ -287,7 +301,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     // Clears all polylines and end locations on the map
-    private void clearDisplayInfo(){
+    public void clearDisplayInfo(){
+
+        latsWaypoints = new ArrayList<Double>();
+        lngsWaypoints = new ArrayList<Double>();
+
         for(Polyline line : polylines){
             line.remove();
         }
@@ -434,6 +452,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     points.add(position);
                 }
+
+                // Store the data in a the data collection class
+                fragmentData.setWaypointsLatsLngs(latsWaypoints,lngsWaypoints);
+
                 Log.i("Lats", latsWaypoints.toString());
                 Log.i("Lngs", lngsWaypoints.toString());
 

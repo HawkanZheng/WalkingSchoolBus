@@ -18,10 +18,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import project.cmpt276.model.walkingschoolbus.GoogleMapsInterface;
+import project.cmpt276.model.walkingschoolbus.fragmentDataCollection;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.*;
 
 public class CustomizeMarkerFragment extends AppCompatDialogFragment {
+
+    // Transfer data
+    fragmentDataCollection fragmentData = fragmentDataCollection.getInstance();
 
     private GoogleMap map;
     private GoogleMapsInterface gMapsOption;
@@ -48,15 +52,38 @@ public class CustomizeMarkerFragment extends AppCompatDialogFragment {
             public void onClick(View view) {
                 String title = nameForm.getText().toString();
                 MarkerOptions m = gMapsOption.makeMarker(coordinates,type,title);
+
                 if(buttons[0].isChecked()){
                     //TODO: Find a way to remove markers from the map.
-                    //remove a start marker if there is already a marker.
+
+                    // If there is a start marker on the map remove it
+                    if(fragmentData.getStartCount() > 0){
+                        fragmentData.getStartMarker().remove();
+                        fragmentData.setStartMarker(null);
+                        fragmentData.decStartCount();
+                        fragmentData.setMarkerTitle(null);
+                    }
+
                     gMapsOption.addMarker(m,0);
-                    map.addMarker(gMapsOption.getStartMarker());
+
+                    // Creates, displays, and stores a marker
+                    fragmentData.setStartMarker(map.addMarker(gMapsOption.getStartMarker()));
+                    fragmentData.setMarkerTitle(title);
+
                 }else{
+
+                    if(fragmentData.getEndCount() > 0){
+                        fragmentData.getEndMarker().remove();
+                        fragmentData.setEndMarker(null);
+                        fragmentData.decEndCount();
+                    }
                     gMapsOption.addMarker(m,1);
-                    map.addMarker(gMapsOption.getFinishMarker());
+
+                    // Creates, displays, and stores a marker
+                    fragmentData.setEndMarker(map.addMarker(gMapsOption.getFinishMarker()));
+
                 }
+
                 dismiss();
             }
         });
@@ -96,5 +123,14 @@ public class CustomizeMarkerFragment extends AppCompatDialogFragment {
             }
         }
     }
+
+    private void clearAllMarkersFromMap(){
+        fragmentData.getEndMarker().remove();
+        fragmentData.getStartMarker().remove();
+
+        fragmentData.setStartMarker(null);
+        fragmentData.setEndMarker(null);
+    }
+
 
 }
