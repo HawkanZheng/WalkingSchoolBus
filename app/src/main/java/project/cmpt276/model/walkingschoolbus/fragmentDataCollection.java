@@ -72,10 +72,7 @@ public class fragmentDataCollection {
     public void clearData() {
         waypointsLats = new ArrayList<Double>();
         waypointsLngs = new ArrayList<Double>();
-        this.startCount = 0;
-        this.endCount = 0;
-        this.lastSelcted = false;
-        this.userEndMarker = null;
-        this.userStartMarker = null;
+        markerTitle = null;
+        markers = new Marker[2];
     }
 }

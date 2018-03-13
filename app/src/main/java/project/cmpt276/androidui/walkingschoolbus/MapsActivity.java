@@ -13,6 +13,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -93,6 +95,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         //Map stuffs
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
@@ -104,6 +107,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         createLocationRequest();
         createLocationCallback();
         createLocationSettings();
+
+        // Setup save button
+        setupSaveButton();
     }
 
     @Override
@@ -136,12 +142,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 clearDisplayInfo();
 
-                Log.i("ConditionMarker", "" + marker.getId());
-                Log.i("ConditionStart","" + (fragmentData.getStartMarker().getId()));
-                Log.i("ConditionEnd","" + (fragmentData.getEndMarker() != null));
-
                 // Select Start location marker
-                if(Objects.equals(marker.getId(), fragmentData.getStartMarker().getId()) && fragmentData.getEndMarker() != null){
+                if(fragmentData.getStartMarker() != null && fragmentData.getEndMarker() != null &&
+                        Objects.equals(marker.getId(), fragmentData.getStartMarker().getId())){
+
                     // Clicking a Marker will display the coordinates of the marker.
                     String URL = gMapsInterface.getDirectionsUrl(marker.getPosition(),fragmentData.getEndMarker().getPosition());
                     DownloadDataFromUrl DownloadDataFromUrl = new DownloadDataFromUrl();
@@ -473,13 +477,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     protected void onPause(){
-        super.onResume();
+        super.onPause();
         fragmentData.clearData();
     }
 
     private void createLatLngList(double lat, double lng){
         latsWaypoints.add(lat);
         lngsWaypoints.add(lng);
+    }
+
+    // TODO: add fragment to get title for group
+    // TODO: add server call to push data
+    private void setupSaveButton(){
+        Button saveBtn = (Button) findViewById(R.id.btnSaveGroup);
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                /*
+                    Open fragment to get a group title -> Must be valid name
+                    Create new group using latest fragmentData
+                    Push to server
+                */
+                Toast.makeText(MapsActivity.this,"New Group Saved!",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     // TODO: Creates a new group
