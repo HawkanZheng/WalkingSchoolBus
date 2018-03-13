@@ -36,11 +36,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 import project.cmpt276.model.walkingschoolbus.GoogleMapsInterface;
+import project.cmpt276.model.walkingschoolbus.Group;
+import project.cmpt276.model.walkingschoolbus.GroupCollection;
 import project.cmpt276.model.walkingschoolbus.MapsJsonParser;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE;
@@ -50,16 +51,21 @@ import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,ActivityCompat.OnRequestPermissionsResultCallback{
 
     //TODO: Interface with group class
-    // Server called data
-    // group groupData[];
-    // group groupInRadius[];
+    private GroupCollection groupCollection = GroupCollection.getInstance();
+    private ArrayList<Group> groupInRadius = new ArrayList<Group>();
+    private ArrayList<Marker> groupMarkersPlaced = new ArrayList<Marker>();
+    private Marker grpEndLocationMarker;
 
-
-    // Pin Types
     //Pin Types
     private final float GROUP_TYPE = HUE_RED;
     private final float USER_TYPE = HUE_GREEN;
-    private final float START_TYPE = HUE_BLUE;
+    private final float END_TYPE = HUE_BLUE;
+
+
+    // Vars to Create a new group
+    private Marker userSelectedStart;
+    private Marker getUserSelectedEnd;
+
     //Waypoints for path
     List<Polyline> polylines = new ArrayList<Polyline>();
     private List<Double> latsWaypoints;
@@ -100,23 +106,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng origin = new LatLng(0, 0);
+
         //mMap.addMarker(placeMarkerAtLocation(origin, GROUP_TYPE, "Origin"));
-
         //Moves the camera to your location and pins it.
+        //Also displays nearby groups
         addUserBlip();
-        // TODO: pin groups to map // extract this to a function // This is pseudo code
-        /*
-            groupData = server call to get all groups
-            for(group grp : groupData):
-                if(isLocationInRadius(LatLng currentLocation, LatLng grp)){
-                    groupInRadius.add(grp)
-                    Marker marker = nMap.addMarker(...(grp.LatLng, Colour, Message))
-                    marker.setTag(grp)
-                }
-
-        */
-
 
         //Place Marker when long pressing on map.
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
@@ -135,15 +129,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public boolean onMarkerClick(Marker marker) {
 
-                clearLines();
+                clearDisplayInfo();
 
-                //TODO: click on a marker in the radius and show its path // This is pseudo code
-                /*
-                    group grp = marker.getTag()
+                // Grabs the group objected tagged to the marker
+                Group grp = (Group) marker.getTag();
+
+                if(grp != null){
+                    // Draws a path from the Group start location to the end location
                     mapSelectedGroupPath mapSelectedGroupPath = new mapSelectedGroupPath();
-                    mapSelectedGroupPath.execute(grp.LIST_OF_LatLng)
+                    mapSelectedGroupPath.execute(grp);
+                }
+                else{
+                    Log.i("onMarkerClicked", "Group Invalid");
+                }
 
-                */
+
                 // Clicking a Marker will display the coordinates of the marker.
                 String URL = gMapsInterface.getDirectionsUrl(deviceLocation,marker.getPosition());
                 DownloadDataFromUrl DownloadDataFromUrl = new DownloadDataFromUrl();
@@ -181,12 +181,37 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 public void onSuccess(Location location) {
                     deviceLocation = gMapsInterface.calculateDeviceLocation(location);
                     mMap.moveCamera(gMapsInterface.cameraSettings(deviceLocation,15.0f));
+                    displayNearbyGroups();
                 }
             });
 
         } else {
             //Prompt user for access to their device's location.
             ActivityCompat.requestPermissions(this, perms, LOCATION_PERMISSION_REQUESTCODE);
+        }
+    }
+
+    private void displayNearbyGroups() {
+        Log.i("Location","" + deviceLocation);
+        for(int i = 0; i<groupCollection.numGroups(); i++) {
+            Group grp = new Group();
+            grp = groupCollection.getGroup(i);
+
+            List<Double> grpLatLocation = grp.getRouteLatArray();
+            List<Double> grpLngLocation = grp.getRouteLngArray();
+
+            LatLng grpStartLocation = new LatLng(grpLatLocation.get(0), grpLngLocation.get(0));
+
+
+            Log.i("isLocationInRadius","" + gMapsInterface.isLocationInRadius(deviceLocation,grpStartLocation));
+            if (gMapsInterface.isLocationInRadius(deviceLocation, grpStartLocation)) {
+                groupInRadius.add(grp);
+                Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, GROUP_TYPE, grp.getGroupDescription()));
+                marker.setTag(grp);
+                groupMarkersPlaced.add(marker);
+            }
+
+
         }
     }
 
@@ -261,22 +286,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    // Clears all polylines on the map
-    private void clearLines(){
+    // Clears all polylines and end locations on the map
+    private void clearDisplayInfo(){
         for(Polyline line : polylines){
             line.remove();
         }
         polylines.clear();
+        if(grpEndLocationMarker != null){
+            grpEndLocationMarker.remove();
+        }
     }
 
 
 
     // Created draw a path via waypoints
-    private abstract class mapSelectedGroupPath extends AsyncTask<LatLng, Void, ArrayList<LatLng>>{
+    private class mapSelectedGroupPath extends AsyncTask<Group, Void, ArrayList<LatLng>>{
         @Override
-        protected ArrayList<LatLng> doInBackground(LatLng... waypoints){
-            ArrayList<LatLng> mapableWaypoints = new ArrayList<LatLng>(Arrays.asList(waypoints[0]));
-            return mapableWaypoints;
+        protected ArrayList<LatLng> doInBackground(Group... grp){
+
+            // Convert Group object to ArrayList of waypoints
+            ArrayList<LatLng> waypoints = new ArrayList<LatLng>();
+            List<Double> latWaypoints = grp[0].getRouteLatArray();
+            List<Double> lngWaypoints = grp[0].getRouteLngArray();
+
+            for (int i = 0; i < grp[0].getRouteLatArray().size(); i++) {
+                LatLng currentPosition = new LatLng(latWaypoints.get(i), lngWaypoints.get(i));
+                waypoints.add(currentPosition);
+            }
+
+            return waypoints;
         }
 
         @Override
@@ -298,7 +336,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Log.i("OnPostExecute","Could not draw");
                 }
             }
-
+           grpEndLocationMarker =  mMap.addMarker(gMapsInterface.makeMarker(waypointsToBeMapped.get(waypointsToBeMapped.size()-1),END_TYPE,"End Location"));
         }
     }
 

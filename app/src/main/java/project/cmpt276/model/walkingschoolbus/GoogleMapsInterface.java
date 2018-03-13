@@ -69,6 +69,7 @@ public class GoogleMapsInterface {
                 groupMeetLocation.latitude, groupMeetLocation.longitude, distanceResult);
 
         // if the value is in the range -> true, else -> false
+        Log.i("isLocationInRadius","distance: " + distanceResult[0]);
         return (distanceResult[0] < this.radius);
 
     }
