@@ -190,19 +190,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (ActivityCompat.checkSelfPermission(this, perms[0]) == PackageManager.PERMISSION_GRANTED) {
             //This sets up a user location blip.
             mMap.setMyLocationEnabled(true);
-            locationService.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    deviceLocation = gMapsInterface.calculateDeviceLocation(location);
-                    mMap.moveCamera(gMapsInterface.cameraSettings(deviceLocation,15.0f));
-                    displayNearbyGroups();
-                }
-            });
-
+            locationService.getLastLocation().addOnSuccessListener(l -> moveCameraToUser(l));
         } else {
             //Prompt user for access to their device's location.
             ActivityCompat.requestPermissions(this, perms, LOCATION_PERMISSION_REQUESTCODE);
         }
+    }
+
+    private void moveCameraToUser(Location location){
+        deviceLocation = gMapsInterface.calculateDeviceLocation(location);
+        mMap.moveCamera(gMapsInterface.cameraSettings(deviceLocation,15.0f));
+        displayNearbyGroups();
     }
 
     private void displayNearbyGroups() {
@@ -216,7 +214,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             LatLng grpStartLocation = new LatLng(grpLatLocation.get(0), grpLngLocation.get(0));
 
-
             Log.i("isLocationInRadius","" + gMapsInterface.isLocationInRadius(deviceLocation,grpStartLocation));
             if (gMapsInterface.isLocationInRadius(deviceLocation, grpStartLocation)) {
                 groupInRadius.add(grp);
@@ -224,8 +221,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 marker.setTag(grp);
                 groupMarkersPlaced.add(marker);
             }
-
-
         }
     }
 
@@ -314,8 +309,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             grpEndLocationMarker.remove();
         }
     }
-
-
 
     // Created draw a path via waypoints
     private class mapSelectedGroupPath extends AsyncTask<Group, Void, ArrayList<LatLng>>{

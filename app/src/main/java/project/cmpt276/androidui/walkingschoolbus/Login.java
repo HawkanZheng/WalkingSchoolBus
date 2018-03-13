@@ -37,8 +37,7 @@ public class Login extends AppCompatActivity {
     }
 
 
-    private void setUpSkipButton()
-    {
+    private void setUpSkipButton() {
         Button button = (Button) findViewById(R.id.skip);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,8 +48,7 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    private void setUpSignUpButton()
-    {
+    private void setUpSignUpButton(){
         Button button = (Button) findViewById(R.id.skip);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -64,8 +62,7 @@ public class Login extends AppCompatActivity {
 
     }
 
-    private void setUpLoginButton()
-    {
+    private void setUpLoginButton(){
 
         Button button = (Button) findViewById(R.id.loginBtn);
 
@@ -88,11 +85,6 @@ public class Login extends AppCompatActivity {
 
 //            Intent intent = mainMenu.makeIntent(Login.this, newToken);
 //            startActivity(intent);
-
-
-
-
-
         });
     }
 
@@ -121,8 +113,6 @@ public class Login extends AppCompatActivity {
 
         Intent intent = mainMenu.makeIntent(Login.this, token);
         startActivity(intent);
-
-
     }
 
     private void onReceiveError(String message){
@@ -130,7 +120,6 @@ public class Login extends AppCompatActivity {
 //
 //        Intent intent = Login.makeIntent(Login.this);
 //        startActivity(intent);
-
     }
 
 

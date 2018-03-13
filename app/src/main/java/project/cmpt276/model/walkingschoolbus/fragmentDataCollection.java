@@ -10,18 +10,8 @@ import java.util.List;
  */
 
 public class fragmentDataCollection {
-
-    // True = finished was the last marker
-    // False = start was last marker
-    private boolean lastSelcted;
-
-    // Track how many markers are on the map
-    private int startCount;
-    private int endCount;
-
     // Track the markers made
-    private Marker userStartMarker;
-    private Marker userEndMarker;
+    private Marker[] markers = new Marker[2];
     private String markerTitle;
     private List<Double> waypointsLats;
     private List<Double> waypointsLngs;
@@ -34,9 +24,6 @@ public class fragmentDataCollection {
         // Singleton Pattern
         waypointsLats = new ArrayList<Double>();
         waypointsLngs = new ArrayList<Double>();
-        this.startCount = 0;
-        this.endCount = 0;
-        this.lastSelcted = false;
     }
 
     public static fragmentDataCollection getInstance(){
@@ -46,61 +33,24 @@ public class fragmentDataCollection {
         return instance;
     }
 
-
     public Marker getStartMarker(){
-        return userStartMarker;
+        return markers[0];
     }
 
     public Marker getEndMarker(){
-        return userEndMarker;
-    }
-
-    public boolean getLastSelected(){
-        return lastSelcted;
-    }
-
-    public int getStartCount(){
-        return startCount;
-    }
-
-    public int getEndCount(){
-        return endCount;
+        return markers[1];
     }
 
     public String getMarkerTitle(){
         return markerTitle;
     }
 
-    private void setLastSelected(boolean lastSelcted){
-        this.lastSelcted = lastSelcted;
+    public void storeStartMarker(Marker startMarker){
+        markers[0] = startMarker;
     }
 
-    private void incStartCount(){
-        this.startCount += 1;
-    }
-
-    public void decStartCount(){
-        this.startCount -= 1;
-    }
-
-    private void incEndCount(){
-        this.endCount += 1;
-    }
-
-    public void decEndCount(){
-        this.endCount -= 1;
-    }
-
-    public void setStartMarker(Marker startMarker){
-        incStartCount();
-        setLastSelected(false);
-        this.userStartMarker = startMarker;
-    }
-
-    public void setEndMarker(Marker endMarker){
-        incEndCount();
-        setLastSelected(true);
-        this.userEndMarker = endMarker;
+    public void storeEndMarker(Marker endMarker){
+        markers[1] = endMarker;
     }
 
     public void setMarkerTitle(String title){
