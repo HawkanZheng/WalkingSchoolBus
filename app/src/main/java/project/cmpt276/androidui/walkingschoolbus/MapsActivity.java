@@ -138,10 +138,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 Log.i("ConditionMarker", "" + marker.getId());
                 Log.i("ConditionStart","" + (fragmentData.getStartMarker().getId()));
-                Log.i("ConditionEnd","" + (fragmentData.getEndMarker().getId()));
+                Log.i("ConditionEnd","" + (fragmentData.getEndMarker() != null));
 
                 // Select Start location marker
-                if(Objects.equals(marker.getId(), fragmentData.getStartMarker().getId())){
+                if(Objects.equals(marker.getId(), fragmentData.getStartMarker().getId()) && fragmentData.getEndMarker() != null){
                     // Clicking a Marker will display the coordinates of the marker.
                     String URL = gMapsInterface.getDirectionsUrl(marker.getPosition(),fragmentData.getEndMarker().getPosition());
                     DownloadDataFromUrl DownloadDataFromUrl = new DownloadDataFromUrl();
@@ -150,7 +150,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
 
                 // Select a group marker
-                else if(!Objects.equals(fragmentData.getEndMarker().getId(), marker.getId())){
+                else if(fragmentData.getEndMarker() != null && !Objects.equals(fragmentData.getEndMarker().getId(), marker.getId())){
                     // Grabs the group objected tagged to the marker
                     Group grp = (Group) marker.getTag();
 
@@ -476,6 +476,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Log.d("onPostExecute","without Polylines drawn");
             }
         }
+    }
+
+    @Override
+    protected void onPause(){
+        super.onResume();
+        fragmentData.clearData();
     }
 
     private void createLatLngList(double lat, double lng){
