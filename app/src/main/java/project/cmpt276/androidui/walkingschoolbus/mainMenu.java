@@ -12,10 +12,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
 import java.util.List;
 
 import project.cmpt276.model.walkingschoolbus.Group;
 import project.cmpt276.model.walkingschoolbus.GroupCollection;
+import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
@@ -27,10 +29,7 @@ public class mainMenu extends AppCompatActivity {
     //    private long userId = 0;
     private User user;
     private GroupCollection groupList;
-
-
-
-
+    private SharedValues sharedValues;
 
 
     @Override
@@ -38,15 +37,16 @@ public class mainMenu extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-
-
-        proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), getIntent().getStringExtra("Token"));
-
+        sharedValues = SharedValues.getInstance();
+        proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
         user = User.getInstance();
+
 
         Log.i(TAG, ""+user.toString());
 
         groupList = GroupCollection.getInstance();
+        getGroups();
+
         setUpMapButton();
 
 //        setupTestButton();
@@ -62,12 +62,11 @@ public class mainMenu extends AppCompatActivity {
             public void onClick(View view) {
                 //createGroup();
                 //getGroup(Long.valueOf(21));
-                //
-//                deleteGroup();
-                getGroups();
+                //deleteGroup();
+                //getGroups();
                 //getGroupMembers();
                 //addNewMember();
-                //updateGroup(Long.valueOf(18));
+                //updateGroup(Long.valueOf(20));
                 //deleteGroupMember();
 
             }
@@ -116,7 +115,7 @@ public class mainMenu extends AppCompatActivity {
 
         Log.w(TAG, "All Groups:");
         for (Group group : returnedGroups) {
-//            Log.w(TAG, "    Group: " + group.toString());
+            Log.w(TAG, "    Group: " + group.toString());
             groupList.addGroup(group);
 
         }
@@ -131,8 +130,11 @@ public class mainMenu extends AppCompatActivity {
 
     private void createGroup() {
         Group group = new Group();
-        group.setGroupDescription("Test 2");
+        group.setId(-1);
+        group.setGroupDescription("Test 4");
         group.setLeader(user);
+        group.setRouteLatArray(Arrays.asList(Double.valueOf(115.2344), Double.valueOf(225.3432)));
+        group.setRouteLngArray(Arrays.asList(Double.valueOf(142.6621), Double.valueOf(265.3455)));
         Call<Group> caller = proxy.createGroup(group);
         ProxyBuilder.callProxy(mainMenu.this, caller, returnedGroup -> groupResponse(returnedGroup));
     }
@@ -213,9 +215,9 @@ public class mainMenu extends AppCompatActivity {
         Log.w(TAG, "Server replied with nothing");
     }
 
-    public static Intent makeIntent(Context context, String token) {
+    public static Intent makeIntent(Context context) {
         Intent intent = new Intent(context, mainMenu.class);
-        intent.putExtra("Token", token);
+
         return intent;
     }
 

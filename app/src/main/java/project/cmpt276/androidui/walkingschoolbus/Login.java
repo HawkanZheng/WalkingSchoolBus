@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.List;
+
+import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
@@ -21,6 +24,7 @@ public class Login extends AppCompatActivity {
     private WGServerProxy proxy;
     private static final String TAG = "Test";
     private User user;
+    private SharedValues sharedValues;
 
     public GoogleMapsInterface gmaps;
     String password;
@@ -38,7 +42,7 @@ public class Login extends AppCompatActivity {
 
         getInput();
         user = User.getInstance();
-
+        sharedValues = SharedValues.getInstance();
         //Build server proxy
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), null);
         setUpSkipButton();
@@ -153,8 +157,8 @@ public class Login extends AppCompatActivity {
 
                 //ProxyBuilder.setOnErrorCallback(this::onReceiveError);
 
-                Call<Void> caller = proxy.login(user);
-                ProxyBuilder.callProxy(Login.this, caller, this::response);
+            Call<Void> loginCaller = proxy.login(user);
+            ProxyBuilder.callProxy(Login.this, loginCaller, this::response);
 
 //            Intent intent = mainMenu.makeIntent(Login.this, newToken);
 //            startActivity(intent);
@@ -184,12 +188,26 @@ public class Login extends AppCompatActivity {
         // Replace the current proxy with one that uses the token!
         Log.w(TAG, "   --> NOW HAVE TOKEN: " + token);
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), token);
+        sharedValues.setToken(token);
+
+        setUser();
 
 
+
+
+    }
+
+    private void setUser() {
         Call<User> caller = proxy.getUserByEmail(user.getEmail());
-        ProxyBuilder.callProxy(Login.this, caller, returnedUser -> response(returnedUser));
+        ProxyBuilder.callProxy(Login.this, caller, returnedUser -> userResponse(returnedUser));
+        Log.i(TAG, "setUser used here");
+    }
 
-        Intent intent = mainMenu.makeIntent(Login.this, token);
+    private void userResponse(User returnedUser) {
+        Log.i(TAG, "userResponse used here");
+        User.setUser(returnedUser);
+
+        Intent intent = mainMenu.makeIntent(Login.this);
         startActivity(intent);
 
 
@@ -206,14 +224,9 @@ public class Login extends AppCompatActivity {
 
     private void response(Void returnedNothing) {
         Log.w(TAG, "Server replied to login request (no content was expected).");
+
     }
 
-    private void response(User returnedUser){
-        User.setUser(returnedUser);
-        user = User.getInstance();
-
-        Log.w(TAG, "After Singleton test, server replied with User: " + user.toString());
-    }
 
     public static Intent makeIntent(Context context){
         return new Intent(context, Login.class);

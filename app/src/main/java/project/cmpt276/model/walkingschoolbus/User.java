@@ -82,7 +82,7 @@ public class User {
     public void setMonitoredByUsers(List<User> monitoredByUsers) {
         this.monitoredByUsers = monitoredByUsers;
     }
-    @JsonIgnore
+    //@JsonIgnore
     public List<User> getMonitorsUsers() {
         return monitorsUsers;
     }
@@ -90,7 +90,7 @@ public class User {
     public void setMonitorsUsers(List<User> monitorsUsers) {
         this.monitorsUsers = monitorsUsers;
     }
-    @JsonIgnore
+   // @JsonIgnore
     public List<Group> getWalkingGroups() {
         return walkingGroups;
     }
@@ -106,7 +106,7 @@ public class User {
     public void setHref(String href) {
         this.href = href;
     }
-    @JsonIgnore
+    //@JsonIgnore
     public List<Group> getMemberOfGroups() {
         return memberOfGroups;
     }
@@ -132,7 +132,7 @@ public class User {
                 ", password='" + password + '\'' +
                 ", monitoredByUsers=" + monitoredByUsers +
                 ", monitorsUsers=" + monitorsUsers +
-                ", walkingGroups=" + walkingGroups +
+                ", memberOfGroups=" + memberOfGroups +
                 '}';
     }
 }
