@@ -505,6 +505,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Create new group using latest fragmentData
                     Push to server
                 */
+                List<Double> lats = fragmentData.getWaypointsLats();
+                List<Double> lngs = fragmentData.getWaypointsLngs();
+
+                String groupTitle = fragmentData.getMarkerTitle();
+
+
+
                 Toast.makeText(MapsActivity.this,"New Group Saved!",Toast.LENGTH_SHORT).show();
             }
         });
@@ -518,11 +525,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
 
+
+                // This is the group that needs to be added
+                // joinGroup
+
                 /*
                     Get data of latest marker clicked
                     Make Server call
-
-                    joinGroup.pushToServer();
 
                  */
                 Toast.makeText(MapsActivity.this,"Joined Group!", Toast.LENGTH_SHORT).show();
