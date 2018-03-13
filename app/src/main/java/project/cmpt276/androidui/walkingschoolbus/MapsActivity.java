@@ -19,6 +19,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import project.cmpt276.model.walkingschoolbus.GoogleMapsInterface;
+import project.cmpt276.model.walkingschoolbus.GroupCollection;
+import project.cmpt276.model.walkingschoolbus.SharedValues;
+import project.cmpt276.model.walkingschoolbus.User;
+import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
+import project.cmpt276.server.walkingschoolbus.WGServerProxy;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_CYAN;
@@ -36,6 +41,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private static int markerId = 1;
     private GoogleMapsInterface gMapsInterface;
+    private WGServerProxy proxy;
+    private GroupCollection groupList;
+    private User user;
+    private SharedValues sharedValues;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Map stuffs
@@ -45,6 +54,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         gMapsInterface =  GoogleMapsInterface.getInstance(this);
+        groupList = GroupCollection.getInstance();
+        user = User.getInstance();
+        sharedValues = SharedValues.getInstance();
+        proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
     }
 
     @Override

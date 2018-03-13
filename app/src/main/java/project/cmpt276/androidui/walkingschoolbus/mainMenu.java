@@ -17,6 +17,7 @@ import java.util.List;
 
 import project.cmpt276.model.walkingschoolbus.Group;
 import project.cmpt276.model.walkingschoolbus.GroupCollection;
+import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
@@ -28,10 +29,7 @@ public class mainMenu extends AppCompatActivity {
 //    private long userId = 0;
     private User user;
     private GroupCollection groupList;
-
-
-
-
+    private SharedValues sharedValues;
 
 
     @Override
@@ -39,11 +37,10 @@ public class mainMenu extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-
-
-        proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), getIntent().getStringExtra("Token"));
-
+        sharedValues = SharedValues.getInstance();
+        proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
         user = User.getInstance();
+
 
         Log.i(TAG, ""+user.toString());
 
@@ -216,9 +213,9 @@ public class mainMenu extends AppCompatActivity {
         Log.w(TAG, "Server replied with nothing");
     }
 
-    public static Intent makeIntent(Context context, String token) {
+    public static Intent makeIntent(Context context) {
         Intent intent = new Intent(context, mainMenu.class);
-        intent.putExtra("Token", token);
+
         return intent;
     }
 }

@@ -29,31 +29,31 @@ public class signUp extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         user = User.getInstance();
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), null);
-//        setupSignUpBtn();
+        setupSignUpBtn();
     }
 
-//    private void setupSignUpBtn() {
-//        Button button = findViewById(R.id.signUpBtn);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //Build new user
-//                EditText newName = findViewById(R.id.signUpName);
-//                String name = newName.getText().toString();
-//                EditText newEmail = findViewById(R.id.signUpEmail);
-//                String email = newEmail.getText().toString();
-//                EditText newPassword = findViewById(R.id.signUpPassword);
-//                String password = newPassword.getText().toString();
-//                user.setPassword(password);
-//                user.setEmail(email);
-//                user.setName(name);
-//
-//                Call<User> caller = proxy.createNewUser(user);
-//                ProxyBuilder.callProxy(signUp.this, caller, returnedUser -> response(returnedUser));
-//
-//            }
-//        });
-//    }
+    private void setupSignUpBtn() {
+        Button button = findViewById(R.id.signUpBtn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Build new user
+                EditText newName = findViewById(R.id.signUpName);
+                String name = newName.getText().toString();
+                EditText newEmail = findViewById(R.id.signUpEmail);
+                String email = newEmail.getText().toString();
+                EditText newPassword = findViewById(R.id.signUpPassword);
+                String password = newPassword.getText().toString();
+                user.setPassword(password);
+                user.setEmail(email);
+                user.setName(name);
+
+                Call<User> caller = proxy.createNewUser(user);
+                ProxyBuilder.callProxy(signUp.this, caller, returnedUser -> response(returnedUser));
+
+            }
+        });
+    }
 
     public static Intent makeIntent(Context context) {
         return new Intent(context, signUp.class);
