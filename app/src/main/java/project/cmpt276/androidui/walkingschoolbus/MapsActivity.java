@@ -214,6 +214,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void displayNearbyGroups() {
         Log.i("Location","" + deviceLocation);
+        Log.i("All Groups","" + groupCollection.numGroups());
         for(int i = 0; i<groupCollection.numGroups(); i++) {
             Group grp = new Group();
             grp = groupCollection.getGroup(i);
@@ -505,6 +506,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Create new group using latest fragmentData
                     Push to server
                 */
+
+                Log.i("Group Save - Lats",""+fragmentData.getWaypointsLats());
+                Log.i("Group Save - Lngs", ""+fragmentData.getWaypointsLngs());
+
                 List<Double> lats = fragmentData.getWaypointsLats();
                 List<Double> lngs = fragmentData.getWaypointsLngs();
 
