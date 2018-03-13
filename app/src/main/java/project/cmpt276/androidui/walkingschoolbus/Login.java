@@ -27,6 +27,12 @@ public class Login extends AppCompatActivity {
     private SharedValues sharedValues;
 
     public GoogleMapsInterface gmaps;
+    String password;
+    String userName;
+
+    EditText getPassword;
+    EditText getUserName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +40,7 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         gmaps = GoogleMapsInterface.getInstance(this);
 
+        getInput();
         user = User.getInstance();
         sharedValues = SharedValues.getInstance();
         //Build server proxy
@@ -46,29 +53,91 @@ public class Login extends AppCompatActivity {
 
     private void setUpSkipButton()
     {
-        Button button = (Button) findViewById(R.id.skip);
+        Button button = (Button) findViewById(R.id.loginBtn);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Login.this, MapsActivity.class);
-                startActivity(intent);
+
+                setUserInfo();
+
+                if(!errorCheck())
+                {
+                    //look for the user in the server and proceed accordingly
+                    Intent intent = new Intent(Login.this, mainMenu.class);
+                    startActivity(intent);
+                }
+
+
             }
         });
+
     }
 
     private void setUpSignUpButton()
     {
-        Button button = (Button) findViewById(R.id.skip);
+
+        Button button = (Button) findViewById(R.id.createUser);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(Login.this, MapsActivity.class);
+                Intent intent = new Intent(Login.this, signUp.class);
                 startActivity(intent);
 
             }
         });
+
+    }
+
+    private boolean errorCheck()
+    {
+        boolean hasError = false;
+        String errors = "please correct the following\n";
+
+        if(userName.length()==0)
+        {
+            errors = errors +"User Name Invalid\n";
+            hasError = true;
+        }
+
+        if(password.length()==0)
+        {
+            errors = errors+"Password Invalid\n";
+            hasError=true;
+        }
+
+
+        if(hasError)
+        {
+            changeError(errors);
+        }
+
+
+        return hasError;
+    }
+
+    private void getInput()
+    {
+        getUserName = (EditText) findViewById(R.id.userName);
+        getPassword = (EditText) findViewById(R.id.enterPassWord);
+
+    }
+
+    private void setUserInfo()
+    {
+        userName = getUserName.getText().toString();
+        password = getPassword.getText().toString();
+        user.setEmail(userName);
+        user.setPassword(password);
+
+    }
+
+
+    private void changeError(String error)
+    {
+        TextView test = findViewById(R.id.loginErrorMessages);
+        test.setText(error);
 
     }
 
@@ -78,20 +147,15 @@ public class Login extends AppCompatActivity {
         Button button = (Button) findViewById(R.id.loginBtn);
 
         button.setOnClickListener((View view) -> {
-            EditText userName = findViewById(R.id.userName);
-            String email = userName.getText().toString();
 
-            EditText password = findViewById(R.id.enterPassWord);
-            String pw = password.getText().toString();
-            //Set new user
-            user.setEmail(email);
-            user.setPassword(pw);
+            setUserInfo();
 
+            if(!errorCheck()) {
 
+                //Set new user
+                ProxyBuilder.setOnTokenReceiveCallback(this::onReceiveToken);
 
-            ProxyBuilder.setOnTokenReceiveCallback(this::onReceiveToken);
-
-            //ProxyBuilder.setOnErrorCallback(this::onReceiveError);
+                //ProxyBuilder.setOnErrorCallback(this::onReceiveError);
 
             Call<Void> loginCaller = proxy.login(user);
             ProxyBuilder.callProxy(Login.this, loginCaller, this::response);
@@ -99,7 +163,7 @@ public class Login extends AppCompatActivity {
 //            Intent intent = mainMenu.makeIntent(Login.this, newToken);
 //            startActivity(intent);
 
-
+            }
 
 
 
@@ -160,8 +224,6 @@ public class Login extends AppCompatActivity {
 
     private void response(Void returnedNothing) {
         Log.w(TAG, "Server replied to login request (no content was expected).");
-
-
 
     }
 
