@@ -501,6 +501,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
 
+
+                GroupCreationFragment groupCreation = new GroupCreationFragment();
+                FragmentManager manager = getSupportFragmentManager();
+                groupCreation.show(manager,"GroupCreation");
                 /*
                     Open fragment to get a group title -> Must be valid name
                     Create new group using latest fragmentData
@@ -555,7 +559,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public static Intent makeIntentForMapsActivity(Context context){
         return new Intent(context, MapsActivity.class);
     }
-
-
 }
 

@@ -15,10 +15,13 @@
     </string>
     <string name="title_activity_maps">Map</string>
     <string name="apiKey">A4A59288-25B8-4586-B736-6F453957C8BE</string>
-    
+
     <string name="fragmentTitle">Custom Waypoint</string>
-    <string name= "markerTitleLabel">Marker Title</string>
+    <string name="markerTitleLabel">Marker Title</string>
     <string name="marketTypeLabel">Type of Marker</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="groupTitle">Group Name</string>
 </resources>
