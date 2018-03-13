@@ -20,9 +20,17 @@ public class User {
     private List<Group> walkingGroups = new ArrayList<>();   // <-- TO BE IMPLEMENTED
     private List<Group> memberOfGroups = new ArrayList<>();
     private List<Group> leadsGroups = new ArrayList<>();
+
+    private String[] monitorsUsersString;
+    private String[] monitoredByUsersString;
+
+
+
     /*
-    Singleton Support
-     */
+        Singleton Support
+         */
+
+
     private static User instance;
     private User(){
         //Private to prevent anyone else from instantiating
@@ -122,6 +130,23 @@ public class User {
     public void setLeadsGroups(List<Group> leadsGroups) {
         this.leadsGroups = leadsGroups;
     }
+
+    public String[] getMonitorsUsersString() {
+        return monitorsUsersString;
+    }
+
+    public void setMonitorsUsersString(String[] monitorsUsersString) {
+        this.monitorsUsersString = monitorsUsersString;
+    }
+
+    public String[] getMonitoredByUsersString() {
+        return monitoredByUsersString;
+    }
+
+    public void setMonitoredByUsersString(String[] monitoredByUsersString) {
+        this.monitoredByUsersString = monitoredByUsersString;
+    }
+
 
     @Override
     public String toString() {

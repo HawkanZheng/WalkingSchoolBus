@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="project.cmpt276.androidui.walkingschoolbus.WhoIMonitor"
+    tools:layout_editor_absoluteY="81dp">
+
+    <TextView
+        android:id="@+id/currentMonitoringView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/currently_monitoring"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <ListView
+        android:id="@+id/currentlyMonitoringList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="19dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="19dp"
+        app:layout_constraintBottom_toBottomOf="@+id/addSomoneToMonitorView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/currentMonitoringView" />
+
+    <EditText
+        android:id="@+id/addSomeoneToMonitorEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/user_s_email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintStart_toStartOf="@+id/addSomoneToMonitorView"
+        app:layout_constraintTop_toBottomOf="@+id/addSomoneToMonitorView" />
+
+    <TextView
+        android:id="@+id/addSomoneToMonitorView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="184dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/add_a_user_to_monitor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/currentlyMonitoringList" />
+
+    <Button
+        android:id="@+id/addUserToMonitorBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add"
+        app:layout_constraintBaseline_toBaselineOf="@+id/addSomeoneToMonitorEdit"
+        app:layout_constraintStart_toEndOf="@+id/addSomeoneToMonitorEdit" />
+
+    <Button
+        android:id="@+id/returnMainMenuBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/return_to_main_menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/stopMonitoringView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stop_monitoring_a_user"
+        app:layout_constraintStart_toStartOf="@+id/addSomeoneToMonitorEdit"
+        app:layout_constraintTop_toBottomOf="@+id/addSomeoneToMonitorEdit" />
+
+    <EditText
+        android:id="@+id/stopMonitoringText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/user_s_email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintStart_toStartOf="@+id/stopMonitoringView"
+        app:layout_constraintTop_toBottomOf="@+id/stopMonitoringView" />
+
+    <Button
+        android:id="@+id/stopMonitoringBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/remove"
+        app:layout_constraintBaseline_toBaselineOf="@+id/stopMonitoringText"
+        app:layout_constraintStart_toEndOf="@+id/stopMonitoringText" />
+</android.support.constraint.ConstraintLayout>

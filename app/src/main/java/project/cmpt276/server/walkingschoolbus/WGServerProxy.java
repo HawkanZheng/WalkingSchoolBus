@@ -49,16 +49,20 @@ public interface WGServerProxy {
     Call<List<User>> getUsersMonitered(@Path("id") Long userId);
 
     @GET("/users/{id}/monitoredByUsers")
-    Call<List<User>> getUsersMoniteredBy(@Path("id") Long userId);
+    Call<List<User>> getUsersMonitoredBy(@Path("id") Long userId);
 
     @POST("/users/{id}/monitorsUsers")
     Call<List<User>> addUserToMonitor(@Path("id") Long userId, @Body User user);
 
-//    @POST("/users/{id}/monitorsUsers")
-//    Call<List<User>> addUserMonitoredBy(@Path("id") Long userId, @Body User user);
+    @POST("/users/{id}/monitoredByUsers")
+    Call<List<User>> addUserMonitoredBy(@Path("id") Long userId, @Body User user);
 
     @DELETE("/users/{idA}/monitorsUsers/{idB}")
     Call<Void> stopMonitoringUser(@Path("idA") Long userIdA, @Path("idB") Long userIdB);
+
+    @DELETE("/users/{idA}/monitoredByUsers/{idB}")
+    Call<Void> stopBeingMonitoredByUser(@Path("idA") Long userIdA, @Path("idB") Long userIdB);
+
 
     //Groups
 
