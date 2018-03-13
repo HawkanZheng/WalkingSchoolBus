@@ -37,9 +37,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import project.cmpt276.model.walkingschoolbus.GoogleMapsInterface;
@@ -65,11 +67,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private final float USER_TYPE = HUE_GREEN;
     private final float END_TYPE = HUE_BLUE;
 
-
-    // Vars to Create a new group
+    // Create a new group
     fragmentDataCollection fragmentData = fragmentDataCollection.getInstance();
-    private Marker userSelectedStart;
-    private Marker getUserSelectedEnd;
+
+    // Join a existing group
+    Group joinGroup;
+
 
     //Waypoints for path
     List<Polyline> polylines = new ArrayList<Polyline>();
@@ -108,8 +111,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         createLocationCallback();
         createLocationSettings();
 
-        // Setup save button
+        // Setup  buttons -- These need to come after the map creation
         setupSaveButton();
+        setupJoinGroupButton();
     }
 
     @Override
@@ -157,6 +161,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 else if(fragmentData.getEndMarker() != null && !Objects.equals(fragmentData.getEndMarker().getId(), marker.getId())){
                     // Grabs the group objected tagged to the marker
                     Group grp = (Group) marker.getTag();
+                    joinGroup = grp;
 
                     if(grp != null){
                         // Draws a path from the Group start location to the end location
@@ -488,6 +493,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     // TODO: add fragment to get title for group
     // TODO: add server call to push data
+    // Saves the newest created route to the server as a group
     private void setupSaveButton(){
         Button saveBtn = (Button) findViewById(R.id.btnSaveGroup);
         saveBtn.setOnClickListener(new View.OnClickListener() {
@@ -500,6 +506,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Push to server
                 */
                 Toast.makeText(MapsActivity.this,"New Group Saved!",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // TODO: implement server logic
+    // Joins a pre-existing group
+    private void setupJoinGroupButton(){
+        Button joinBtn = (Button) findViewById(R.id.btnJoinGroup);
+        joinBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                /*
+                    Get data of latest marker clicked
+                    Make Server call
+
+                    joinGroup.pushToServer();
+
+                 */
+                Toast.makeText(MapsActivity.this,"Joined Group!", Toast.LENGTH_SHORT).show();
             }
         });
     }
