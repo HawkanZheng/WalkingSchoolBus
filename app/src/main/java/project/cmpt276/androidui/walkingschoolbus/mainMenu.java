@@ -6,12 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.List;
 
@@ -49,10 +45,15 @@ public class mainMenu extends AppCompatActivity {
 
         setUpMapButton();
 
+        setUpWhoIMonitorBtn();
+        setUpWhoMonitorsMeBtn();
+
 //        setupTestButton();
 //        setupTestGroupButton();
 
     }
+
+
 
     private void setupTestGroupButton() {
         Button button = findViewById(R.id.groupTestBtn);
@@ -150,7 +151,7 @@ public class mainMenu extends AppCompatActivity {
 //        //Build Adapter
 //        ArrayAdapter<String> adapter = new ArrayAdapter<>(
 //                this,           //Context for the activity
-//                R.layout.user_list,      //Layout used
+//                R.layout.monitors_users_list,      //Layout used
 //                groups);               //Groups/Users displayed
 //
 //        //Configure the list view
@@ -215,11 +216,7 @@ public class mainMenu extends AppCompatActivity {
         Log.w(TAG, "Server replied with nothing");
     }
 
-    public static Intent makeIntent(Context context) {
-        Intent intent = new Intent(context, mainMenu.class);
 
-        return intent;
-    }
 
     private void setUpMapButton()
     {
@@ -232,6 +229,30 @@ public class mainMenu extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+
+
+
+    private void setUpWhoIMonitorBtn() {
+        Button button = findViewById(R.id.whoIMonitorBtn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = WhoIMonitor.makeIntent(mainMenu.this);
+                startActivity(intent);
+
+            }
+        });
+    }
+
+    private void setUpWhoMonitorsMeBtn() {
+    }
+
+    public static Intent makeIntent(Context context) {
+        Intent intent = new Intent(context, mainMenu.class);
+
+        return intent;
     }
 }
 

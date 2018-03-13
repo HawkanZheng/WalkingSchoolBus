@@ -44,8 +44,10 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/app_name"></activity>
-        <activity android:name=".mainMenu"></activity>
+            android:label="@string/app_name" />
+        <activity android:name=".mainMenu" />
+        <activity android:name=".WhoIMonitor" />
+        <activity android:name=".WhoMonitorsMe"></activity>
     </application>
 
 </manifest>
