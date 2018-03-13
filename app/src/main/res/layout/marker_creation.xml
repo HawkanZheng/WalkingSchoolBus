@@ -13,7 +13,7 @@
         android:layout_marginEnd="248dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="22dp"
-        android:text="Marker Title"
+        android:text="@string/markerTitleLabel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="70dp"
-        android:text="Type of Marker"
+        android:text="@string/marketTypeLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,7 +48,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="116dp"
         android:padding="0dp"
-        android:text="Confirm"
+        android:text="@string/confirm"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -60,7 +60,7 @@
         android:layout_marginStart="100dp"
         android:layout_marginTop="116dp"
         android:padding="0dp"
-        android:text="Cancel"
+        android:text="@string/cancel"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -80,7 +80,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="Custom Waypoint"
+        android:text="@string/fragmentTitle"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

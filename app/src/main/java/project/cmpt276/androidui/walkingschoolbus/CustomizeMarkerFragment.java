@@ -2,7 +2,6 @@ package project.cmpt276.androidui.walkingschoolbus;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
@@ -33,9 +32,10 @@ public class CustomizeMarkerFragment extends AppCompatDialogFragment {
     private EditText nameForm;
     private float type;
 
-    private float[] colors = {HUE_RED, HUE_BLUE};
-    private String[] parallelTitle = {"Start", "Finish"};
-    private RadioButton[] buttons = new RadioButton[2];
+    private final float[] PIN_COLORS = {HUE_RED, HUE_BLUE};
+    private final String[] PIN_OPTIONS = {"Start", "Finish"};
+    private final int NUM_PIN_OPTIONS = 2;
+    private RadioButton[] buttons = new RadioButton[NUM_PIN_OPTIONS];
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -46,80 +46,61 @@ public class CustomizeMarkerFragment extends AppCompatDialogFragment {
         Button confirm = v.findViewById(R.id.confirmBtn);
         Button cancel = v.findViewById(R.id.cancelBtn);
         setUpTypeGroups(v);
-        confirm.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View view) {
-                String title = nameForm.getText().toString();
-                MarkerOptions m = gMapsOption.makeMarker(coordinates,type,title);
-
-                if(buttons[0].isChecked()){
-                    //TODO: Find a way to remove markers from the map.
-
-                    // If there is a start marker on the map remove it
-                    if(fragmentData.getStartCount() > 0){
-                        fragmentData.getStartMarker().remove();
-                        fragmentData.setStartMarker(null);
-                        fragmentData.decStartCount();
-                        fragmentData.setMarkerTitle(null);
-                    }
-
-                    gMapsOption.addMarker(m,0);
-
-                    // Creates, displays, and stores a marker
-                    fragmentData.setStartMarker(map.addMarker(gMapsOption.getStartMarker()));
-                    fragmentData.setMarkerTitle(title);
-
-                }else{
-
-                    if(fragmentData.getEndCount() > 0){
-                        fragmentData.getEndMarker().remove();
-                        fragmentData.setEndMarker(null);
-                        fragmentData.decEndCount();
-                    }
-                    gMapsOption.addMarker(m,1);
-
-                    // Creates, displays, and stores a marker
-                    fragmentData.setEndMarker(map.addMarker(gMapsOption.getFinishMarker()));
-
-                }
-
-                dismiss();
-            }
-        });
-
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-        });
-        Dialog d = new Dialog(getActivity(),0);
+        confirm.setOnClickListener(view -> manageMarkers());
+        cancel.setOnClickListener(view -> dismiss());
         return new AlertDialog.Builder(getActivity()).setView(v).create();
     }
 
+    //Function to pass the map to this fragment.
     public void setMap(GoogleMap gmap, LatLng location){
         map = gmap;
         coordinates = location;
     }
 
+    //Manages markers on the map so that only two exist at a time.
+    private void manageMarkers(){
+        //Name the marker... may need error checking.
+        String title = nameForm.getText().toString();
+        //Create marker options.
+        MarkerOptions options = gMapsOption.makeMarker(coordinates,type,title);
+        //Manage start markers
+        if(buttons[0].isChecked()){
+            if(fragmentData.getStartMarker() != null){
+                //Removes an existing start marker if there is one...
+                Marker m = fragmentData.getStartMarker();
+                m.remove();
+            }
+            //Place a marker
+            Marker m = map.addMarker(options);
+            fragmentData.storeStartMarker(m);
+        }
+        //Manage finish markers
+        else{
+            if(fragmentData.getEndMarker() != null){
+                //Removes an existing start marker if there is one...
+                Marker m = fragmentData.getEndMarker();
+                m.remove();
+            }
+            //Place a marker
+            Marker m = map.addMarker(options);
+            fragmentData.storeEndMarker(m);
+        }
+        dismiss();
+    }
+
     private void setUpTypeGroups(View v){
         RadioGroup markerTypes = v.findViewById(R.id.typeGroups);
-        for(int i = 0; i < 2; i++){
-            final int finalI = i;
+        for(int i = 0; i < NUM_PIN_OPTIONS; i++){
+            final int refIndex = i;
             RadioButton button = new RadioButton(v.getContext());
-            button.setText(parallelTitle[i]);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    type = colors[finalI];
-                }
-            });
+            button.setText(PIN_OPTIONS[i]);
+            button.setOnClickListener(view -> type = PIN_COLORS[refIndex]);
             markerTypes.addView(button);
             buttons[i] = button;
-            //Default checked value
-            if(Color.RED == colors[i]){
-                button.setChecked(true);
+            //Default checked value is "Start"
+            if(buttons[i].getText() == PIN_OPTIONS[0]){
+                buttons[i].setChecked(true);
             }
         }
     }
@@ -128,8 +109,8 @@ public class CustomizeMarkerFragment extends AppCompatDialogFragment {
         fragmentData.getEndMarker().remove();
         fragmentData.getStartMarker().remove();
 
-        fragmentData.setStartMarker(null);
-        fragmentData.setEndMarker(null);
+        fragmentData.storeStartMarker(null);
+        fragmentData.storeEndMarker(null);
     }
 
 

@@ -36,8 +36,6 @@ public class GoogleMapsInterface {
     private static final float CIRCLE_THICKNESS = 2.0f;
     private static Circle userProximity;
 
-    private MarkerOptions[] markers = new MarkerOptions[2];
-
     private GoogleMapsInterface(Context c){
         context = c;
         locationService = LocationServices.getFusedLocationProviderClient(c);
@@ -61,18 +59,6 @@ public class GoogleMapsInterface {
             // Just a default value, should be moved to a const later
             this.radius = 100;
         }
-    }
-
-    public void addMarker(MarkerOptions m, int i){
-        markers[i] = m;
-    }
-
-    public MarkerOptions getStartMarker(){
-        return markers[0];
-    }
-
-    public MarkerOptions getFinishMarker(){
-        return markers[1];
     }
 
     // Computes if a location is within the radius of the person's current location
