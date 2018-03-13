@@ -21,4 +21,11 @@
     <string name="add_a_user_to_monitor">Add a user to monitor</string>
     <string name="add">Add</string>
     <string name="long_press_user_to_stop_monitoring">Long press user to stop monitoring</string>
+    <string name="currently_monitored_by">Currently monitored by:</string>
+    <string name="add_user_to_monitor_me">Add user to monitor me</string>
+    <string name="long_press_user_to_stop_being_by_them">Long press user to stop being by them</string>
+    <string name="return_to_main_menu">Return to Main Menu</string>
+    <string name="remove">Remove</string>
+    <string name="stop_monitoring_a_user">Stop monitoring a user</string>
+    <string name="stop_a_user_from_monitoring_me">Stop a user from monitoring me</string>
 </resources>

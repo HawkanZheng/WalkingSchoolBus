@@ -21,11 +21,9 @@ import project.cmpt276.server.walkingschoolbus.WGServerProxy;
 import retrofit2.Call;
 
 /* Activity that list all users being monitored by the current users
- - User can remove anyone from the list of users whom they monitor, and who monitors them.
+ - User can remove anyone from the list of users whom they monitor
  - User can add another user to the set of users they monitor (add their child).
     The child account must already exist and is identified by its email address.
- - User can add another user to the set of users who monitor them (add their parent).
-    The parent account must already exist and is identified by its email address.
  */
 
 public class WhoIMonitor extends AppCompatActivity {
@@ -48,7 +46,8 @@ public class WhoIMonitor extends AppCompatActivity {
 
         setUpAddButton();
         setUpReturnButton();
-        registerLongListClickCallback();
+        setUpRemoveMonitoredUserButton();
+
 
 
     }
@@ -82,22 +81,20 @@ public class WhoIMonitor extends AppCompatActivity {
         list.setAdapter(adapter);
     }
 
-    private void registerLongListClickCallback() {
-        ListView list = findViewById(R.id.currentlyMonitoringList);
-        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+    private void setUpRemoveMonitoredUserButton() {
+        Button button = findViewById(R.id.stopMonitoringBtn);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View viewClicked, int position, long id) {
-
-                //Long-press user to delete from monitors users list
-                Long deleteMonitorsId = user.getMonitorsUsers().get(position).getId();
-                Call<User> caller = proxy.getUserById(deleteMonitorsId);
+            public void onClick(View v) {
+                EditText text = findViewById(R.id.stopMonitoringText);
+                Call<User> caller = proxy.getUserByEmail(text.getText().toString());
                 ProxyBuilder.callProxy(WhoIMonitor.this, caller, returnedUser -> removeUserResponse(returnedUser));
-
-
-                return true;
             }
         });
     }
+
+
+
 
     private void removeUserResponse(User returnedUser) {
         Call<Void> caller = proxy.stopMonitoringUser(user.getId(), returnedUser.getId());

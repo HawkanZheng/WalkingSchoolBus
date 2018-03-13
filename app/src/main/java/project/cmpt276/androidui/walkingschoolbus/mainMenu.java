@@ -247,6 +247,14 @@ public class mainMenu extends AppCompatActivity {
     }
 
     private void setUpWhoMonitorsMeBtn() {
+        Button button = findViewById(R.id.whoMonitorsMeBtn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = WhoMonitorsMe.makeIntent(mainMenu.this);
+                startActivity(intent);
+            }
+        });
     }
 
     public static Intent makeIntent(Context context) {

@@ -22,12 +22,15 @@ public class User {
     private List<Group> leadsGroups = new ArrayList<>();
 
     private String[] monitorsUsersString;
+    private String[] monitoredByUsersString;
 
 
 
     /*
         Singleton Support
          */
+
+
     private static User instance;
     private User(){
         //Private to prevent anyone else from instantiating
@@ -134,6 +137,14 @@ public class User {
 
     public void setMonitorsUsersString(String[] monitorsUsersString) {
         this.monitorsUsersString = monitorsUsersString;
+    }
+
+    public String[] getMonitoredByUsersString() {
+        return monitoredByUsersString;
+    }
+
+    public void setMonitoredByUsersString(String[] monitoredByUsersString) {
+        this.monitoredByUsersString = monitoredByUsersString;
     }
 
 
