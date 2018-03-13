@@ -74,7 +74,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationCallback locationCallback;
     private LocationSettingsRequest locationSettings;
     private Circle userRadius;
-
     //Variables in use
     private static final int LOCATION_PERMISSION_REQUESTCODE = 076;
     private final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
@@ -189,6 +188,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             ActivityCompat.requestPermissions(this, perms, LOCATION_PERMISSION_REQUESTCODE);
         }
     }
+
 
     //This places a marker at user's last known location... Maybe implement the panic button to drop a last known location as well?
     private void placeLastLocationMarker(Location location){
