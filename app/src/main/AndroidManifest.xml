@@ -47,7 +47,8 @@
             android:label="@string/app_name" />
         <activity android:name=".mainMenu" />
         <activity android:name=".WhoIMonitor" />
-        <activity android:name=".WhoMonitorsMe"></activity>
+        <activity android:name=".WhoMonitorsMe" />
+        <activity android:name=".ManageGroups"></activity>
     </application>
 
 </manifest>

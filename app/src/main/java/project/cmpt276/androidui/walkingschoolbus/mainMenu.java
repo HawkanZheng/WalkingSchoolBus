@@ -49,6 +49,7 @@ public class mainMenu extends AppCompatActivity {
         setUpWhoIMonitorBtn();
         setUpWhoMonitorsMeBtn();
         setUpLogoutBtn();
+        setUpManageGroupsBtn();
 
 //        setupTestButton();
 //        setupTestGroupButton();
@@ -260,6 +261,17 @@ public class mainMenu extends AppCompatActivity {
         });
     }
 
+    private  void  setUpManageGroupsBtn(){
+        Button button = findViewById(R.id.manageGroupsBtn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = ManageGroups.makeIntent(mainMenu.this);
+                startActivity(intent);
+            }
+        });
+    }
+
     private void setUpLogoutBtn() {
         Button button = findViewById(R.id.logoutBtn);
         button.setOnClickListener(new View.OnClickListener() {
@@ -273,6 +285,7 @@ public class mainMenu extends AppCompatActivity {
         });
 
     }
+
 
     public static Intent makeIntent(Context context) {
         Intent intent = new Intent(context, mainMenu.class);
