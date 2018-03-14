@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="22dp"
         android:layout_marginStart="12dp"
-        android:text="See Who I Monitor"
+        android:text="@string/see_who_i_monitor"
         app:layout_constraintBottom_toTopOf="@+id/whoMonitorsMeBtn"
         app:layout_constraintStart_toStartOf="@+id/whoMonitorsMeBtn" />
 
@@ -64,8 +64,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="209dp"
-        android:text="See Who Monitors Me"
+        android:text="@string/see_who_monitors_me"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/logoutBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="17dp"
+        android:layout_marginEnd="17dp"
+        android:text="@string/logout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </android.support.constraint.ConstraintLayout>

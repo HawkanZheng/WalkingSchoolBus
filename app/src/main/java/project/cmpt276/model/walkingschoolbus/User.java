@@ -1,6 +1,7 @@
 package project.cmpt276.model.walkingschoolbus;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
  * Simple User class to store the data the server expects and returns.
 
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
     private Long id;
     private String name;

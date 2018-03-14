@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,11 +48,13 @@ public class mainMenu extends AppCompatActivity {
 
         setUpWhoIMonitorBtn();
         setUpWhoMonitorsMeBtn();
+        setUpLogoutBtn();
 
 //        setupTestButton();
 //        setupTestGroupButton();
 
     }
+
 
 
 
@@ -255,6 +258,20 @@ public class mainMenu extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void setUpLogoutBtn() {
+        Button button = findViewById(R.id.logoutBtn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sharedValues.setToken(null);
+                Intent intent = Login.makeIntent(mainMenu.this);
+                startActivity(intent);
+                Toast.makeText(mainMenu.this, "You have logged out.",Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
     public static Intent makeIntent(Context context) {
