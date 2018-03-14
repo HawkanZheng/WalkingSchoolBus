@@ -647,6 +647,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void userResponse(User returnedUser) {
         //Log.i(TAG, "userResponse used here");
         User.setUser(returnedUser);
+        user = returnedUser;
 
     }
 
