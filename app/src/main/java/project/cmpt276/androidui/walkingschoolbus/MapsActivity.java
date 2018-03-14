@@ -237,7 +237,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             List<Double> grpLatLocation = grp.getRouteLatArray();
             List<Double> grpLngLocation = grp.getRouteLngArray();
 
-            if(grpLatLocation != null && grpLngLocation != null){
+            if(grpLatLocation != null && grpLngLocation != null && !grpLatLocation.isEmpty() && !grpLngLocation.isEmpty()){
                 LatLng grpStartLocation = new LatLng(grpLatLocation.get(0), grpLngLocation.get(0));
                 Log.i("isLocationInRadius","" + gMapsInterface.isLocationInRadius(deviceLocation,grpStartLocation));
                 if (gMapsInterface.isLocationInRadius(deviceLocation, grpStartLocation)) {
