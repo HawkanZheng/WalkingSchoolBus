@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="project.cmpt276.androidui.walkingschoolbus.WhoIMonitor"
-    tools:layout_editor_absoluteY="81dp">
+    tools:layout_editor_absoluteY="81dp"
+    android:background="@drawable/background">
 
     <TextView
         android:id="@+id/currentMonitoringView"
@@ -99,9 +100,9 @@
         android:id="@+id/pressUserView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="6dp"
-        android:text="Press a user to remove them from a group"
+        android:layout_marginEnd="64dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/press_a_user_to_remove_them_from_a_group"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>

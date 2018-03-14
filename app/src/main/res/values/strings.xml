@@ -48,5 +48,20 @@
     <string name="return_to_who_i_monitor">Return to Who I Monitor</string>
     <string name="enter_group_to_be_removed_from">Enter Group To Be Removed From</string>
     <string name="remove_from_group">Remove From Group</string>
+    <string name="finish">Finish</string>
+    <string name="login">Login</string>
+    <string name="user_name">User Name</string>
+    <string name="password">Password</string>
+    <string name="create_an_account">Create an Account</string>
+    <string name="hello_please_log_in_or_create_an_account">Hello! Please Log In or Create an Account</string>
+    <string name="map">Map</string>
+    <string name="manage_groups">Manage Groups</string>
+    <string name="welcome_to_the_walking_school_bus_app">Welcome to the Walking School Bus App!</string>
+    <string name="enter_your_name">Enter Your Name</string>
+    <string name="enter_your_email">Enter Your Email</string>
+    <string name="create_your_password">Create Your Password</string>
+    <string name="join">join</string>
+    <string name="please_enter_your_credentials">Please Enter Your Credentials</string>
+    <string name="press_a_user_to_remove_them_from_a_group">Press a user to remove them from a group</string>
 
 </resources>
