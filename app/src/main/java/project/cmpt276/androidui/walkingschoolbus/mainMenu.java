@@ -42,7 +42,6 @@ public class mainMenu extends AppCompatActivity {
         Log.i(TAG, ""+user.toString());
 
         groupList = GroupCollection.getInstance();
-        getGroups();
 
         setUpMapButton();
 
@@ -111,22 +110,7 @@ public class mainMenu extends AppCompatActivity {
         ProxyBuilder.callProxy(mainMenu.this, caller, returnedGroup -> groupResponse(returnedGroup));
     }
 
-    private void getGroups() {
-        Call<List<Group>> caller = proxy.getGroups();
-        ProxyBuilder.callProxy(mainMenu.this, caller, returnedGroups ->groupsResponse(returnedGroups));
-    }
 
-    private void groupsResponse(List<Group> returnedGroups) {
-
-        Log.w(TAG, "All Groups:");
-        for (Group group : returnedGroups) {
-            Log.w(TAG, "    Group: " + group.toString());
-            groupList.addGroup(group);
-
-        }
-//        populateList();
-
-    }
 
     private void getGroup(Long groupId) {
         Call<Group> caller = proxy.getGroupById(groupId);
