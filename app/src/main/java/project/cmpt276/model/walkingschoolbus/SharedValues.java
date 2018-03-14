@@ -6,6 +6,7 @@ package project.cmpt276.model.walkingschoolbus;
 
 public class SharedValues {
     private  String token;
+    private Group group;
 
     private static SharedValues instance;
     private SharedValues(){
@@ -28,4 +29,11 @@ public class SharedValues {
         this.token = token;
     }
 
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
 }

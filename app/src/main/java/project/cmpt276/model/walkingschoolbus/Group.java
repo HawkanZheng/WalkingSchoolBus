@@ -13,7 +13,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Group {
-    private Long id;
+    private long id;
     private String href;
     private String groupDescription;
     private List<Double> routeLatArray = new ArrayList<>();

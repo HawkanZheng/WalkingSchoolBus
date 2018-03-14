@@ -52,7 +52,7 @@ public class mainMenu extends AppCompatActivity {
         setUpManageGroupsBtn();
 
 //        setupTestButton();
-//        setupTestGroupButton();
+        setupTestGroupButton();
 
     }
 
@@ -65,7 +65,7 @@ public class mainMenu extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //createGroup();
+                createGroup();
                 //getGroup(Long.valueOf(21));
                 //deleteGroup();
                 //getGroups();
@@ -136,10 +136,10 @@ public class mainMenu extends AppCompatActivity {
     private void createGroup() {
         Group group = new Group();
         group.setId(-1);
-        group.setGroupDescription("Test 4");
+        group.setGroupDescription("Test 6");
         group.setLeader(user);
-        group.setRouteLatArray(Arrays.asList(Double.valueOf(115.2344), Double.valueOf(225.3432)));
-        group.setRouteLngArray(Arrays.asList(Double.valueOf(142.6621), Double.valueOf(265.3455)));
+        //group.setRouteLatArray(Arrays.asList(Double.valueOf(115.2344), Double.valueOf(225.3432)));
+        //group.setRouteLngArray(Arrays.asList(Double.valueOf(142.6621), Double.valueOf(265.3455)));
         Call<Group> caller = proxy.createGroup(group);
         ProxyBuilder.callProxy(mainMenu.this, caller, returnedGroup -> groupResponse(returnedGroup));
     }

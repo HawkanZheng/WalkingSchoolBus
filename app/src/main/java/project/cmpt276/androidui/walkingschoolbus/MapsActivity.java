@@ -55,6 +55,7 @@ import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
+import retrofit2.Call;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_GREEN;
@@ -553,9 +554,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Make Server call
 
                  */
-                Toast.makeText(MapsActivity.this,"Joined Group!", Toast.LENGTH_SHORT).show();
+                if(joinGroup != null) {
+                    Call<List<User>> caller = proxy.addNewMember(joinGroup.getId(), user);
+                    ProxyBuilder.callProxy(MapsActivity.this, caller, returnedMembers -> memberResponse(returnedMembers));
+
+                    Toast.makeText(MapsActivity.this, "Joined Group!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+    }
+
+    private void memberResponse(List<User> returnedMembers) {
+
     }
 
     // TODO: Creates a new group
