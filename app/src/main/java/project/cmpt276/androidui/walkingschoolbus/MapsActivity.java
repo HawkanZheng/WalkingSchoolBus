@@ -157,9 +157,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 clearDisplayInfo();
 
+
                 // Select Start location marker
                 if(fragmentData.getStartMarker() != null && fragmentData.getEndMarker() != null &&
                         Objects.equals(marker.getId(), fragmentData.getStartMarker().getId())){
+
+                    Log.i("Marker","CustomMarkerClicked");
 
                     // Clicking a Marker will display the coordinates of the marker.
                     String URL = gMapsInterface.getDirectionsUrl(marker.getPosition(),fragmentData.getEndMarker().getPosition());
@@ -169,9 +172,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
 
                 // Select a group marker
-                else if(fragmentData.getEndMarker() == null || (fragmentData.getEndMarker() == null && !Objects.equals(fragmentData.getEndMarker().getId(), marker.getId()))){
+                else if(fragmentData.getEndMarker() == null || (fragmentData.getEndMarker() != null && !Objects.equals(fragmentData.getEndMarker().getId(), marker.getId()))){
                     // Grabs the group objected tagged to the marker
-                    Log.i("NonCustomMarker", "hetre");
+                    Log.i("Marker", "Non-Custom Marker Clicked");
                     Group grp = (Group) marker.getTag();
                     joinGroup = grp;
 
@@ -188,7 +191,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 else{
                     // if end location marker is clicked
+                    Log.i("Marker", "ElseStateTriggerd");
                     fragmentData.clearRoutes();
+                    clearDisplayInfo();
                 }
 
                 return false;
@@ -359,6 +364,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             List<Double> latWaypoints = grp[0].getRouteLatArray();
             List<Double> lngWaypoints = grp[0].getRouteLngArray();
 
+            Log.i("MapDraw","" +  grp[0].getRouteLatArray().size());
+            Log.i("MapDraw","" +  grp[0].getRouteLatArray());
             for (int i = 0; i < grp[0].getRouteLatArray().size(); i++) {
                 LatLng currentPosition = new LatLng(latWaypoints.get(i), lngWaypoints.get(i));
                 waypoints.add(currentPosition);
