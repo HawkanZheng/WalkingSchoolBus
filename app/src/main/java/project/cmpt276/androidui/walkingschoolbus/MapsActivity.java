@@ -49,6 +49,11 @@ import project.cmpt276.model.walkingschoolbus.Group;
 import project.cmpt276.model.walkingschoolbus.GroupCollection;
 import project.cmpt276.model.walkingschoolbus.MapsJsonParser;
 import project.cmpt276.model.walkingschoolbus.fragmentDataCollection;
+import project.cmpt276.model.walkingschoolbus.GroupCollection;
+import project.cmpt276.model.walkingschoolbus.SharedValues;
+import project.cmpt276.model.walkingschoolbus.User;
+import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
+import project.cmpt276.server.walkingschoolbus.WGServerProxy;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_GREEN;
@@ -95,6 +100,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final long LOCATION_UPDATE_RATE_IN_MS = 10000;
 
 
+    private WGServerProxy proxy;
+    private GroupCollection groupList;
+    private User user;
+    private SharedValues sharedValues;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -113,6 +122,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Setup  buttons -- These need to come after the map creation
         setupSaveButton();
         setupJoinGroupButton();
+        groupList = GroupCollection.getInstance();
+        user = User.getInstance();
+        sharedValues = SharedValues.getInstance();
+        proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
     }
 
     @Override

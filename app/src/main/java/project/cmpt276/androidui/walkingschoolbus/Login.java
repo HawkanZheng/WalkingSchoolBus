@@ -8,6 +8,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import java.util.List;
+
+import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
@@ -18,8 +23,15 @@ public class Login extends AppCompatActivity {
     private WGServerProxy proxy;
     private static final String TAG = "Test";
     private User user;
+    private SharedValues sharedValues;
 
     public GoogleMapsInterface gmaps;
+    String password;
+    String userName;
+
+    EditText getPassword;
+    EditText getUserName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +39,9 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         gmaps = GoogleMapsInterface.getInstance(this);
 
+        getInput();
         user = User.getInstance();
-
+        sharedValues = SharedValues.getInstance();
         //Build server proxy
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), null);
         setUpSkipButton();
@@ -37,54 +50,122 @@ public class Login extends AppCompatActivity {
     }
 
 
-    private void setUpSkipButton() {
-        Button button = (Button) findViewById(R.id.skip);
+    private void setUpSkipButton()
+    {
+        Button button = (Button) findViewById(R.id.loginBtn);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Login.this, MapsActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
 
-    private void setUpSignUpButton(){
-        Button button = (Button) findViewById(R.id.skip);
+                setUserInfo();
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Login.this, MapsActivity.class);
-                startActivity(intent);
+                if(!errorCheck())
+                {
+                    //look for the user in the server and proceed accordingly
+                    Intent intent = new Intent(Login.this, mainMenu.class);
+                    startActivity(intent);
+                }
+
 
             }
         });
 
     }
 
-    private void setUpLoginButton(){
+    private void setUpSignUpButton()
+    {
+
+        Button button = (Button) findViewById(R.id.createUser);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(Login.this, signUp.class);
+                startActivity(intent);
+
+            }
+        });
+
+    }
+
+    private boolean errorCheck()
+    {
+        boolean hasError = false;
+        String errors = "please correct the following\n";
+
+        if(userName.length()==0)
+        {
+            errors = errors +"User Name Invalid\n";
+            hasError = true;
+        }
+
+        if(password.length()==0)
+        {
+            errors = errors+"Password Invalid\n";
+            hasError=true;
+        }
+
+
+        if(hasError)
+        {
+            changeError(errors);
+        }
+
+
+        return hasError;
+    }
+
+    private void getInput()
+    {
+        getUserName = (EditText) findViewById(R.id.userName);
+        getPassword = (EditText) findViewById(R.id.enterPassWord);
+
+    }
+
+    private void setUserInfo()
+    {
+        userName = getUserName.getText().toString();
+        password = getPassword.getText().toString();
+        user.setEmail(userName);
+        user.setPassword(password);
+
+    }
+
+
+    private void changeError(String error)
+    {
+        TextView test = findViewById(R.id.loginErrorMessages);
+        test.setText(error);
+
+    }
+
+    private void setUpLoginButton()
+    {
 
         Button button = (Button) findViewById(R.id.loginBtn);
 
         button.setOnClickListener((View view) -> {
-            EditText userName = findViewById(R.id.userName);
-            String email = userName.getText().toString();
 
-            EditText password = findViewById(R.id.enterPassWord);
-            String pw = password.getText().toString();
-            //Set new user
-            user.setEmail(email);
-            user.setPassword(pw);
+            setUserInfo();
 
-            ProxyBuilder.setOnTokenReceiveCallback(this::onReceiveToken);
+            if(!errorCheck()) {
 
-            //ProxyBuilder.setOnErrorCallback(this::onReceiveError);
+                //Set new user
+                ProxyBuilder.setOnTokenReceiveCallback(this::onReceiveToken);
 
-            Call<Void> caller = proxy.login(user);
-            ProxyBuilder.callProxy(Login.this, caller, this::response);
+                //ProxyBuilder.setOnErrorCallback(this::onReceiveError);
+
+            Call<Void> loginCaller = proxy.login(user);
+            ProxyBuilder.callProxy(Login.this, loginCaller, this::response);
 
 //            Intent intent = mainMenu.makeIntent(Login.this, newToken);
 //            startActivity(intent);
+
+            }
+
+
+
         });
     }
 
@@ -106,13 +187,29 @@ public class Login extends AppCompatActivity {
         // Replace the current proxy with one that uses the token!
         Log.w(TAG, "   --> NOW HAVE TOKEN: " + token);
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), token);
+        sharedValues.setToken(token);
+
+        setUser();
 
 
+
+
+    }
+
+    private void setUser() {
         Call<User> caller = proxy.getUserByEmail(user.getEmail());
-        ProxyBuilder.callProxy(Login.this, caller, returnedUser -> response(returnedUser));
+        ProxyBuilder.callProxy(Login.this, caller, returnedUser -> userResponse(returnedUser));
+        Log.i(TAG, "setUser used here");
+    }
 
-        Intent intent = mainMenu.makeIntent(Login.this, token);
+    private void userResponse(User returnedUser) {
+        Log.i(TAG, "userResponse used here");
+        User.setUser(returnedUser);
+
+        Intent intent = mainMenu.makeIntent(Login.this);
         startActivity(intent);
+
+
     }
 
     private void onReceiveError(String message){
@@ -120,19 +217,15 @@ public class Login extends AppCompatActivity {
 //
 //        Intent intent = Login.makeIntent(Login.this);
 //        startActivity(intent);
+
     }
 
 
     private void response(Void returnedNothing) {
         Log.w(TAG, "Server replied to login request (no content was expected).");
+
     }
 
-    private void response(User returnedUser){
-        User.setUser(returnedUser);
-        user = User.getInstance();
-
-        Log.w(TAG, "After Singleton test, server replied with User: " + user.toString());
-    }
 
     public static Intent makeIntent(Context context){
         return new Intent(context, Login.class);

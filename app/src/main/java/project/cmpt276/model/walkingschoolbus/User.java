@@ -1,6 +1,7 @@
 package project.cmpt276.model.walkingschoolbus;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
  * Simple User class to store the data the server expects and returns.
 
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
     private Long id;
     private String name;
@@ -20,9 +22,17 @@ public class User {
     private List<Group> walkingGroups = new ArrayList<>();   // <-- TO BE IMPLEMENTED
     private List<Group> memberOfGroups = new ArrayList<>();
     private List<Group> leadsGroups = new ArrayList<>();
+
+    private String[] monitorsUsersString;
+    private String[] monitoredByUsersString;
+
+
+
     /*
-    Singleton Support
-     */
+        Singleton Support
+         */
+
+
     private static User instance;
     private User(){
         //Private to prevent anyone else from instantiating
@@ -48,7 +58,7 @@ public class User {
     public void setId(Long id) {
         this.id = id;
     }
-    @JsonIgnore
+    //@JsonIgnore
     public String getName() {
         return name;
     }
@@ -80,7 +90,7 @@ public class User {
     public void setMonitoredByUsers(List<User> monitoredByUsers) {
         this.monitoredByUsers = monitoredByUsers;
     }
-    @JsonIgnore
+    //@JsonIgnore
     public List<User> getMonitorsUsers() {
         return monitorsUsers;
     }
@@ -88,7 +98,7 @@ public class User {
     public void setMonitorsUsers(List<User> monitorsUsers) {
         this.monitorsUsers = monitorsUsers;
     }
-    @JsonIgnore
+   // @JsonIgnore
     public List<Group> getWalkingGroups() {
         return walkingGroups;
     }
@@ -104,7 +114,7 @@ public class User {
     public void setHref(String href) {
         this.href = href;
     }
-    @JsonIgnore
+    //@JsonIgnore
     public List<Group> getMemberOfGroups() {
         return memberOfGroups;
     }
@@ -121,6 +131,23 @@ public class User {
         this.leadsGroups = leadsGroups;
     }
 
+    public String[] getMonitorsUsersString() {
+        return monitorsUsersString;
+    }
+
+    public void setMonitorsUsersString(String[] monitorsUsersString) {
+        this.monitorsUsersString = monitorsUsersString;
+    }
+
+    public String[] getMonitoredByUsersString() {
+        return monitoredByUsersString;
+    }
+
+    public void setMonitoredByUsersString(String[] monitoredByUsersString) {
+        this.monitoredByUsersString = monitoredByUsersString;
+    }
+
+
     @Override
     public String toString() {
         return "User{" +
@@ -130,7 +157,7 @@ public class User {
                 ", password='" + password + '\'' +
                 ", monitoredByUsers=" + monitoredByUsers +
                 ", monitorsUsers=" + monitorsUsers +
-                ", walkingGroups=" + walkingGroups +
+                ", memberOfGroups=" + memberOfGroups +
                 '}';
     }
 }

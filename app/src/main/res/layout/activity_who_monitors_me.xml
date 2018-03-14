@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="project.cmpt276.androidui.walkingschoolbus.WhoMonitorsMe"
+    tools:layout_editor_absoluteY="81dp">
+
+    <TextView
+        android:id="@+id/currentMonitoredByView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="17dp"
+        android:text="@string/currently_monitored_by"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/currentlyMonitoredByList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="19dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="19dp"
+        app:layout_constraintBottom_toBottomOf="@+id/addSomeoneToMonitorMeView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/currentMonitoredByView" />
+
+    <EditText
+        android:id="@+id/addSomeoneToMonitorMeEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/user_s_email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintStart_toStartOf="@+id/addSomeoneToMonitorMeView"
+        app:layout_constraintTop_toBottomOf="@+id/addSomeoneToMonitorMeView" />
+
+    <TextView
+        android:id="@+id/addSomeoneToMonitorMeView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="184dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/add_user_to_monitor_me"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/currentlyMonitoredByList" />
+
+    <Button
+        android:id="@+id/addUserToMonitorMeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add"
+        app:layout_constraintBaseline_toBaselineOf="@+id/addSomeoneToMonitorMeEdit"
+        app:layout_constraintStart_toEndOf="@+id/addSomeoneToMonitorMeEdit" />
+
+    <Button
+        android:id="@+id/returnMainMenuBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/return_to_main_menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/stopBeingMonitoredView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stop_a_user_from_monitoring_me"
+        app:layout_constraintStart_toStartOf="@+id/addSomeoneToMonitorMeEdit"
+        app:layout_constraintTop_toBottomOf="@+id/addSomeoneToMonitorMeEdit" />
+
+    <EditText
+        android:id="@+id/stopBeingMonitoredText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/user_s_email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintStart_toStartOf="@+id/stopBeingMonitoredView"
+        app:layout_constraintTop_toBottomOf="@+id/stopBeingMonitoredView" />
+
+    <Button
+        android:id="@+id/stopBeingMonitoredBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/remove"
+        app:layout_constraintBaseline_toBaselineOf="@+id/stopBeingMonitoredText"
+        app:layout_constraintStart_toEndOf="@+id/stopBeingMonitoredText" />
+</android.support.constraint.ConstraintLayout>

@@ -6,16 +6,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import java.lang.reflect.Proxy;
+import java.util.Arrays;
 import java.util.List;
 
 import project.cmpt276.model.walkingschoolbus.Group;
 import project.cmpt276.model.walkingschoolbus.GroupCollection;
+import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
@@ -24,13 +23,10 @@ import retrofit2.Call;
 public class mainMenu extends AppCompatActivity {
     private WGServerProxy proxy;
     private static final String TAG = "Test";
-//    private long userId = 0;
+    //    private long userId = 0;
     private User user;
     private GroupCollection groupList;
-
-
-
-
+    private SharedValues sharedValues;
 
 
     @Override
@@ -38,20 +34,29 @@ public class mainMenu extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-
-
-        proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), getIntent().getStringExtra("Token"));
-
+        sharedValues = SharedValues.getInstance();
+        proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
         user = User.getInstance();
+
 
         Log.i(TAG, ""+user.toString());
 
-       groupList = GroupCollection.getInstance();
+        groupList = GroupCollection.getInstance();
+        getGroups();
+
+        setUpMapButton();
+
+        setUpWhoIMonitorBtn();
+        setUpWhoMonitorsMeBtn();
+        setUpLogoutBtn();
 
 //        setupTestButton();
 //        setupTestGroupButton();
 
     }
+
+
+
 
     private void setupTestGroupButton() {
         Button button = findViewById(R.id.groupTestBtn);
@@ -61,12 +66,11 @@ public class mainMenu extends AppCompatActivity {
             public void onClick(View view) {
                 //createGroup();
                 //getGroup(Long.valueOf(21));
-                //
-//                deleteGroup();
-               getGroups();
+                //deleteGroup();
+                //getGroups();
                 //getGroupMembers();
                 //addNewMember();
-                //updateGroup(Long.valueOf(18));
+                //updateGroup(Long.valueOf(20));
                 //deleteGroupMember();
 
             }
@@ -115,7 +119,7 @@ public class mainMenu extends AppCompatActivity {
 
         Log.w(TAG, "All Groups:");
         for (Group group : returnedGroups) {
-//            Log.w(TAG, "    Group: " + group.toString());
+            Log.w(TAG, "    Group: " + group.toString());
             groupList.addGroup(group);
 
         }
@@ -130,8 +134,11 @@ public class mainMenu extends AppCompatActivity {
 
     private void createGroup() {
         Group group = new Group();
-        group.setGroupDescription("Test 2");
+        group.setId(-1);
+        group.setGroupDescription("Test 4");
         group.setLeader(user);
+        group.setRouteLatArray(Arrays.asList(Double.valueOf(115.2344), Double.valueOf(225.3432)));
+        group.setRouteLngArray(Arrays.asList(Double.valueOf(142.6621), Double.valueOf(265.3455)));
         Call<Group> caller = proxy.createGroup(group);
         ProxyBuilder.callProxy(mainMenu.this, caller, returnedGroup -> groupResponse(returnedGroup));
     }
@@ -147,7 +154,7 @@ public class mainMenu extends AppCompatActivity {
 //        //Build Adapter
 //        ArrayAdapter<String> adapter = new ArrayAdapter<>(
 //                this,           //Context for the activity
-//                R.layout.user_list,      //Layout used
+//                R.layout.monitors_users_list,      //Layout used
 //                groups);               //Groups/Users displayed
 //
 //        //Configure the list view
@@ -212,10 +219,67 @@ public class mainMenu extends AppCompatActivity {
         Log.w(TAG, "Server replied with nothing");
     }
 
-    public static Intent makeIntent(Context context, String token) {
+
+
+    private void setUpMapButton()
+    {
+        Button button = (Button) findViewById(R.id.goToMap);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mainMenu.this, MapsActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+
+
+
+    private void setUpWhoIMonitorBtn() {
+        Button button = findViewById(R.id.whoIMonitorBtn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = WhoIMonitor.makeIntent(mainMenu.this);
+                startActivity(intent);
+
+            }
+        });
+    }
+
+    private void setUpWhoMonitorsMeBtn() {
+        Button button = findViewById(R.id.whoMonitorsMeBtn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = WhoMonitorsMe.makeIntent(mainMenu.this);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void setUpLogoutBtn() {
+        Button button = findViewById(R.id.logoutBtn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sharedValues.setToken(null);
+                Intent intent = Login.makeIntent(mainMenu.this);
+                startActivity(intent);
+                Toast.makeText(mainMenu.this, "You have logged out.",Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+    public static Intent makeIntent(Context context) {
         Intent intent = new Intent(context, mainMenu.class);
-        intent.putExtra("Token", token);
+
         return intent;
     }
 }
+
+
 
