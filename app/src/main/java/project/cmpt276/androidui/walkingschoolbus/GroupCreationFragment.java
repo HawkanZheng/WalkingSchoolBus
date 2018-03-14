@@ -107,6 +107,7 @@ public class GroupCreationFragment extends AppCompatDialogFragment {
     private void groupResponse(Group returnedGroup) {
         Log.i("Group returned: ", returnedGroup.toString());
         sharedValues.setGroup(returnedGroup);
+        groupList.addGroup(returnedGroup);
         //Get updated user
         Call<User> caller = proxy.getUserByEmail(user.getEmail());
         ProxyBuilder.callProxy(getActivity(), caller, returnedUser -> userResponse(returnedUser));

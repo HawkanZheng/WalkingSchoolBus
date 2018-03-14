@@ -134,7 +134,7 @@ public class WhoMonitorsMe extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(mainMenu.makeIntent(WhoMonitorsMe.this));
+                finish();
             }
         });
     }

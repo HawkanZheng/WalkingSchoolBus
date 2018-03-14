@@ -77,7 +77,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     fragmentDataCollection fragmentData = fragmentDataCollection.getInstance();
 
     // Join a existing group
-    Group joinGroup;
+    Group joinGroup = new Group();
 
 
     //Waypoints for path
