@@ -88,6 +88,11 @@ public class GroupCreationFragment extends AppCompatDialogFragment {
             return;
 
         }
+        /*
+        * Set leader
+        * Set id
+        * Push group to server and add it to client.
+        */
         group.setId(-1);
         group.setLeader(user);
         Call<Group> caller = proxy.createGroup(group);
@@ -95,18 +100,14 @@ public class GroupCreationFragment extends AppCompatDialogFragment {
 
         Toast.makeText(getActivity(),"New Group Saved!", Toast.LENGTH_SHORT).show();
 
-        /*
-        * Set leader
-        * Set id
-        * Push group to server and add it to client.
-        */
-        //Dismiss the dialog once a group is successfully made.
-        //dismiss();
+
+
     }
 
     private void groupResponse(Group returnedGroup) {
         Log.i("Group returned: ", returnedGroup.toString());
         sharedValues.setGroup(returnedGroup);
+        groupList.addGroup(returnedGroup);
         //Get updated user
         Call<User> caller = proxy.getUserByEmail(user.getEmail());
         ProxyBuilder.callProxy(getActivity(), caller, returnedUser -> userResponse(returnedUser));
@@ -122,6 +123,8 @@ public class GroupCreationFragment extends AppCompatDialogFragment {
 
     private void membersResponse(List<User> returnedMembers) {
         Log.i("New Group:", "Now member of group");
+        //Dismiss the dialog once a group is successfully made.
+        dismiss();
     }
 
 
