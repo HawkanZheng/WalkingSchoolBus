@@ -661,7 +661,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 addMonitoredUsers.show(manager,"AddMonitoredUsers");
 
 
-                Toast.makeText(MapsActivity.this,"Added User",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MapsActivity.this,"Added User",Toast.LENGTH_SHORT).show();
             }
         });
     }

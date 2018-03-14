@@ -64,9 +64,9 @@ public class Group {
         this.memberUsers = memberUsers;
     }
 
-    public void addMembertoGroup(User u){
-        memberUsers.add(u);
-    }
+//    public void addMembertoGroup(User u){
+//        memberUsers.add(u);
+//    }
 
     public List<Double> getRouteLatArray() {
         return routeLatArray;

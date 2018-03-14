@@ -225,12 +225,14 @@ public class Login extends AppCompatActivity {
 
     private void groupsResponse(List<Group> returnedGroups) {
 
-        Log.w(TAG, "All Groups:");
-        for (Group group : returnedGroups) {
-            Log.w(TAG, "    Group: " + group.toString());
-            groupList.addGroup(group);
+        groupList.setGroups(returnedGroups);
 
-        }
+//        Log.w(TAG, "All Groups:");
+//        for (Group group : returnedGroups) {
+//            Log.w(TAG, "    Group: " + group.toString());
+//            groupList.addGroup(group);
+//
+//        }
 //        populateList();
 
     }

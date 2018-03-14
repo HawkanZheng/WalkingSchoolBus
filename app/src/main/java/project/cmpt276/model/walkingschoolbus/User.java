@@ -159,6 +159,10 @@ public class User {
         this.memberOfGroupsString.add(group);
     }
 
+    public void setMemberInList(int i, String string){
+        this.memberOfGroupsString.set(i, string );
+    }
+
 
     @Override
     public String toString() {
