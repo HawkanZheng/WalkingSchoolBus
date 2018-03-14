@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
@@ -106,7 +107,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private SharedValues sharedValues;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         //Map stuffs
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
@@ -145,9 +145,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 CustomizeMarkerFragment markerShop = new CustomizeMarkerFragment();
                 markerShop.setMap(mMap,latLng);
                 markerShop.show(manager,"MesageDialog");
-
                 clearDisplayInfo();
-
             }
         });
 
@@ -239,14 +237,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             List<Double> grpLatLocation = grp.getRouteLatArray();
             List<Double> grpLngLocation = grp.getRouteLngArray();
 
-            LatLng grpStartLocation = new LatLng(grpLatLocation.get(0), grpLngLocation.get(0));
-
-            Log.i("isLocationInRadius","" + gMapsInterface.isLocationInRadius(deviceLocation,grpStartLocation));
-            if (gMapsInterface.isLocationInRadius(deviceLocation, grpStartLocation)) {
-                groupInRadius.add(grp);
-                Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, GROUP_TYPE, grp.getGroupDescription()));
-                marker.setTag(grp);
-                groupMarkersPlaced.add(marker);
+            if(grpLatLocation != null && grpLngLocation != null){
+                LatLng grpStartLocation = new LatLng(grpLatLocation.get(0), grpLngLocation.get(0));
+                Log.i("isLocationInRadius","" + gMapsInterface.isLocationInRadius(deviceLocation,grpStartLocation));
+                if (gMapsInterface.isLocationInRadius(deviceLocation, grpStartLocation)) {
+                    groupInRadius.add(grp);
+                    Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, GROUP_TYPE, grp.getGroupDescription()));
+                    marker.setTag(grp);
+                    groupMarkersPlaced.add(marker);
+                }
+            }
+            else{
+                return;
             }
         }
     }
