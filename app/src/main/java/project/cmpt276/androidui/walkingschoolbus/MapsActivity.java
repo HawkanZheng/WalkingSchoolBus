@@ -564,7 +564,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onPause(){
         super.onPause();
-        fragmentData.clearData();
+        clearDisplayInfo();
+
+        if(fragmentData.getStartMarker() != null){
+            fragmentData.getStartMarker().remove();
+        }
+
+        if(fragmentData.getEndMarker() != null){
+            fragmentData.getEndMarker().remove();
+        }
+
+        if(fragmentData.getStartMarker() != null || fragmentData.getEndMarker() != null ){
+            fragmentData.clearData();
+        }
     }
 
     private void createLatLngList(double lat, double lng){
@@ -643,6 +655,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                AddMonitoredUsersToGroup addMonitoredUsers = new AddMonitoredUsersToGroup();
+                FragmentManager manager = getSupportFragmentManager();
+                addMonitoredUsers.show(manager,"AddMonitoredUsers");
+
+
                 Toast.makeText(MapsActivity.this,"Added User",Toast.LENGTH_SHORT).show();
             }
         });

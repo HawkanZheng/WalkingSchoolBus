@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -33,8 +34,10 @@ public class AddMonitoredUsersToGroup extends AppCompatDialogFragment {
 
     private void fillGroupsList(){
         List<Group> groups = user.getWalkingGroups();
+        Log.i("MonitorFragment","Group # :" + groups.size());
+        Log.i("MonitorFragment","GroupCall # :" + user.getWalkingGroups());
         ListView listview = v.findViewById(R.id.usersGroups);
-        ArrayAdapter<Group> groupAdapter = new ArrayAdapter<Group>(v.getContext(),R.layout.user_groups_list,groups);
+        ArrayAdapter<Group> groupAdapter = new ArrayAdapter<Group>(getActivity(),R.layout.user_groups_list,groups);
         listview.setAdapter(groupAdapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -47,6 +50,8 @@ public class AddMonitoredUsersToGroup extends AppCompatDialogFragment {
 
     private void fillMonitorsList(){
         List<User> monitored = user.getMonitorsUsers();
+        Log.i("MonitorFragment","Monitor # :" + monitored.size());
+        Log.i("MonitorFragment","MonitorCall # :" + user.getMonitorsUsers());
         ListView listview = v.findViewById(R.id.usersMonitored);
         ArrayAdapter<Group> monitoredAdapter = new ArrayAdapter<Group>(v.getContext(),R.layout.monitors_users_list);
         listview.setAdapter(monitoredAdapter);
