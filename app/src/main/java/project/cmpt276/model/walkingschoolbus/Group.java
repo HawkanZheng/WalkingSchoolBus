@@ -1,6 +1,7 @@
 package project.cmpt276.model.walkingschoolbus;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +11,7 @@ import java.util.List;
  * Created by Hawkan Zheng on 3/9/2018.
  */
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Group {
     private Long id;
     private String href;

@@ -28,4 +28,7 @@
     <string name="remove">Remove</string>
     <string name="stop_monitoring_a_user">Stop monitoring a user</string>
     <string name="stop_a_user_from_monitoring_me">Stop a user from monitoring me</string>
+    <string name="logout">LOGOUT</string>
+    <string name="see_who_i_monitor">See Who I Monitor</string>
+    <string name="see_who_monitors_me">See Who Monitors Me</string>
 </resources>
