@@ -565,9 +565,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onPause(){
         super.onPause();
         clearDisplayInfo();
-        if(fragmentData.getStartMarker() != null && fragmentData.getEndMarker() != null){
+
+        if(fragmentData.getStartMarker() != null){
             fragmentData.getStartMarker().remove();
+        }
+
+        if(fragmentData.getEndMarker() != null){
             fragmentData.getEndMarker().remove();
+        }
+
+        if(fragmentData.getStartMarker() != null || fragmentData.getEndMarker() != null ){
             fragmentData.clearData();
         }
     }
