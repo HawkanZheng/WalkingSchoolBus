@@ -56,7 +56,6 @@ import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,ActivityCompat.OnRequestPermissionsResultCallback{
 
-    //TODO: Interface with group class
     private GroupCollection groupCollection = GroupCollection.getInstance();
     private ArrayList<Group> groupInRadius = new ArrayList<Group>();
     private ArrayList<Marker> groupMarkersPlaced = new ArrayList<Marker>();
@@ -140,7 +139,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         //Allow something to happen when a marker is clicked.
-        // TODO: show path from start location to end location on pin clicked
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -303,10 +301,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    // TODO: convert this to accept a group object which translates into a pin
+
     // string temporary, info should be extracted from group class
     public MarkerOptions placeMarkerAtLocation(LatLng location, float type, String title){
-        // TODO: pin should be customized to show related information
         return new MarkerOptions().position(location).title(title).icon(BitmapDescriptorFactory.defaultMarker(type));
     }
 
@@ -498,7 +495,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         lngsWaypoints.add(lng);
     }
 
-    // TODO: add fragment to get title for group
     // TODO: add server call to push data
     // Saves the newest created route to the server as a group
     private void setupSaveButton(){
