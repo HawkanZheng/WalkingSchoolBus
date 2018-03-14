@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="project.cmpt276.androidui.walkingschoolbus.ManageGroups"
+    tools:layout_editor_absoluteY="81dp">
+
+    <TextView
+        android:id="@+id/myGroupsView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="9dp"
+        android:text="@string/my_groups"
+        app:layout_constraintBottom_toTopOf="@+id/myGroupsList"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/myGroupsList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="51dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/leaveGroupView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myGroupsView" />
+
+    <Button
+        android:id="@+id/leaveGroupBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="45dp"
+        android:layout_marginEnd="21dp"
+        android:text="@string/leave_group"
+        app:layout_constraintBottom_toTopOf="@+id/returnToMainMenuBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/groupIDEdit"
+        app:layout_constraintTop_toBottomOf="@+id/leaveGroupView" />
+
+    <TextView
+        android:id="@+id/leaveGroupView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/enter_group_you_want_to_leave"
+        app:layout_constraintBottom_toTopOf="@+id/leaveGroupBtn"
+        app:layout_constraintStart_toStartOf="@+id/groupIDEdit"
+        app:layout_constraintTop_toBottomOf="@+id/myGroupsList" />
+
+    <EditText
+        android:id="@+id/groupIDEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/group_id"
+        android:inputType="number"
+        app:layout_constraintEnd_toStartOf="@+id/leaveGroupBtn"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/leaveGroupView" />
+
+    <Button
+        android:id="@+id/returnToMainMenuBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:text="@string/return_to_main_menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/leaveGroupBtn" />
+</android.support.constraint.ConstraintLayout>

@@ -59,6 +59,7 @@ import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
+import retrofit2.Call;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_GREEN;
@@ -81,7 +82,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     fragmentDataCollection fragmentData = fragmentDataCollection.getInstance();
 
     // Join a existing group
-    Group joinGroup;
+    Group joinGroup = new Group();
 
 
     //Waypoints for path
@@ -124,6 +125,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Setup  buttons -- These need to come after the map creation
         setupSaveButton();
         setupJoinGroupButton();
+        setupAddUserButton();
+
         groupList = GroupCollection.getInstance();
         user = User.getInstance();
         sharedValues = SharedValues.getInstance();
@@ -157,9 +160,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 clearDisplayInfo();
 
+
                 // Select Start location marker
                 if(fragmentData.getStartMarker() != null && fragmentData.getEndMarker() != null &&
                         Objects.equals(marker.getId(), fragmentData.getStartMarker().getId())){
+
+                    Log.i("Marker","CustomMarkerClicked");
 
                     // Clicking a Marker will display the coordinates of the marker.
                     String URL = gMapsInterface.getDirectionsUrl(marker.getPosition(),fragmentData.getEndMarker().getPosition());
@@ -169,10 +175,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
 
                 // Select a group marker
-                else if(fragmentData.getEndMarker() != null && !Objects.equals(fragmentData.getEndMarker().getId(), marker.getId())){
+                else if(fragmentData.getEndMarker() == null || (fragmentData.getEndMarker() != null && !Objects.equals(fragmentData.getEndMarker().getId(), marker.getId()))){
                     // Grabs the group objected tagged to the marker
+                    Log.i("Marker", "Non-Custom Marker Clicked");
                     Group grp = (Group) marker.getTag();
                     joinGroup = grp;
+                    Log.i("Marker","" + (joinGroup == null));
 
                     if(grp != null){
                         // Draws a path from the Group start location to the end location
@@ -187,7 +195,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 else{
                     // if end location marker is clicked
+                    Log.i("Marker", "ElseStateTriggerd");
                     fragmentData.clearRoutes();
+                    clearDisplayInfo();
                 }
 
                 return false;
@@ -276,21 +286,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Group grp = new Group();
             grp = groupCollection.getGroup(i);
 
-            List<Double> grpLatLocation = grp.getRouteLatArray();
-            List<Double> grpLngLocation = grp.getRouteLngArray();
+            List<Double> grpLatLocation = new ArrayList<Double>();
+            List<Double> grpLngLocation = new ArrayList<Double>();
+
+            grpLatLocation = grp.getRouteLatArray();
+            grpLngLocation = grp.getRouteLngArray();
+
+
+            Log.i("grpLatNull","" + (grp.getRouteLatArray() == null));
+            Log.i("grpLngNull","" + (grpLatLocation == null));
+
 
             if(grpLatLocation != null && grpLngLocation != null && !grpLatLocation.isEmpty() && !grpLngLocation.isEmpty()){
                 LatLng grpStartLocation = new LatLng(grpLatLocation.get(0), grpLngLocation.get(0));
+                Log.i("grp@",""+grpStartLocation);
                 Log.i("isLocationInRadius","" + gMapsInterface.isLocationInRadius(deviceLocation,grpStartLocation));
+                placeMarkerAtLocation(grpStartLocation,GROUP_TYPE,grp.getGroupDescription());
                 if (gMapsInterface.isLocationInRadius(deviceLocation, grpStartLocation)) {
                     groupInRadius.add(grp);
+                    //
+                    //Marker marker = mMap.addMarker(placeMarkerAtLocation(grpStartLocation,GROUP_TYPE,grp.getGroupDescription()));
                     Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, GROUP_TYPE, grp.getGroupDescription()));
                     marker.setTag(grp);
                     groupMarkersPlaced.add(marker);
                 }
-            }
-            else{
-                return;
             }
         }
     }
@@ -389,6 +408,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             List<Double> latWaypoints = grp[0].getRouteLatArray();
             List<Double> lngWaypoints = grp[0].getRouteLngArray();
 
+            Log.i("MapDraw","" +  grp[0].getRouteLatArray().size());
+            Log.i("MapDraw","" +  grp[0].getRouteLatArray());
             for (int i = 0; i < grp[0].getRouteLatArray().size(); i++) {
                 LatLng currentPosition = new LatLng(latWaypoints.get(i), lngWaypoints.get(i));
                 waypoints.add(currentPosition);
@@ -594,9 +615,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Make Server call
 
                  */
-                Toast.makeText(MapsActivity.this,"Joined Group!", Toast.LENGTH_SHORT).show();
+                if(joinGroup != null) {
+                    Call<List<User>> caller = proxy.addNewMember(joinGroup.getId(), user);
+                    ProxyBuilder.callProxy(MapsActivity.this, caller, returnedMembers -> memberResponse(returnedMembers));
+
+                    Toast.makeText(MapsActivity.this, "Joined Group!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+    }
+
+    private void setupAddUserButton(){
+        Button addBtn = (Button) findViewById(R.id.btnAddUserToGrp);
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MapsActivity.this,"Added User",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void memberResponse(List<User> returnedMembers) {
+
     }
 
     // TODO: Creates a new group

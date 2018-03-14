@@ -13,7 +13,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Group {
-    private Long id;
+    private long id;
     private String href;
     private String groupDescription;
     private List<Double> routeLatArray = new ArrayList<>();
@@ -21,6 +21,24 @@ public class Group {
     private User leader;
     private String leaderHref;
     private List<User> memberUsers;
+
+//      /*
+//        Singleton Support
+//         */
+//
+//
+//    private static Group instance;
+//    private Group(){
+//        //Private to prevent anyone else from instantiating
+//    }
+//    public static Group getInstance(){
+//        if (instance == null){
+//            instance = new Group();
+//        }
+//
+//        return instance;
+//
+//    }
 
     public String getLeaderHref() {
         return leaderHref;
@@ -96,6 +114,10 @@ public class Group {
 
     public void setHref(String href) {
         this.href = href;
+    }
+
+    public String groupToListString(){
+        return "Group ID: " + id + "\nGroup Description: " + groupDescription;
     }
 
 

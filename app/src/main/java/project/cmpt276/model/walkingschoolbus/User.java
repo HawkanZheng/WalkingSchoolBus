@@ -25,6 +25,7 @@ public class User {
 
     private String[] monitorsUsersString;
     private String[] monitoredByUsersString;
+    private List<String> memberOfGroupsString = new ArrayList<>();
 
 
 
@@ -145,6 +146,17 @@ public class User {
 
     public void setMonitoredByUsersString(String[] monitoredByUsersString) {
         this.monitoredByUsersString = monitoredByUsersString;
+    }
+
+    public List<String> getMemberOfGroupsString() {
+        return memberOfGroupsString;
+    }
+
+    public void setMemberOfGroupsString(List<String> memberOfGroupsString) {
+        this.memberOfGroupsString = memberOfGroupsString;
+    }
+    public void addMemberOfGroupsString(String group){
+        this.memberOfGroupsString.add(group);
     }
 
 

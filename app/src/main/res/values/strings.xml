@@ -40,4 +40,9 @@
     <string name="logout">LOGOUT</string>
     <string name="see_who_i_monitor">See Who I Monitor</string>
     <string name="see_who_monitors_me">See Who Monitors Me</string>
+    <string name="my_groups">My Groups:</string>
+    <string name="leave_group">Leave Group</string>
+    <string name="enter_group_you_want_to_leave">Enter Group You Want To Leave</string>
+    <string name="group_id">Group ID</string>
+
 </resources>

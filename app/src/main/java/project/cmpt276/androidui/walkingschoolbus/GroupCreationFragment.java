@@ -16,8 +16,13 @@ import android.widget.Toast;
 import java.util.List;
 
 import project.cmpt276.model.walkingschoolbus.Group;
+import project.cmpt276.model.walkingschoolbus.GroupCollection;
+import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.model.walkingschoolbus.fragmentDataCollection;
+import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
+import project.cmpt276.server.walkingschoolbus.WGServerProxy;
+import retrofit2.Call;
 
 /**
  * Created by Jerry on 3/13/2018.
@@ -29,9 +34,21 @@ public class GroupCreationFragment extends AppCompatDialogFragment {
     private EditText groupTitle;
     private View v;
     private TextView errorLog;
+    private GroupCollection groupList;
+    private SharedValues sharedValues;
+    private WGServerProxy proxy;
+    private User user;
     private List<User> monitoredUsers;
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        //Get shareValues (token)
+        sharedValues = SharedValues.getInstance();
+        //Get server proxy
+        proxy = ProxyBuilder.getProxy(getString(R.string.apiKey),sharedValues.getToken());
+        //Get current user instance
+        user = User.getInstance();
+        //Get the group collection list
+        groupList = GroupCollection.getInstance();
         //Create the view to show.
         v = LayoutInflater.from(getActivity()).inflate(R.layout.group_creation, null);
         Button confirmGroup = v.findViewById(R.id.confirmGroup);
@@ -72,16 +89,44 @@ public class GroupCreationFragment extends AppCompatDialogFragment {
             return;
 
         }
-
-        Toast.makeText(getActivity(),"New Group Saved!", Toast.LENGTH_SHORT).show();
-
         /*
         * Set leader
         * Set id
         * Push group to server and add it to client.
         */
-        //Dismiss the dialog once a group is successfully made.
-        //dismiss();
+        group.setId(-1);
+        group.setLeader(user);
+        Call<Group> caller = proxy.createGroup(group);
+        ProxyBuilder.callProxy(getActivity(), caller, returnedGroup -> groupResponse(returnedGroup));
+
+        Toast.makeText(getActivity(),"New Group Saved!", Toast.LENGTH_SHORT).show();
+
+
+
     }
+
+    private void groupResponse(Group returnedGroup) {
+        Log.i("Group returned: ", returnedGroup.toString());
+        sharedValues.setGroup(returnedGroup);
+        groupList.addGroup(returnedGroup);
+        //Get updated user
+        Call<User> caller = proxy.getUserByEmail(user.getEmail());
+        ProxyBuilder.callProxy(getActivity(), caller, returnedUser -> userResponse(returnedUser));
+
+
+    }
+
+    private void userResponse(User returnedUser) {
+        User.setUser(returnedUser);
+        Call<List<User>> caller = proxy.addNewMember(sharedValues.getGroup().getId(), returnedUser);
+        ProxyBuilder.callProxy(getActivity(), caller, returnedMembers -> membersResponse(returnedMembers));
+    }
+
+    private void membersResponse(List<User> returnedMembers) {
+        Log.i("New Group:", "Now member of group");
+        //Dismiss the dialog once a group is successfully made.
+        dismiss();
+    }
+
 
 }
