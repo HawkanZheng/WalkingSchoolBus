@@ -42,7 +42,6 @@ public class CustomizeMarkerFragment extends AppCompatDialogFragment {
         //Create the view to show.
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.marker_creation, null);
         gMapsOption = GoogleMapsInterface.getInstance(v.getContext());
-        nameForm = v.findViewById(R.id.titleEntry);
         Button confirm = v.findViewById(R.id.confirmBtn);
         Button cancel = v.findViewById(R.id.cancelBtn);
         setUpTypeGroups(v);
@@ -60,10 +59,9 @@ public class CustomizeMarkerFragment extends AppCompatDialogFragment {
 
     //Manages markers on the map so that only two exist at a time.
     private void manageMarkers(){
-        //Name the marker... may need error checking.
-        String title = nameForm.getText().toString();
+
         //Create marker options.
-        MarkerOptions options = gMapsOption.makeMarker(coordinates,type,title);
+        MarkerOptions options = gMapsOption.makeMarker(coordinates,type,"");
         //Manage start markers
         if(buttons[0].isChecked()){
             if(fragmentData.getStartMarker() != null){
