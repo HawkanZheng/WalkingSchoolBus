@@ -1,7 +1,6 @@
 package project.cmpt276.androidui.walkingschoolbus;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -11,7 +10,6 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -31,7 +29,6 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.GoogleMap;
@@ -44,8 +41,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import org.json.JSONObject;
@@ -60,7 +55,6 @@ import project.cmpt276.model.walkingschoolbus.Group;
 import project.cmpt276.model.walkingschoolbus.GroupCollection;
 import project.cmpt276.model.walkingschoolbus.MapsJsonParser;
 import project.cmpt276.model.walkingschoolbus.fragmentDataCollection;
-import project.cmpt276.model.walkingschoolbus.GroupCollection;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
@@ -126,7 +120,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         locationService = LocationServices.getFusedLocationProviderClient(this);
         gMapsInterface =  GoogleMapsInterface.getInstance(this);
-        settingsRequest();
+        checkLocationsEnabled();
         // Setup  buttons -- These need to come after the map creation
         setupSaveButton();
         setupJoinGroupButton();
@@ -143,7 +137,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //mMap.addMarker(placeMarkerAtLocation(origin, GROUP_TYPE, "Origin"));
         //Moves the camera to your location and pins it.
         //Also displays nearby groups
-        //settingsRequest();
+        //checkLocationsEnabled();
         //Place Marker when long pressing on map.
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
@@ -216,7 +210,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     }
-    public void settingsRequest() {
+
+
+    /**
+     * Follows:
+     * https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient (for base code).
+     * https://stackoverflow.com/questions/45504515/changing-location-settings (for the onFailureListener idea).
+     * */
+    private void checkLocationsEnabled() {
         createLocationRequest();
         createLocationCallback();
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()

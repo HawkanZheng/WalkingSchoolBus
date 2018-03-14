@@ -7,12 +7,16 @@ import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import project.cmpt276.model.walkingschoolbus.Group;
+import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.model.walkingschoolbus.fragmentDataCollection;
 
 /**
@@ -25,6 +29,7 @@ public class GroupCreationFragment extends AppCompatDialogFragment {
     private EditText groupTitle;
     private View v;
     private TextView errorLog;
+    private List<User> monitoredUsers;
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         //Create the view to show.
@@ -39,7 +44,6 @@ public class GroupCreationFragment extends AppCompatDialogFragment {
     }
 
     private void createGroup(){
-
         // Clear the error log between launches
         errorLog.setText("");
 

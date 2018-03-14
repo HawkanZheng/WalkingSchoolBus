@@ -75,7 +75,6 @@ public class WhoIMonitor extends AppCompatActivity {
                 this,           //Context for the activity
                 R.layout.monitors_users_list,      //Layout used
                 currUser.getMonitorsUsersString());               //Groups/Users displayed
-
         //Configure the list view
         ListView list = findViewById(R.id.currentlyMonitoringList);
         list.setAdapter(adapter);
@@ -92,8 +91,6 @@ public class WhoIMonitor extends AppCompatActivity {
             }
         });
     }
-
-
 
 
     private void removeUserResponse(User returnedUser) {
