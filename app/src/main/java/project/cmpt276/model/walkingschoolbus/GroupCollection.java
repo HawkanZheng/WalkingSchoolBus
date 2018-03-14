@@ -28,8 +28,6 @@ public class GroupCollection {
 
     }
 
-
-
     public void addGroup(Group group)
     {
         groups.add(group);

@@ -49,7 +49,8 @@
         <activity android:name=".mainMenu" />
         <activity android:name=".WhoIMonitor" />
         <activity android:name=".WhoMonitorsMe" />
-        <activity android:name=".ManageGroups"></activity>
+        <activity android:name=".ManageGroups"/>
+        <activity android:name=".AddMonitoredUsersToGroup"></activity>
     </application>
 
 </manifest>
