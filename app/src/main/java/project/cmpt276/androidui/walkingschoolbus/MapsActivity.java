@@ -621,8 +621,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     Toast.makeText(MapsActivity.this, "Joined Group!", Toast.LENGTH_SHORT).show();
                 }
+                refreshUser();
             }
         });
+    }
+
+    private void refreshUser() {
+        Call<User> caller = proxy.getUserByEmail(user.getEmail());
+        ProxyBuilder.callProxy(MapsActivity.this, caller, returnedUser -> userResponse(returnedUser));
+        //Log.i(TAG, "setUser used here");
+    }
+
+    private void userResponse(User returnedUser) {
+        //Log.i(TAG, "userResponse used here");
+        User.setUser(returnedUser);
+
     }
 
     private void setupAddUserButton(){

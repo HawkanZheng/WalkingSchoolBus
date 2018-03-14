@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="45dp"
-        android:layout_marginEnd="21dp"
+        android:layout_marginEnd="19dp"
         android:text="@string/leave_group"
         app:layout_constraintBottom_toTopOf="@+id/returnToMainMenuBtn"
         app:layout_constraintEnd_toEndOf="parent"
@@ -47,9 +47,11 @@
         android:id="@+id/leaveGroupView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
         android:text="@string/enter_group_you_want_to_leave"
         app:layout_constraintBottom_toTopOf="@+id/leaveGroupBtn"
-        app:layout_constraintStart_toStartOf="@+id/groupIDEdit"
+        app:layout_constraintEnd_toStartOf="@+id/leaveGroupBtn"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/myGroupsList" />
 
     <EditText
@@ -62,7 +64,7 @@
         app:layout_constraintEnd_toStartOf="@+id/leaveGroupBtn"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/leaveGroupView" />
+        app:layout_constraintTop_toTopOf="@+id/leaveGroupBtn" />
 
     <Button
         android:id="@+id/returnToMainMenuBtn"
