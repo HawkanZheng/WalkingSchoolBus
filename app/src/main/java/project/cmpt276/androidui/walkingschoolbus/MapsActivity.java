@@ -135,6 +135,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 markerShop.show(manager,"MesageDialog");
 
                 clearDisplayInfo();
+
             }
         });
 
@@ -167,13 +168,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         // Draws a path from the Group start location to the end location
                         mapSelectedGroupPath mapSelectedGroupPath = new mapSelectedGroupPath();
                         mapSelectedGroupPath.execute(grp);
+                        Toast.makeText(MapsActivity.this, grp.getGroupDescription(), Toast.LENGTH_SHORT).show();
+
                     }
                     else{
                         Log.i("onMarkerClicked", "Group Invalid");
                     }
                 }
+                else{
+                    // if end location marker is clicked
+                    fragmentData.clearRoutes();
+                }
 
-                Toast.makeText(MapsActivity.this, marker.getPosition().toString(), Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
@@ -514,14 +520,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Log.i("Group Save - Lats",""+fragmentData.getWaypointsLats());
                 Log.i("Group Save - Lngs", ""+fragmentData.getWaypointsLngs());
 
-                List<Double> lats = fragmentData.getWaypointsLats();
-                List<Double> lngs = fragmentData.getWaypointsLngs();
 
-                String groupTitle = fragmentData.getMarkerTitle();
-
-
-
-                Toast.makeText(MapsActivity.this,"New Group Saved!",Toast.LENGTH_SHORT).show();
             }
         });
     }

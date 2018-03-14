@@ -75,4 +75,9 @@ public class fragmentDataCollection {
         markerTitle = null;
         markers = new Marker[2];
     }
+
+    public void clearRoutes(){
+        waypointsLats = new ArrayList<Double>();
+        waypointsLngs = new ArrayList<Double>();
+    }
 }

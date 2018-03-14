@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -38,24 +39,37 @@ public class GroupCreationFragment extends AppCompatDialogFragment {
     }
 
     private void createGroup(){
+
+        // Clear the error log between launches
+        errorLog.setText("");
+
         Group group = new Group();
 
         if(groupTitle != null && !(groupTitle.getText().toString().isEmpty())){
             group.setGroupDescription(groupTitle.getText().toString());
         }else{
             errorLog.setText("A group needs a name...");
+            Log.i("Fragment","No Group Name");
+            return;
         }
 
-        if(fragmentData.getWaypointsLats() != null){
+        if(fragmentData.getWaypointsLats() != null && !(fragmentData.getWaypointsLats().isEmpty())){
             group.setRouteLatArray(fragmentData.getWaypointsLats());
         }else{
-           errorLog.setText("No latitude data found...");
+            errorLog.setText("No latitude data found...");
+            Log.i("Fragment","No Latitude");
+            return;
         }
-        if(fragmentData.getWaypointsLngs() != null){
+        if(fragmentData.getWaypointsLngs() != null && !(fragmentData.getWaypointsLngs().isEmpty())){
             group.setRouteLngArray(fragmentData.getWaypointsLngs());
         }else{
             errorLog.setText("No longitude data found...");
+            Log.i("Fragment","No Longitude");
+            return;
+
         }
+
+        Toast.makeText(getActivity(),"New Group Saved!", Toast.LENGTH_SHORT).show();
 
         /*
         * Set leader

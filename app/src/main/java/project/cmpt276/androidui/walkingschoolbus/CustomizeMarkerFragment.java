@@ -85,7 +85,10 @@ public class CustomizeMarkerFragment extends AppCompatDialogFragment {
             //Place a marker
             Marker m = map.addMarker(options);
             fragmentData.storeEndMarker(m);
+
+            // clear previous routes
         }
+        fragmentData.clearRoutes();
         dismiss();
     }
 
