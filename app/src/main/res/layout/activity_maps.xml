@@ -6,4 +6,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="project.cmpt276.androidui.walkingschoolbus.MapsActivity"
-    tools:layout="@layout/activity_maps" />
+    tools:layout="@layout/activity_maps" >
+
+        <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|top"
+        android:text="Save New Group"
+        android:id="@+id/btnSaveGroup"
+        android:padding="10dp"
+        android:layout_marginTop="20dp"
+        android:paddingRight="10dp"/>
+
+        <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|bottom"
+        android:text="Join Group"
+        android:id="@+id/btnJoinGroup"
+        android:padding="10dp"
+        android:layout_marginTop="20dp"
+        android:paddingRight="10dp"/>
+
+    </fragment>

@@ -44,12 +44,10 @@ public class User {
         }
 
         return instance;
-
     }
 
     public static void setUser(User user){
         instance = user;
-
     }
 
     private String href;
