@@ -77,7 +77,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     fragmentDataCollection fragmentData = fragmentDataCollection.getInstance();
 
     // Join a existing group
-    Group joinGroup;
+    Group joinGroup = new Group();
 
 
     //Waypoints for path
@@ -123,6 +123,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Setup  buttons -- These need to come after the map creation
         setupSaveButton();
         setupJoinGroupButton();
+        setupAddUserButton();
+
         groupList = GroupCollection.getInstance();
         user = User.getInstance();
         sharedValues = SharedValues.getInstance();
@@ -177,6 +179,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Log.i("Marker", "Non-Custom Marker Clicked");
                     Group grp = (Group) marker.getTag();
                     joinGroup = grp;
+                    Log.i("Marker","" + (joinGroup == null));
 
                     if(grp != null){
                         // Draws a path from the Group start location to the end location
@@ -577,6 +580,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     Toast.makeText(MapsActivity.this, "Joined Group!", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+    }
+
+    private void setupAddUserButton(){
+        Button addBtn = (Button) findViewById(R.id.btnAddUserToGrp);
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MapsActivity.this,"Added User",Toast.LENGTH_SHORT).show();
             }
         });
     }
