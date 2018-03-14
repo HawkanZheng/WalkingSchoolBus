@@ -58,8 +58,8 @@ public class fragmentDataCollection {
     }
 
     public void setWaypointsLatsLngs(List<Double> lats, List<Double> lngs){
-        waypointsLngs = new ArrayList<>(lats);
-        waypointsLats = new ArrayList<>(lngs);
+        waypointsLngs = new ArrayList<>(lngs);
+        waypointsLats = new ArrayList<>(lats);
     }
 
     public List<Double> getWaypointsLats(){
