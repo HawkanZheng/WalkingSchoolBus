@@ -178,7 +178,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     // Grabs the group objected tagged to the marker
                     Log.i("Marker", "Non-Custom Marker Clicked");
                     Group grp = (Group) marker.getTag();
+
+                    // Store the Last selected group
                     joinGroup = grp;
+                    fragmentData.setGroupToBeAdded(grp);
+
                     Log.i("Marker","" + (joinGroup == null));
 
                     if(grp != null){
