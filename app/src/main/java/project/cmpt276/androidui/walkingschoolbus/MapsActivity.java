@@ -126,7 +126,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setupSaveButton();
         setupJoinGroupButton();
         setupAddUserButton();
-
+        setupRefreshButton();
         groupList = GroupCollection.getInstance();
         user = User.getInstance();
         sharedValues = SharedValues.getInstance();
@@ -612,6 +612,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 refreshUser();
             }
         });
+    }
+
+    private void setupRefreshButton(){
+        Button syncDisplay = findViewById(R.id.refreshMapsBtn);
+        syncDisplay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
     }
 
     // TODO: implement server logic

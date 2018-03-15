@@ -40,7 +40,15 @@
             android:id="@+id/btnAddUserToGrp"
             android:padding="10dp"
             android:paddingRight="10dp"/>
-
     </LinearLayout>
+
+    <Button
+        android:id="@+id/refreshMapsBtn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:drawableStart="@android:drawable/stat_notify_sync"
+        android:gravity="top|left"
+        android:textAlignment="center" />
 
 </fragment>
