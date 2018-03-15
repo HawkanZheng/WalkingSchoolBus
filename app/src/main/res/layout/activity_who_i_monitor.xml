@@ -11,10 +11,10 @@
         android:id="@+id/currentMonitoringView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:text="@string/currently_monitoring"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="16dp" />
+        app:layout_constraintStart_toStartOf="@+id/currentlyMonitoringList"
+        app:layout_constraintTop_toBottomOf="@+id/pressUserView" />
 
     <ListView
         android:id="@+id/currentlyMonitoringList"
@@ -27,7 +27,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/addSomoneToMonitorView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/currentMonitoringView" />
+        app:layout_constraintTop_toTopOf="@+id/currentMonitoringView" />
 
     <EditText
         android:id="@+id/addSomeoneToMonitorEdit"
@@ -36,14 +36,14 @@
         android:ems="10"
         android:hint="@string/user_s_email"
         android:inputType="textEmailAddress"
-        app:layout_constraintStart_toStartOf="@+id/addSomoneToMonitorView"
-        app:layout_constraintTop_toBottomOf="@+id/addSomoneToMonitorView" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/addUserToMonitorBtn"
+        app:layout_constraintStart_toStartOf="@+id/addSomoneToMonitorView" />
 
     <TextView
         android:id="@+id/addSomoneToMonitorView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="184dp"
+        android:layout_marginBottom="183dp"
         android:layout_marginStart="8dp"
         android:text="@string/add_a_user_to_monitor"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -53,9 +53,10 @@
         android:id="@+id/addUserToMonitorBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
         android:text="@string/add"
-        app:layout_constraintBaseline_toBaselineOf="@+id/addSomeoneToMonitorEdit"
-        app:layout_constraintStart_toEndOf="@+id/addSomeoneToMonitorEdit" />
+        app:layout_constraintStart_toEndOf="@+id/addSomeoneToMonitorEdit"
+        app:layout_constraintTop_toBottomOf="@+id/currentlyMonitoringList" />
 
     <Button
         android:id="@+id/returnMainMenuBtn"
@@ -82,14 +83,25 @@
         android:ems="10"
         android:hint="@string/user_s_email"
         android:inputType="textEmailAddress"
-        app:layout_constraintStart_toStartOf="@+id/stopMonitoringView"
-        app:layout_constraintTop_toBottomOf="@+id/stopMonitoringView" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/stopMonitoringBtn"
+        app:layout_constraintStart_toStartOf="@+id/stopMonitoringView" />
 
     <Button
         android:id="@+id/stopMonitoringBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="@string/remove"
-        app:layout_constraintBaseline_toBaselineOf="@+id/stopMonitoringText"
-        app:layout_constraintStart_toEndOf="@+id/stopMonitoringText" />
+        app:layout_constraintStart_toEndOf="@+id/stopMonitoringText"
+        app:layout_constraintTop_toBottomOf="@+id/addUserToMonitorBtn" />
+
+    <TextView
+        android:id="@+id/pressUserView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="6dp"
+        android:text="Press a user to remove them from a group"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>

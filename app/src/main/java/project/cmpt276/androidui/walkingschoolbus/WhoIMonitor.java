@@ -47,10 +47,13 @@ public class WhoIMonitor extends AppCompatActivity {
         setUpAddButton();
         setUpReturnButton();
         setUpRemoveMonitoredUserButton();
+        registerListClickCallBack();
 
 
 
     }
+
+
 
     private void getMonitorsUsers(User currUser) {
         //User user = User.getInstance();
@@ -75,7 +78,6 @@ public class WhoIMonitor extends AppCompatActivity {
                 this,           //Context for the activity
                 R.layout.monitors_users_list,      //Layout used
                 currUser.getMonitorsUsersString());               //Groups/Users displayed
-
         //Configure the list view
         ListView list = findViewById(R.id.currentlyMonitoringList);
         list.setAdapter(adapter);
@@ -94,8 +96,6 @@ public class WhoIMonitor extends AppCompatActivity {
     }
 
 
-
-
     private void removeUserResponse(User returnedUser) {
         Call<Void> caller = proxy.stopMonitoringUser(user.getId(), returnedUser.getId());
         ProxyBuilder.callProxy(WhoIMonitor.this, caller, returnedNothing -> voidResponse(returnedNothing));
@@ -110,8 +110,7 @@ public class WhoIMonitor extends AppCompatActivity {
 
     private void userResponse(User returnedUser) {
         User.setUser(returnedUser);
-        user = User.getInstance();
-        getMonitorsUsers(user);
+        getMonitorsUsers(returnedUser);
     }
 
     private void setUpAddButton() {
@@ -146,6 +145,20 @@ public class WhoIMonitor extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void registerListClickCallBack() {
+        ListView list = findViewById(R.id.currentlyMonitoringList);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                user = User.getInstance();
+                sharedValues.setUser(user.getMonitorsUsers().get(position));
+                Intent intent = monitoredUserGroupsActivity.makeIntent(WhoIMonitor.this);
+                startActivity(intent);
+            }
+        });
+
     }
 
     public static Intent makeIntent(Context context){

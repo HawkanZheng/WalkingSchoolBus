@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="project.cmpt276.androidui.walkingschoolbus.monitoredUserGroupsActivity"
+    tools:layout_editor_absoluteY="81dp">
+
+    <TextView
+        android:id="@+id/userGroupsView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/usersGroupsList"
+        app:layout_constraintStart_toStartOf="@+id/usersGroupsList"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/usersGroupsList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="19dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/userLeaveGroupView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userGroupsView" />
+
+    <Button
+        android:id="@+id/removeFromGroupBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="31dp"
+        android:layout_marginStart="22dp"
+        android:text="@string/remove_from_group"
+        app:layout_constraintBottom_toTopOf="@+id/returnToMonitorsBtn"
+        app:layout_constraintStart_toStartOf="@+id/userGroupIDEdit"
+        app:layout_constraintTop_toBottomOf="@+id/userGroupIDEdit" />
+
+    <TextView
+        android:id="@+id/userLeaveGroupView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:text="@string/enter_group_to_be_removed_from"
+        app:layout_constraintBottom_toTopOf="@+id/userGroupIDEdit"
+        app:layout_constraintStart_toStartOf="@+id/userGroupIDEdit"
+        app:layout_constraintTop_toBottomOf="@+id/usersGroupsList" />
+
+    <EditText
+        android:id="@+id/userGroupIDEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/group_id"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/removeFromGroupBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userLeaveGroupView" />
+
+    <Button
+        android:id="@+id/returnToMonitorsBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/return_to_who_i_monitor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/removeFromGroupBtn" />
+</android.support.constraint.ConstraintLayout>

@@ -20,6 +20,7 @@ public class Group {
     private List<Double> routeLngArray = new ArrayList<>();
     private User leader;
     private String leaderHref;
+    private List<User> memberUsers;
 
 //      /*
 //        Singleton Support
@@ -47,8 +48,6 @@ public class Group {
         this.leaderHref = leaderHref;
     }
 
-    private List<User> memberUsers;
-
     public User getLeader() {
         return leader;
     }
@@ -65,6 +64,10 @@ public class Group {
         this.memberUsers = memberUsers;
     }
 
+//    public void addMembertoGroup(User u){
+//        memberUsers.add(u);
+//    }
+
     public List<Double> getRouteLatArray() {
         return routeLatArray;
     }
@@ -72,7 +75,6 @@ public class Group {
     public List<Double> getRouteLngArray() {
         return routeLngArray;
     }
-
 
     public void setRouteLatArray(List<Double> routeLatArray) {
         this.routeLatArray = routeLatArray;
@@ -89,9 +91,6 @@ public class Group {
         this.routeLngArray.add(coordinate);
     }
 
-
-
-
     public String getGroupDescription() {
         return groupDescription;
     }
@@ -99,7 +98,6 @@ public class Group {
     public void setGroupDescription(String groupDescription) {
         this.groupDescription = groupDescription;
     }
-
 
     public long getId() {
         return id;

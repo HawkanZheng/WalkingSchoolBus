@@ -9,9 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
+import project.cmpt276.model.walkingschoolbus.Group;
+import project.cmpt276.model.walkingschoolbus.GroupCollection;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
@@ -24,6 +27,7 @@ public class Login extends AppCompatActivity {
     private static final String TAG = "Test";
     private User user;
     private SharedValues sharedValues;
+    private GroupCollection groupList;
 
     public GoogleMapsInterface gmaps;
     String password;
@@ -42,6 +46,7 @@ public class Login extends AppCompatActivity {
         getInput();
         user = User.getInstance();
         sharedValues = SharedValues.getInstance();
+        groupList = GroupCollection.getInstance();
         //Build server proxy
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), null);
         setUpSkipButton();
@@ -190,6 +195,7 @@ public class Login extends AppCompatActivity {
         sharedValues.setToken(token);
 
         setUser();
+        getGroups();
 
 
 
@@ -212,6 +218,25 @@ public class Login extends AppCompatActivity {
 
     }
 
+    private void getGroups() {
+        Call<List<Group>> caller = proxy.getGroups();
+        ProxyBuilder.callProxy(Login.this, caller, returnedGroups ->groupsResponse(returnedGroups));
+    }
+
+    private void groupsResponse(List<Group> returnedGroups) {
+
+        groupList.setGroups(returnedGroups);
+
+//        Log.w(TAG, "All Groups:");
+//        for (Group group : returnedGroups) {
+//            Log.w(TAG, "    Group: " + group.toString());
+//            groupList.addGroup(group);
+//
+//        }
+//        populateList();
+
+    }
+
     private void onReceiveError(String message){
 //        Log.w(TAG, "   --> ERROR: " + message);
 //
@@ -223,7 +248,7 @@ public class Login extends AppCompatActivity {
 
     private void response(Void returnedNothing) {
         Log.w(TAG, "Server replied to login request (no content was expected).");
-
+        Toast.makeText(Login.this, "You have logged in.", Toast.LENGTH_LONG).show();
     }
 
 
