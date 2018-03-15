@@ -20,7 +20,7 @@
             <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save New Group"
+            android:text="@string/saveGroup"
             android:id="@+id/btnSaveGroup"
             android:padding="10dp"
             android:paddingRight="10dp"/>
@@ -28,7 +28,7 @@
             <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Join Group"
+            android:text="@string/joinGroup"
             android:id="@+id/btnJoinGroup"
             android:padding="10dp"
             android:paddingRight="10dp"/>
@@ -36,7 +36,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add A User to Group"
+            android:text="@string/addUserToGroup"
             android:id="@+id/btnAddUserToGrp"
             android:padding="10dp"
             android:paddingRight="10dp"/>
