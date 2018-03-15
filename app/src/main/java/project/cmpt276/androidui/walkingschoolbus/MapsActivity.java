@@ -620,6 +620,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
 
+                groupCollection = GroupCollection.getInstance();
+
+                if(fragmentData.getStartMarker() != null){
+                    fragmentData.getStartMarker().remove();
+                }
+
+                if(fragmentData.getEndMarker() != null){
+                    fragmentData.getEndMarker().remove();
+                }
+
+                if(fragmentData.getStartMarker() != null || fragmentData.getEndMarker() != null ){
+                    fragmentData.clearData();
+                }
+
+                clearDisplayInfo();
+                displayNearbyGroups();
+
+
             }
         });
 
