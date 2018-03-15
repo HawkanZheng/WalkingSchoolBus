@@ -16,7 +16,6 @@ import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
-import retrofit2.Call;
 
 /*Main Menu
 Access to :

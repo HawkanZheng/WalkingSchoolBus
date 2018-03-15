@@ -52,28 +52,16 @@ public class Login extends AppCompatActivity {
         gmaps = GoogleMapsInterface.getInstance(this);
         String savedPassword = getSavedPassword(this);
         String savedUserName = getSavedUserName(this);
-//        String savedName = getSavedName(this);
         password = savedPassword;
         userName =savedUserName;
         user = User.getInstance();
-
-//        getPassword.setText(savedPassword);
-//        getUserName.append((savedUserName));
-
-
-
-
-
-
         getInput();
-
         sharedValues = SharedValues.getInstance();
         groupList = GroupCollection.getInstance();
         //Build server proxy
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), null);
         setUpLoginButton();
         setUpSignUpButton();
-
         previousLogin();
     }
 
@@ -83,10 +71,8 @@ public class Login extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent intent = new Intent(Login.this, signUp.class);
                 startActivity(intent);
-
             }
         });
 
@@ -152,25 +138,8 @@ public class Login extends AppCompatActivity {
                 Call<Void> loginCaller = proxy.login(user);
                 ProxyBuilder.callProxy(Login.this, loginCaller, this::response);
             }
-
-
-
         });
     }
-
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        ProxyBuilder.setOnErrorCallback(null);
-//
-//
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        ProxyBuilder.setOnErrorCallback(this::onReceiveError);
-//    }
 
     private void onReceiveToken(String token){
         // Replace the current proxy with one that uses the token!
@@ -242,13 +211,11 @@ public class Login extends AppCompatActivity {
         return prefs.getString("user name", "");
     }
 
-    private void previousLogin()
-    {
+    //Allows instant login if previously logged in. "remember me" feature.
+    private void previousLogin() {
         String savedPassword = getSavedPassword(this);
         String savedUserName = getSavedUserName(this);
-        if(!savedUserName.equals("")&&!savedPassword.equals(""))
-        {
-
+        if(!savedUserName.equals("")&&!savedPassword.equals("")) {
             greetingMessage();
             ProxyBuilder.setOnTokenReceiveCallback(this::onReceiveToken);
             userName = savedUserName;
@@ -258,12 +225,8 @@ public class Login extends AppCompatActivity {
 
             Call<Void> loginCaller = proxy.login(user);
             ProxyBuilder.callProxy(Login.this, loginCaller, this::response);
-
             userName = "";
             password = "";
-//            saveUserInfo();
-
-
         }
     }
 
