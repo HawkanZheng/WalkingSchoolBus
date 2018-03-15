@@ -34,7 +34,6 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -62,7 +61,6 @@ import project.cmpt276.server.walkingschoolbus.WGServerProxy;
 import retrofit2.Call;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE;
-import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_GREEN;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,ActivityCompat.OnRequestPermissionsResultCallback {
@@ -75,7 +73,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     //Pin Types
     private final float GROUP_TYPE = HUE_RED;
-    private final float USER_TYPE = HUE_GREEN;
     private final float END_TYPE = HUE_BLUE;
 
     // Create a new group
@@ -83,7 +80,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     // Join a existing group
     Group joinGroup = new Group();
-
 
     //Waypoints for path
     List<Polyline> polylines = new ArrayList<Polyline>();
@@ -104,7 +100,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     //Variables in use
     private static final int LOCATION_PERMISSION_REQUESTCODE = 076;
     private final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
-    private static int markerId = 1;
     private static final long LOCATION_UPDATE_RATE_IN_MS = 10000;
 
     private WGServerProxy proxy;
@@ -136,11 +131,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        //mMap.addMarker(placeMarkerAtLocation(origin, GROUP_TYPE, "Origin"));
-        //Moves the camera to your location and pins it.
-        //Also displays nearby groups
-        //checkLocationsEnabled();
         //Place Marker when long pressing on map.
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
@@ -157,10 +147,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-
                 clearDisplayInfo();
-
-
                 // Select Start location marker
                 if(fragmentData.getStartMarker() != null && fragmentData.getEndMarker() != null &&
                         Objects.equals(marker.getId(), fragmentData.getStartMarker().getId())){
@@ -191,19 +178,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         mapSelectedGroupPath mapSelectedGroupPath = new mapSelectedGroupPath();
                         mapSelectedGroupPath.execute(grp);
                         Toast.makeText(MapsActivity.this, grp.getGroupDescription(), Toast.LENGTH_SHORT).show();
-
-                    }
-                    else{
+                    }else{
                         Log.i("onMarkerClicked", "Group Invalid");
                     }
-                }
-                else{
+                } else{
                     // if end location marker is clicked
                     Log.i("Marker", "ElseStateTriggerd");
                     fragmentData.clearRoutes();
                     clearDisplayInfo();
                 }
-
                 return false;
             }
         });
@@ -218,13 +201,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     addUserBlip();
                 } else {
                     ActivityCompat.requestPermissions(this,perms ,LOCATION_PERMISSION_REQUESTCODE);
-                    Toast.makeText(this, "Please enable device location", Toast.LENGTH_LONG);
+                    Toast.makeText(this, "Please allow device location", Toast.LENGTH_LONG);
                 }
                 return;
             }
         }
     }
-
 
     /**
      * Follows:
@@ -232,6 +214,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * https://stackoverflow.com/questions/45504515/changing-location-settings (for the onFailureListener idea).
      * */
     private void checkLocationsEnabled() {
+        //Start all location related activities.
         createLocationRequest();
         createLocationCallback();
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
@@ -240,28 +223,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         SettingsClient client = LocationServices.getSettingsClient(this);
         Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+        //If locations successfully received, start by adding the user's location.
         task.addOnSuccessListener(this, e -> addUserBlip());
+        //Otherwise start handling the failure.
         task.addOnFailureListener(this, e -> locationsNotOn((ApiException) e));
     }
 
     private void locationsNotOn(ApiException e){
         switch (e.getStatusCode()) {
             case CommonStatusCodes.RESOLUTION_REQUIRED:
-                // Location settings are not satisfied, but this can be fixed
-                // by showing the user a dialog.
+                //Locational error, attempt resolution based on error.
                 try {
-                    // Show the dialog by calling startResolutionForResult(),
-                    // and check the result in onActivityResult().
+                    // Ask for Locations to be enabled using startResolutionForResult(),
                     ResolvableApiException resolvable = (ResolvableApiException) e;
                     resolvable.startResolutionForResult(this, REQUEST_CHECK_SETTINGS);
                     finish(); //Temporary solution.
                 } catch (IntentSender.SendIntentException sendEx) {
-                    // Ignore the error.
+                    // Ignore.
                 }
                 break;
             case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                // Location settings are not satisfied. However, we have no way
-                // to fix the settings so we won't show the dialog.
+                //Error is out of our control. Ignore.
                 break;
         }
     }
@@ -305,11 +287,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 LatLng grpStartLocation = new LatLng(grpLatLocation.get(0), grpLngLocation.get(0));
                 Log.i("grp@",""+grpStartLocation);
                 Log.i("isLocationInRadius","" + gMapsInterface.isLocationInRadius(deviceLocation,grpStartLocation));
-                placeMarkerAtLocation(grpStartLocation,GROUP_TYPE,grp.getGroupDescription());
+                gMapsInterface.makeMarker(grpStartLocation,GROUP_TYPE,grp.getGroupDescription());
                 if (gMapsInterface.isLocationInRadius(deviceLocation, grpStartLocation)) {
                     groupInRadius.add(grp);
-                    //
-                    //Marker marker = mMap.addMarker(placeMarkerAtLocation(grpStartLocation,GROUP_TYPE,grp.getGroupDescription()));
                     Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, GROUP_TYPE, grp.getGroupDescription()));
                     marker.setTag(grp);
                     groupMarkersPlaced.add(marker);
@@ -318,7 +298,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    //This places a marker at user's last known location... Maybe implement the panic button to drop a last known location as well?
+    //This places a marker at user's last known location... Could be used in a Panic feature.
     private void placeLastLocationMarker(Location location){
         deviceLocation = gMapsInterface.calculateDeviceLocation(location);
         Toast.makeText(MapsActivity.this,"Adding marker at " + deviceLocation.latitude + ", " + deviceLocation.longitude, Toast.LENGTH_LONG).show();
@@ -381,10 +361,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    // string temporary, info should be extracted from group class
-    public MarkerOptions placeMarkerAtLocation(LatLng location, float type, String title){
-        return new MarkerOptions().position(location).title(title).icon(BitmapDescriptorFactory.defaultMarker(type));
-    }
+
 
 
     // Clears all polylines and end locations on the map
@@ -445,14 +422,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    /**
+     * Classes needed to map routes asynchronously
+     * Code courtesy of  Anupam Chugh
+     * Full write up found here: https://www.journaldev.com/13373/android-google-map-drawing-route-two-points
+     * */
 
-    // -- Classes needed to map routes asynchronously -- //
-    // -- Code courtesy of  Anupam Chugh -- //
-    // -- Full write up found here: https://www.journaldev.com/13373/android-google-map-drawing-route-two-points -- //
-
-
-    // -- Class used to create new groups -- //
-    // Fetches data from url passed
+    // Class used to create new groups; Fetches data from url passed
     private class DownloadDataFromUrl extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... URL) {
@@ -588,14 +564,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         lngsWaypoints.add(lng);
     }
 
-    // TODO: add server call to push data
     // Saves the newest created route to the server as a group
     private void setupSaveButton(){
-        Button saveBtn = (Button) findViewById(R.id.btnSaveGroup);
+        Button saveBtn = findViewById(R.id.btnSaveGroup);
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
 
                 GroupCreationFragment groupCreation = new GroupCreationFragment();
                 FragmentManager manager = getSupportFragmentManager();
@@ -636,30 +610,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 clearDisplayInfo();
                 displayNearbyGroups();
-
-
             }
         });
-
     }
 
-    // TODO: implement server logic
     // Joins a pre-existing group
     private void setupJoinGroupButton(){
-        Button joinBtn = (Button) findViewById(R.id.btnJoinGroup);
+        Button joinBtn = findViewById(R.id.btnJoinGroup);
         joinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-                // This is the group that needs to be added
-                // joinGroup
-
-                /*
-                    Get data of latest marker clicked
-                    Make Server call
-
-                 */
                 if(joinGroup != null) {
                     Call<List<User>> caller = proxy.addNewMember(joinGroup.getId(), user);
                     ProxyBuilder.callProxy(MapsActivity.this, caller, returnedMembers -> memberResponse(returnedMembers));
@@ -674,28 +634,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void refreshUser() {
         Call<User> caller = proxy.getUserByEmail(user.getEmail());
         ProxyBuilder.callProxy(MapsActivity.this, caller, returnedUser -> userResponse(returnedUser));
-        //Log.i(TAG, "setUser used here");
     }
 
     private void userResponse(User returnedUser) {
-        //Log.i(TAG, "userResponse used here");
         User.setUser(returnedUser);
         user = returnedUser;
-
     }
 
     private void setupAddUserButton(){
-        Button addBtn = (Button) findViewById(R.id.btnAddUserToGrp);
+        Button addBtn = findViewById(R.id.btnAddUserToGrp);
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 AddMonitoredUsersToGroup addMonitoredUsers = new AddMonitoredUsersToGroup();
                 FragmentManager manager = getSupportFragmentManager();
                 addMonitoredUsers.show(manager,"AddMonitoredUsers");
-
-
-                //Toast.makeText(MapsActivity.this,"Added User",Toast.LENGTH_SHORT).show();
                 refreshUser();
             }
         });
@@ -706,14 +659,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    // TODO: Creates a new group
-    private void pushNewGroupToServer(){
-        // from Group Class
-        // creatNewGroup(latsWaypoints, lngsWaypoints);
-    }
-
-    // Makes an Intent for other activities to call
-    // launches Maps activity
+    // Makes an Intent for other activities to call launches Maps activity
     public static Intent makeIntentForMapsActivity(Context context){
         return new Intent(context, MapsActivity.class);
     }

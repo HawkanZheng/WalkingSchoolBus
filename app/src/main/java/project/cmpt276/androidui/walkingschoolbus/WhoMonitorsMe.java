@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,7 +46,6 @@ public class WhoMonitorsMe extends AppCompatActivity {
         setUpRemoveMonitoredByUserButton();
     }
     private void getMonitoredByUsers(User currUser) {
-        //User user = User.getInstance();
         Call<List<User>> caller = proxy.getUsersMonitoredBy(currUser.getId());
         ProxyBuilder.callProxy(WhoMonitorsMe.this, caller, returnedUsers -> monitoredByResponse(returnedUsers));
     }
@@ -63,13 +61,11 @@ public class WhoMonitorsMe extends AppCompatActivity {
     }
 
     private void populateList(User currUser) {
-
         //Build Adapter
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,           //Context for the activity
                 R.layout.monitored_by_users_list,      //Layout used
                 currUser.getMonitoredByUsersString());               //Groups/Users displayed
-
         //Configure the list view
         ListView list = findViewById(R.id.currentlyMonitoredByList);
         list.setAdapter(adapter);
@@ -90,7 +86,6 @@ public class WhoMonitorsMe extends AppCompatActivity {
     private void removeUserResponse(User returnedUser) {
         Call<Void> caller = proxy.stopBeingMonitoredByUser(user.getId(), returnedUser.getId());
         ProxyBuilder.callProxy(WhoMonitorsMe.this, caller, returnedNothing -> voidResponse(returnedNothing));
-
     }
 
     private void voidResponse(Void returnedNothing) {
@@ -115,8 +110,6 @@ public class WhoMonitorsMe extends AppCompatActivity {
                 ProxyBuilder.callProxy(WhoMonitorsMe.this, caller, returnedUser -> addUserResponse(returnedUser));
             }
         });
-
-
     }
 
     private void addUserResponse(User returnedUser) {
@@ -141,7 +134,6 @@ public class WhoMonitorsMe extends AppCompatActivity {
 
     public static Intent makeIntent(Context context){
         return new Intent(context, WhoMonitorsMe.class);
-
     }
 }
 

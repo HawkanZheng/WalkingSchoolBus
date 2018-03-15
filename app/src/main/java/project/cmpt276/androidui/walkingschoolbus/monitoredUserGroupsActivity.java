@@ -14,8 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import project.cmpt276.model.walkingschoolbus.Group;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
@@ -39,15 +37,11 @@ public class monitoredUserGroupsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_monitored_user_groups);
         //Get shared values instance
         sharedValues = SharedValues.getInstance();
-
         //Set the proxy
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
-
-
         user = sharedValues.getUser();
         //Get full user info
         getUser(user);
-
         setupRemoveFromGroupButton();
         setUpReturnToWhoIMonitorButton();
     }
@@ -57,7 +51,7 @@ public class monitoredUserGroupsActivity extends AppCompatActivity {
         ProxyBuilder.callProxy(monitoredUserGroupsActivity.this, caller, returnedUser -> userResponse(returnedUser));
     }
 
-    private void getMemberOfGroups(User currUser) {
+    private void getMemberOfGroups(User currUser){
         currUser.setMemberOfGroupsString(new ArrayList<String>());
         for(int i = 0; i < currUser.getMemberOfGroups().size(); i++){
             Group aGroup = currUser.getMemberOfGroups().get(i);
@@ -74,15 +68,10 @@ public class monitoredUserGroupsActivity extends AppCompatActivity {
     }
 
     private void populateList() {
-//        List<String> list = user.getMemberOfGroupsString();
-//        for(int i = 0; i < user.getMemberOfGroups().size(); i++ ) {
-//            Log.i("Group added", list.get(i) );
-//        }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,           //Context for the activity
                 R.layout.users_group_list,      //Layout used
                 user.getMemberOfGroupsString());               //Groups/Users displayed
-
         //Configure the list view
         ListView view = findViewById(R.id.usersGroupsList);
         adapter.notifyDataSetChanged();
@@ -100,8 +89,7 @@ public class monitoredUserGroupsActivity extends AppCompatActivity {
                     long id = Long.parseLong(input);
                     Call<Void> caller = proxy.deleteGroupMember(id, user.getId());
                     ProxyBuilder.callProxy(monitoredUserGroupsActivity.this, caller, returnedNothing -> leaveGroupResponse(returnedNothing));
-                }
-                else{
+                }else{
                     Toast.makeText(monitoredUserGroupsActivity.this, "Please enter a Group ID", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -136,7 +124,6 @@ public class monitoredUserGroupsActivity extends AppCompatActivity {
         view.setText(theUser.getName() + getString(R.string.userGroupsView));
 
     }
-
 
     public static Intent makeIntent(Context context){
         return new Intent(context, monitoredUserGroupsActivity.class);

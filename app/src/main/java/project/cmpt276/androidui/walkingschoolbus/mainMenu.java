@@ -2,19 +2,14 @@ package project.cmpt276.androidui.walkingschoolbus;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.Arrays;
 import java.util.List;
-
-import project.cmpt276.model.walkingschoolbus.Group;
 import project.cmpt276.model.walkingschoolbus.GroupCollection;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
@@ -34,7 +29,6 @@ Access to :
 public class mainMenu extends AppCompatActivity {
     private WGServerProxy proxy;
     private static final String TAG = "Test";
-    //    private long userId = 0;
     private User user;
     private GroupCollection groupList;
     private SharedValues sharedValues;
@@ -42,41 +36,34 @@ public class mainMenu extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
         sharedValues = SharedValues.getInstance();
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
         user = User.getInstance();
-
-
         Log.i(TAG, ""+user.toString());
-
         groupList = GroupCollection.getInstance();
 
+        //Set up Main Menu views.
         setupGreeting();
-
         setUpMapButton();
         setUpWhoIMonitorBtn();
         setUpWhoMonitorsMeBtn();
         setUpLogoutBtn();
         setUpManageGroupsBtn();
-
     }
 
     private void setupGreeting() {
         TextView view = findViewById(R.id.greeting);
-        view.setText(getString(R.string.hi) + " " + user.getName() +". " + getString(R.string.welcome_to_the_walking_school_bus_app));
+        view.setText(getString(R.string.hi) + " " + user.getName() + ". " + getString(R.string.welcome_to_the_walking_school_bus_app));
     }
 
-
-
-    private void stopMonitoringResponse(User returnedUser) {
+    private void stopMonitoringResponse(User returnedUser){
         Call<Void> caller = proxy.stopMonitoringUser(user.getId(), returnedUser.getId());
         ProxyBuilder.callProxy(mainMenu.this, caller, returnedNothing -> response(returnedNothing));
     }
 
-    private void addUserToMonitor(String email) {
+    private void addUserToMonitor(String email){
         Call<User> userCaller = proxy.getUserByEmail(email);
         ProxyBuilder.callProxy(mainMenu.this, userCaller, returnedUser -> addUserToMonitorResponse(returnedUser));
     }
@@ -87,7 +74,6 @@ public class mainMenu extends AppCompatActivity {
         for (int i = 0; i < returnedUsers.size(); i++ ) {
             Log.w(TAG, "    User: " + returnedUsers.get(i).toString());
             users[i] = returnedUsers.get(i).toString();
-
         }
     }
 
@@ -95,19 +81,15 @@ public class mainMenu extends AppCompatActivity {
         Log.w(TAG, "server replied with User: " + returnedUser.toString());
         Call<List<User>> caller = proxy.addUserToMonitor(user.getId(), returnedUser);
         ProxyBuilder.callProxy(mainMenu.this, caller, returnedUsers -> response(returnedUsers));
-
-
     }
 
     private void response(Void returnedNothing){
         Log.w(TAG, "Server replied with nothing");
     }
 
-
-
     private void setUpMapButton()
     {
-        Button button = (Button) findViewById(R.id.goToMap);
+        Button button = findViewById(R.id.goToMap);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,22 +100,18 @@ public class mainMenu extends AppCompatActivity {
         });
     }
 
-
-
-
-    private void setUpWhoIMonitorBtn() {
+    private void setUpWhoIMonitorBtn(){
         Button button = findViewById(R.id.whoIMonitorBtn);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = WhoIMonitor.makeIntent(mainMenu.this);
                 startActivity(intent);
-
             }
         });
     }
 
-    private void setUpWhoMonitorsMeBtn() {
+    private void setUpWhoMonitorsMeBtn(){
         Button button = findViewById(R.id.whoMonitorsMeBtn);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,7 +133,7 @@ public class mainMenu extends AppCompatActivity {
         });
     }
 
-    private void setUpLogoutBtn() {
+    private void setUpLogoutBtn(){
         Button button = findViewById(R.id.logoutBtn);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,10 +145,8 @@ public class mainMenu extends AppCompatActivity {
 
     }
 
-
     public static Intent makeIntent(Context context) {
         Intent intent = new Intent(context, mainMenu.class);
-
         return intent;
     }
 
@@ -179,7 +155,6 @@ public class mainMenu extends AppCompatActivity {
     {
         moveTaskToBack(true);
     }
-
 }
 
 

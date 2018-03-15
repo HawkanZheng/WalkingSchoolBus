@@ -48,12 +48,7 @@ public class WhoIMonitor extends AppCompatActivity {
         setUpReturnButton();
         setUpRemoveMonitoredUserButton();
         registerListClickCallBack();
-
-
-
     }
-
-
 
     private void getMonitorsUsers(User currUser) {
         //User user = User.getInstance();
@@ -96,7 +91,6 @@ public class WhoIMonitor extends AppCompatActivity {
             }
         });
     }
-
 
     private void removeUserResponse(User returnedUser) {
         Call<Void> caller = proxy.stopMonitoringUser(user.getId(), returnedUser.getId());

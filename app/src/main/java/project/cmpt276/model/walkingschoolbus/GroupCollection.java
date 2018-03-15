@@ -8,14 +8,10 @@ import java.util.List;
  */
 
 public class GroupCollection {
-
-
-
-
     private List<Group> groups = new ArrayList<>();
 
     /*
-  Singleton Support
+    Singleton Support
    */
     private static GroupCollection instance;
     private GroupCollection(){
@@ -25,9 +21,7 @@ public class GroupCollection {
         if (instance == null){
             instance = new GroupCollection();
         }
-
         return instance;
-
     }
 
     public void addGroup(Group group)
@@ -61,5 +55,4 @@ public class GroupCollection {
     public void setGroups(List<Group> groups) {
         this.groups = groups;
     }
-
 }

@@ -29,7 +29,6 @@ public class CustomizeMarkerFragment extends AppCompatDialogFragment {
     private GoogleMap map;
     private GoogleMapsInterface gMapsOption;
     private LatLng coordinates;
-    private EditText nameForm;
     private float type;
 
     private final float[] PIN_COLORS = {HUE_RED, HUE_BLUE};

@@ -41,9 +41,6 @@ public class Login extends AppCompatActivity {
 
     private EditText getPassword;
     private EditText getUserName;
-    private boolean skip = false;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +49,6 @@ public class Login extends AppCompatActivity {
         gmaps = GoogleMapsInterface.getInstance(this);
         String savedPassword = getSavedPassword(this);
         String savedUserName = getSavedUserName(this);
-        //getPassword.setText(savedPassword);
-        //getUserName.setText((savedUserName));
-
-
         getInput();
         user = User.getInstance();
         sharedValues = SharedValues.getInstance();
@@ -67,137 +60,83 @@ public class Login extends AppCompatActivity {
     }
 
 
-    private void setUpSignUpButton()
-    {
-
-        Button button = (Button) findViewById(R.id.createUser);
-
+    private void setUpSignUpButton(){
+        Button button = findViewById(R.id.createUser);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent intent = new Intent(Login.this, signUp.class);
                 startActivity(intent);
-
             }
         });
-
     }
 
-    private boolean errorCheck()
-    {
+    private boolean errorCheck() {
         boolean hasError = false;
         String errors = "Invalid Credentials\nPlease correct the following\n";
-
-        if(userName.length()==0)
-        {
+        if(userName.length()==0){
             errors = errors +"User Name Invalid\n";
             hasError = true;
         }
 
-        if(password.length()==0)
-        {
+        if(password.length()==0){
             errors = errors+"Password Invalid\n";
             hasError=true;
         }
 
-
-        if(hasError)
-        {
+        if(hasError) {
             changeError(errors);
         }
-
-
         return hasError;
     }
 
-    private void getInput()
-    {
-        getUserName = (EditText) findViewById(R.id.userName);
-        getPassword = (EditText) findViewById(R.id.enterPassWord);
-
+    private void getInput(){
+        getUserName = findViewById(R.id.userName);
+        getPassword = findViewById(R.id.enterPassWord);
     }
 
-    private void clearInput()
-    {
+    private void clearInput(){
         getUserName.setText("");
         getPassword.setText("");
     }
 
-    private void setUserInfo()
-    {
+    private void setUserInfo(){
         userName = getUserName.getText().toString();
         password = getPassword.getText().toString();
         user.setEmail(userName);
         user.setPassword(password);
-
     }
 
 
-    private void changeError(String error)
-    {
+    private void changeError(String error){
         TextView test = findViewById(R.id.loginErrorMessages);
         test.setText(error);
-
     }
 
-    private void setUpLoginButton()
-    {
+    private void setUpLoginButton(){
         TextView message = findViewById(R.id.loginErrorMessages);
-
-        Button button = (Button) findViewById(R.id.loginBtn);
-
+        Button button = findViewById(R.id.loginBtn);
         button.setOnClickListener((View view) -> {
-
             setUserInfo();
-
-            if(!errorCheck()) {
-
+            if(!errorCheck()){
                 greetingMessage();
                 clearInput();
                 saveUserInfo();
-//                message.setText("oh hi");
                 //Set new user
                 ProxyBuilder.setOnTokenReceiveCallback(this::onReceiveToken);
-
-                //ProxyBuilder.setOnErrorCallback(this::onReceiveError);
-
-            Call<Void> loginCaller = proxy.login(user);
-            ProxyBuilder.callProxy(Login.this, loginCaller, this::response);
-
+                Call<Void> loginCaller = proxy.login(user);
+                ProxyBuilder.callProxy(Login.this, loginCaller, this::response);
             }
-
-
-
         });
     }
 
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        ProxyBuilder.setOnErrorCallback(null);
-//
-//
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        ProxyBuilder.setOnErrorCallback(this::onReceiveError);
-//    }
-
-    private void onReceiveToken(String token) {
+    private void onReceiveToken(String token){
         // Replace the current proxy with one that uses the token!
         Log.w(TAG, "   --> NOW HAVE TOKEN: " + token);
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), token);
         sharedValues.setToken(token);
-
         setUser();
         getGroups();
-
-
-
-
     }
 
     private void setUser() {
@@ -206,14 +145,11 @@ public class Login extends AppCompatActivity {
         Log.i(TAG, "setUser used here");
     }
 
-    private void userResponse(User returnedUser) {
+    private void userResponse(User returnedUser){
         Log.i(TAG, "userResponse used here");
         User.setUser(returnedUser);
-
         Intent intent = mainMenu.makeIntent(Login.this);
         startActivity(intent);
-
-
     }
 
     private void getGroups() {
@@ -221,50 +157,32 @@ public class Login extends AppCompatActivity {
         ProxyBuilder.callProxy(Login.this, caller, returnedGroups ->groupsResponse(returnedGroups));
     }
 
-    private void groupsResponse(List<Group> returnedGroups) {
-
+    private void groupsResponse(List<Group> returnedGroups){
         groupList.setGroups(returnedGroups);
-
-
     }
-
-    private void onReceiveError(String message){
-//        Log.w(TAG, "   --> ERROR: " + message);
-//
-//        Intent intent = Login.makeIntent(Login.this);
-//        startActivity(intent);
-
-    }
-
 
     private void response(Void returnedNothing) {
         Log.w(TAG, "Server replied to login request (no content was expected).");
         Toast.makeText(Login.this, "You have logged in.", Toast.LENGTH_LONG).show();
     }
 
-
     public static Intent makeIntent(Context context){
         return new Intent(context, Login.class);
     }
 
-    private void greetingMessage()
-    {
+    private void greetingMessage(){
         TextView message = findViewById(R.id.loginErrorMessages);
-
         new CountDownTimer(3000, 1000) {
-
             public void onTick(long millisUntilFinished) {
                message.setText("Welcome!\nLogging You in Now!");
             }
-
             public void onFinish() {
                 message.setText("");
             }
         }.start();
     }
 
-    private void saveUserInfo()
-    {
+    private void saveUserInfo(){
         SharedPreferences prefs = this.getSharedPreferences("user info", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("user name", userName);
@@ -272,15 +190,12 @@ public class Login extends AppCompatActivity {
         editor.apply();
     }
 
-    static public String getSavedPassword(Context context)
-    {
+    static public String getSavedPassword(Context context){
         SharedPreferences prefs = context.getSharedPreferences("user info", MODE_PRIVATE);
         return prefs.getString("password", "");
-
     }
 
-    static public String getSavedUserName(Context context)
-    {
+    static public String getSavedUserName(Context context){
         SharedPreferences prefs = context.getSharedPreferences("user info", MODE_PRIVATE);
         return prefs.getString("user name", "");
     }

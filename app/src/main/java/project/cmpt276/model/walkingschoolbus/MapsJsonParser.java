@@ -14,11 +14,10 @@ import java.util.List;
  * Created by Jorawar on 3/7/2018.
  */
 
-
-// -- Code courtesy of  Anupam Chugh -- //
-// -- Full write up found here: https://www.journaldev.com/13373/android-google-map-drawing-route-two-points -- //
-
-
+/**
+ * Code courtesy of  Anupam Chugh
+ * Full write up found here: https://www.journaldev.com/13373/android-google-map-drawing-route-two-points
+ * */
 public class MapsJsonParser {
         // Receives a JSONObject and returns a list of lists containing latitude and longitude
         public List<List<HashMap<String,String>>> parse(JSONObject jObject){
@@ -63,8 +62,6 @@ public class MapsJsonParser {
                 e.printStackTrace();
             }catch (Exception e){
             }
-
-
             return routes;
         }
 
@@ -103,7 +100,6 @@ public class MapsJsonParser {
                         (((double) lng / 1E5)));
                 poly.add(p);
             }
-
             return poly;
         }
 }

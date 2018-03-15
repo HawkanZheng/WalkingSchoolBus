@@ -7,14 +7,12 @@ import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
-
 import project.cmpt276.model.walkingschoolbus.Group;
 import project.cmpt276.model.walkingschoolbus.GroupCollection;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
@@ -38,7 +36,6 @@ public class GroupCreationFragment extends AppCompatDialogFragment {
     private SharedValues sharedValues;
     private WGServerProxy proxy;
     private User user;
-    private List<User> monitoredUsers;
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         //Get shareValues (token)
@@ -89,11 +86,6 @@ public class GroupCreationFragment extends AppCompatDialogFragment {
             return;
 
         }
-        /*
-        * Set leader
-        * Set id
-        * Push group to server and add it to client.
-        */
         group.setId(-1);
         group.setLeader(user);
         Call<Group> caller = proxy.createGroup(group);
@@ -109,13 +101,10 @@ public class GroupCreationFragment extends AppCompatDialogFragment {
         Log.i("Group returned: ", returnedGroup.toString());
         sharedValues.setGroup(returnedGroup);
         groupList.addGroup(returnedGroup);
-        //getGroups();
         //Get updated user
         Toast.makeText(getActivity(),"New Group Saved!", Toast.LENGTH_SHORT).show();
         Call<User> caller = proxy.getUserByEmail(user.getEmail());
         ProxyBuilder.callProxy(getActivity(), caller, returnedUser -> userResponse(returnedUser));
-
-
     }
 
     private void getGroups() {
@@ -124,15 +113,8 @@ public class GroupCreationFragment extends AppCompatDialogFragment {
     }
 
     private void groupsResponse(List<Group> returnedGroups) {
-//refresh group list
+        //refresh group list
         groupList.setGroups(returnedGroups);
-
-//        //Log.w(TAG, "All Groups:");
-//        for (Group group : returnedGroups) {
-//            //Log.w(TAG, "    Group: " + group.toString());
-//            groupList.addGroup(group);
-//
-//        }
     }
 
     private void userResponse(User returnedUser) {
@@ -144,7 +126,6 @@ public class GroupCreationFragment extends AppCompatDialogFragment {
     private void membersResponse(List<User> returnedMembers) {
         Log.i("New Group:", "Now member of group");
         //Dismiss the dialog once a group is successfully made.
-
         dismiss();
     }
 

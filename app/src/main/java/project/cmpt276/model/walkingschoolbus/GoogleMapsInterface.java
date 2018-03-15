@@ -13,9 +13,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,7 +32,6 @@ public class GoogleMapsInterface {
     private int radius = 1000000000;
     private static GoogleMapsInterface mapsInterface;
     private static final float CIRCLE_THICKNESS = 2.0f;
-    private static Circle userProximity;
 
     private GoogleMapsInterface(Context c){
         context = c;
@@ -99,7 +96,6 @@ public class GoogleMapsInterface {
 
     // Constructs google url to create a path
     public String getDirectionsUrl(LatLng origin, LatLng dest){
-
         // Construct the URL request
         String originUrl = "origin=" + origin.latitude + "," + origin.longitude;
         String destUrl = "destination=" + dest.latitude + "," + dest.longitude;
@@ -110,9 +106,7 @@ public class GoogleMapsInterface {
 
         String params = originUrl + "&" + destUrl + "&" + mode;
 
-        // TODO: Move API key
         String constructedURL = "https://maps.googleapis.com/maps/api/directions/json?" + params + "&key=AIzaSyA6LfimFEM754npAhMt6A_QG4gpeHXlrdg";
-
         return constructedURL;
     }
 
@@ -154,20 +148,4 @@ public class GoogleMapsInterface {
         }
         return data;
     }
-
-
-
-    /*
-    *
-    * public void pinRadius{
-    *
-    * }
-    *
-    * generateMap
-    *
-    * pinCurrentSelectedRoute
-    *
-    * pinNearbyGroups
-    */
-
 }

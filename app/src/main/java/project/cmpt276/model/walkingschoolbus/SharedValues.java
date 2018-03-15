@@ -12,16 +12,10 @@ Shared values to be used between activities such as token, user...
 public class SharedValues {
     private  String token;
     private Group group;
-
-
-
     private User user;
-
     private List<User> userList = new ArrayList<>();
-
-
-
     private static SharedValues instance;
+
     private SharedValues(){
     }
 
@@ -29,9 +23,7 @@ public class SharedValues {
         if (instance == null){
             instance = new SharedValues();
         }
-
         return instance;
-
     }
 
     public String getToken() {

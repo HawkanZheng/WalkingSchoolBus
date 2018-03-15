@@ -10,10 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import java.lang.reflect.Proxy;
 import java.util.ArrayList;
-import java.util.List;
 
 import project.cmpt276.model.walkingschoolbus.Group;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
@@ -39,8 +36,6 @@ public class ManageGroups extends AppCompatActivity {
         setupLeaveGroupButton();
     }
 
-
-
     private void getMemberOfGroups(User currUser) {
         currUser.setMemberOfGroupsString(new ArrayList<String>());
         for(int i = 0; i < currUser.getMemberOfGroups().size(); i++){
@@ -57,10 +52,9 @@ public class ManageGroups extends AppCompatActivity {
 
     private void populateList() {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,           //Context for the activity
-                R.layout.my_groups_list,      //Layout used
-                user.getMemberOfGroupsString());               //Groups/Users displayed
-
+                this,                     //Context for the activity
+                R.layout.my_groups_list,         //Layout used
+                user.getMemberOfGroupsString());//Groups/Users displayed
         //Configure the list view
         ListView list = findViewById(R.id.myGroupsList);
         list.setAdapter(adapter);
@@ -77,8 +71,7 @@ public class ManageGroups extends AppCompatActivity {
                     long id = Long.parseLong(input);
                     Call<Void> caller = proxy.deleteGroupMember(id, user.getId());
                     ProxyBuilder.callProxy(ManageGroups.this, caller, returnedNothing -> leaveGroupResponse(returnedNothing));
-                }
-                else{
+                }else{
                     Toast.makeText(ManageGroups.this, "Please enter a Group ID", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -109,7 +102,5 @@ public class ManageGroups extends AppCompatActivity {
 
     public static Intent makeIntent(Context context){
         return new Intent(context, ManageGroups.class);
-
     }
-
 }

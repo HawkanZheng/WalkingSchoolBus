@@ -1,29 +1,10 @@
 package project.cmpt276.server.walkingschoolbus;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
-
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.logging.HttpLoggingInterceptor;
-import project.cmpt276.androidui.walkingschoolbus.Login;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Retrofit;
-import retrofit2.converter.jackson.JacksonConverterFactory;
-
-import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
-
-import java.io.IOException;
-
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -46,9 +27,6 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 public class ProxyBuilder {
     // Select a server (top one is production one; others are for testing)
     private static final String SERVER_URL = "https://cmpt276-1177-bf.cmpt.sfu.ca:8443/";
-//    private static final String SERVER_URL = "https://cmpt276-1177-bf.cmpt.sfu.ca:9443/";
-//    private static final String SERVER_URL = "https://localhost:8443/";
-
 
     // Allow client-code to register callback for when the token is received.
     // NOTE: the current proxy does not upgrade to using the token!
@@ -61,7 +39,6 @@ public class ProxyBuilder {
 
     public static void setOnErrorCallback(SimpleCallback<String> callback){
         receivedErrorCallback = callback;
-
     }
 
     /**
@@ -97,9 +74,6 @@ public class ProxyBuilder {
 
         return retrofit.create(WGServerProxy.class);
     }
-
-
-
 
     /**
      * Interface for simplifying the callbacks from the server.
@@ -171,23 +145,11 @@ public class ProxyBuilder {
             private void showFailure(String message) {
                 Log.e("ProxyBuilder", message);
                 if (context != null) {
-                    //receivedTokenCallback.callback(null);
                     Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-
                 }
-                //Intent intent = Login.makeIntent(context);
-                //startActivity(intent);
-
-
             }
         });
     }
-
-
-
-
-
-
 
     /*
         --------------------------------

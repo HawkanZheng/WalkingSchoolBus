@@ -2,38 +2,34 @@ package project.cmpt276.model.walkingschoolbus;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Simple User class to store the data the server expects and returns.
-
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
+    //Variables
     private Long id;
     private String name;
     private String email;
     private String password;
+    private String href;
 
+    //Containers
     private List<User> monitoredByUsers = new ArrayList<>();
     private List<User> monitorsUsers = new ArrayList<>();
     private List<Group> walkingGroups = new ArrayList<>();   // <-- TO BE IMPLEMENTED
     private List<Group> memberOfGroups = new ArrayList<>();
     private List<Group> leadsGroups = new ArrayList<>();
-
     private String[] monitorsUsersString;
     private String[] monitoredByUsersString;
     private List<String> memberOfGroupsString = new ArrayList<>();
 
-
-
     /*
-        Singleton Support
-         */
-
-
+    Singleton Support
+    */
     private static User instance;
     private User(){
         //Private to prevent anyone else from instantiating
@@ -42,15 +38,12 @@ public class User {
         if (instance == null){
             instance = new User();
         }
-
         return instance;
     }
 
     public static void setUser(User user){
         instance = user;
     }
-
-    private String href;
 
     public Long getId() {
         return id;
@@ -162,7 +155,6 @@ public class User {
     public void setMemberInList(int i, String string){
         this.memberOfGroupsString.set(i, string );
     }
-
 
     @Override
     public String toString() {

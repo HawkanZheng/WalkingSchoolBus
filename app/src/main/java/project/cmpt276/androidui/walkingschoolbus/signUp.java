@@ -35,15 +35,9 @@ import android.widget.Toast;
 public class signUp extends AppCompatActivity {
     private WGServerProxy proxy;
     private static final String TAG = "Test";
-    private long userId = 0;
     private User user;
     private SharedValues sharedValues;
     private GroupCollection groupList;
-
-
-//    User user = new User();
-//    TextView name = (TextView) findViewById(R.id.getName);
-//    String toName = name.toString();
 
     private String name;
     private String password;
@@ -52,9 +46,6 @@ public class signUp extends AppCompatActivity {
     private EditText getName;
     private EditText getPassword;
     private EditText getUserName;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,20 +66,15 @@ public class signUp extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Build new user
-
                 setUserInfo();
-                if(!errorCheck())
-                {
+                if(!errorCheck()) {
                     greetingMessage();
-
                     user.setPassword(password);
                     user.setEmail(userName);
                     user.setName(name);
-//                    user = User.getInstance();
                     Call<User> caller = proxy.createNewUser(user);
                     ProxyBuilder.callProxy(signUp.this, caller, returnedUser -> response(returnedUser));
                 }
-
             }
         });
     }
@@ -103,7 +89,6 @@ public class signUp extends AppCompatActivity {
         ProxyBuilder.setOnTokenReceiveCallback(this::onReceiveToken);
         Call<Void> caller = proxy.login(user);
         ProxyBuilder.callProxy(signUp.this, caller, returnedNothing -> loginResponse(returnedNothing));
-
     }
 
     private void onReceiveToken(String token) {
@@ -111,13 +96,8 @@ public class signUp extends AppCompatActivity {
         Log.w(TAG, "   --> NOW HAVE TOKEN: " + token);
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), token);
         sharedValues.setToken(token);
-
         setUser();
         getGroups();
-
-
-
-
     }
 
     private void setUser() {
@@ -129,11 +109,8 @@ public class signUp extends AppCompatActivity {
     private void userResponse(User returnedUser) {
         Log.i(TAG, "userResponse used here");
         User.setUser(returnedUser);
-
         Intent intent = mainMenu.makeIntent(signUp.this);
         startActivity(intent);
-
-
     }
 
     private void loginResponse(Void returnedNothing) {
@@ -148,17 +125,7 @@ public class signUp extends AppCompatActivity {
     }
 
     private void groupsResponse(List<Group> returnedGroups) {
-
         groupList.setGroups(returnedGroups);
-
-//        Log.w(TAG, "All Groups:");
-//        for (Group group : returnedGroups) {
-//            Log.w(TAG, "    Group: " + group.toString());
-//            groupList.addGroup(group);
-//
-//        }
-//        populateList();
-
     }
 
     private boolean errorCheck()
@@ -166,69 +133,51 @@ public class signUp extends AppCompatActivity {
         boolean hasError = false;
         String errors = "Credentials Invalid\nPlease Correct the Following\n";
 
-        if(name.length()==0)
-        {
+        if(name.length()==0){
             errors = errors+"Name Invalid\n";
             hasError= true;
         }
 
-        if(userName.length()==0)
-        {
+        if(userName.length()==0){
             errors = errors +"User Name Invalid\n";
             hasError = true;
         }
 
-        if(password.length()==0)
-        {
+        if(password.length()==0){
             errors = errors+"Password Invalid\n";
             hasError=true;
         }
 
-
-        if(hasError)
-        {
+        if(hasError){
             changeError(errors);
         }
-
-
         return hasError;
     }
 
-    private void getInput()
-    {
-        getUserName = (EditText) findViewById(R.id.createEmail);
-        getPassword = (EditText) findViewById(R.id.createPassword);
-        getName = (EditText) findViewById(R.id.createName);
+    private void getInput(){
+        getUserName = findViewById(R.id.createEmail);
+        getPassword = findViewById(R.id.createPassword);
+        getName = findViewById(R.id.createName);
     }
 
-
-
-    private void setUserInfo()
-    {
+    private void setUserInfo(){
         userName = getUserName.getText().toString();
         password = getPassword.getText().toString();
         name = getName.getText().toString();
-
     }
 
 
-    private void changeError(String error)
-    {
+    private void changeError(String error){
         TextView test = findViewById(R.id.errorMessages);
         test.setText(error);
-
     }
 
-    private void greetingMessage()
-    {
+    private void greetingMessage(){
         TextView message = findViewById(R.id.errorMessages);
-
         new CountDownTimer(3000, 1000) {
-
             public void onTick(long millisUntilFinished) {
                 message.setText("Welcome!\nLogging You in Now!");
             }
-
             public void onFinish() {
                 message.setText("");
             }

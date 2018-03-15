@@ -12,8 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +20,6 @@ import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.model.walkingschoolbus.fragmentDataCollection;
 import project.cmpt276.model.walkingschoolbus.GroupCollection;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
-import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
 import retrofit2.Call;
@@ -62,7 +59,6 @@ public class AddMonitoredUsersToGroup extends AppCompatDialogFragment {
             int finalI = i;
             ProxyBuilder.callProxy(getActivity(), caller, returnedGroup -> groupResponse(returnedGroup, finalI));
         }
-
     }
 
     private void groupResponse(Group returnedGroup, int i) {
@@ -133,15 +129,7 @@ public class AddMonitoredUsersToGroup extends AppCompatDialogFragment {
     }
 
     private void groupsResponse(List<Group> returnedGroups) {
-
         groupList.setGroups(returnedGroups);
-
-//        //Log.w(TAG, "All Groups:");
-//        for (Group group : returnedGroups) {
-//            //Log.w(TAG, "    Group: " + group.toString());
-//            groupList.addGroup(group);
-//
-//        }
     }
 
     private void setFinishBtn(){

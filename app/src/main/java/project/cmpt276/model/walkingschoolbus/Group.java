@@ -1,10 +1,7 @@
 package project.cmpt276.model.walkingschoolbus;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,24 +18,6 @@ public class Group {
     private User leader;
     private String leaderHref;
     private List<User> memberUsers;
-
-//      /*
-//        Singleton Support
-//         */
-//
-//
-//    private static Group instance;
-//    private Group(){
-//        //Private to prevent anyone else from instantiating
-//    }
-//    public static Group getInstance(){
-//        if (instance == null){
-//            instance = new Group();
-//        }
-//
-//        return instance;
-//
-//    }
 
     public String getLeaderHref() {
         return leaderHref;
@@ -63,10 +42,6 @@ public class Group {
     public void setMemberUsers(List<User> memberUsers) {
         this.memberUsers = memberUsers;
     }
-
-//    public void addMembertoGroup(User u){
-//        memberUsers.add(u);
-//    }
 
     public List<Double> getRouteLatArray() {
         return routeLatArray;
@@ -117,9 +92,8 @@ public class Group {
     }
 
     public String groupToListString(){
-        return "Group ID: " + id + "\nGroup Description: " + groupDescription;
+        return "Group ID: " + id + "\n Group Description: " + groupDescription;
     }
-
 
     @Override
     public String toString() {
