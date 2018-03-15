@@ -36,11 +36,14 @@ public class Login extends AppCompatActivity {
     private GroupCollection groupList;
 
     public GoogleMapsInterface gmaps;
-    private String password;
-    private String userName;
+    private String password = "";
+    private String userName = "";
 
     private EditText getPassword;
     private EditText getUserName;
+    private boolean skip = false;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,14 +52,17 @@ public class Login extends AppCompatActivity {
         gmaps = GoogleMapsInterface.getInstance(this);
         String savedPassword = getSavedPassword(this);
         String savedUserName = getSavedUserName(this);
-        getInput();
+        password = savedPassword;
+        userName =savedUserName;
         user = User.getInstance();
+        getInput();
         sharedValues = SharedValues.getInstance();
         groupList = GroupCollection.getInstance();
         //Build server proxy
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), null);
         setUpLoginButton();
         setUpSignUpButton();
+        previousLogin();
     }
 
 
@@ -69,6 +75,7 @@ public class Login extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 
     private boolean errorCheck() {
@@ -87,6 +94,8 @@ public class Login extends AppCompatActivity {
         if(hasError) {
             changeError(errors);
         }
+
+
         return hasError;
     }
 
@@ -105,12 +114,14 @@ public class Login extends AppCompatActivity {
         password = getPassword.getText().toString();
         user.setEmail(userName);
         user.setPassword(password);
+
     }
 
 
     private void changeError(String error){
         TextView test = findViewById(R.id.loginErrorMessages);
         test.setText(error);
+
     }
 
     private void setUpLoginButton(){
@@ -198,6 +209,25 @@ public class Login extends AppCompatActivity {
     static public String getSavedUserName(Context context){
         SharedPreferences prefs = context.getSharedPreferences("user info", MODE_PRIVATE);
         return prefs.getString("user name", "");
+    }
+
+    //Allows instant login if previously logged in. "remember me" feature.
+    private void previousLogin() {
+        String savedPassword = getSavedPassword(this);
+        String savedUserName = getSavedUserName(this);
+        if(!savedUserName.equals("")&&!savedPassword.equals("")) {
+            greetingMessage();
+            ProxyBuilder.setOnTokenReceiveCallback(this::onReceiveToken);
+            userName = savedUserName;
+            password = savedPassword;
+            user.setEmail(userName);
+            user.setPassword(password);
+
+            Call<Void> loginCaller = proxy.login(user);
+            ProxyBuilder.callProxy(Login.this, loginCaller, this::response);
+            userName = "";
+            password = "";
+        }
     }
 
 }
