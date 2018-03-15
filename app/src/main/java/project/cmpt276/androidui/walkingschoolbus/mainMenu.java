@@ -45,7 +45,7 @@ public class mainMenu extends AppCompatActivity {
 
         groupList = GroupCollection.getInstance();
 
-        setupGreeting();
+        //setupGreeting();
 
         setUpMapButton();
         setUpWhoIMonitorBtn();
@@ -55,10 +55,10 @@ public class mainMenu extends AppCompatActivity {
 
     }
 
-    private void setupGreeting() {
-        TextView view = findViewById(R.id.greeting);
-        view.setText(user.getName());
-    }
+//    private void setupGreeting() {
+//        TextView view = findViewById(R.id.greeting);
+//        view.setText(user.getName());
+//    }
 
     private void deleteGroupMember() {
         Call<Void> caller = proxy.deleteGroupMember(Long.valueOf(19), user.getId());
