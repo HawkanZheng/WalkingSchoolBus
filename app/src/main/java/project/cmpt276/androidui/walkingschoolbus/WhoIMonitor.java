@@ -62,6 +62,8 @@ public class WhoIMonitor extends AppCompatActivity {
     }
 
     private void monitorsResponse(List<User> returnedUsers) {
+        Log.i("Monitoring", returnedUsers.toString());
+        sharedValues.setUserList(returnedUsers);
         String[] users = new String[returnedUsers.size()];
         for (int i = 0;i < returnedUsers.size(); i++){
             User monitorUser = returnedUsers.get(i);
@@ -153,7 +155,8 @@ public class WhoIMonitor extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 user = User.getInstance();
-                sharedValues.setUser(user.getMonitorsUsers().get(position));
+                Log.i("Monitoring:",sharedValues.getUserList().toString() );
+                sharedValues.setUser(sharedValues.getUserList().get(position));
                 Intent intent = monitoredUserGroupsActivity.makeIntent(WhoIMonitor.this);
                 startActivity(intent);
             }

@@ -609,7 +609,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Log.i("Group Save - Lats",""+fragmentData.getWaypointsLats());
                 Log.i("Group Save - Lngs", ""+fragmentData.getWaypointsLngs());
 
-
+                refreshUser();
             }
         });
     }
@@ -666,6 +666,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
                 //Toast.makeText(MapsActivity.this,"Added User",Toast.LENGTH_SHORT).show();
+                refreshUser();
             }
         });
     }

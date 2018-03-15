@@ -85,6 +85,7 @@ public class monitoredUserGroupsActivity extends AppCompatActivity {
 
         //Configure the list view
         ListView view = findViewById(R.id.usersGroupsList);
+        adapter.notifyDataSetChanged();
         view.setAdapter(adapter);
     }
 
@@ -108,6 +109,7 @@ public class monitoredUserGroupsActivity extends AppCompatActivity {
     }
 
     private void leaveGroupResponse(Void returnedNothing) {
+        Toast.makeText(monitoredUserGroupsActivity.this, "Removed from group.", Toast.LENGTH_SHORT).show();
         Call<User> caller = proxy.getUserById(user.getId());
         ProxyBuilder.callProxy(monitoredUserGroupsActivity.this, caller, returnedUser -> userResponse(returnedUser));
     }

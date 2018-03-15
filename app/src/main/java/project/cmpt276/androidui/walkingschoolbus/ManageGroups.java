@@ -88,6 +88,7 @@ public class ManageGroups extends AppCompatActivity {
     private void leaveGroupResponse(Void returnedNothing) {
         Call<User> caller = proxy.getUserByEmail(user.getEmail());
         ProxyBuilder.callProxy(ManageGroups.this, caller, returnedUser -> userResponse(returnedUser));
+        Toast.makeText(ManageGroups.this, "Left Group.", Toast.LENGTH_SHORT).show();
     }
 
     private void userResponse(User returnedUser) {

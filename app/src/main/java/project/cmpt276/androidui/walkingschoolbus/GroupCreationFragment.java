@@ -109,11 +109,29 @@ public class GroupCreationFragment extends AppCompatDialogFragment {
         Log.i("Group returned: ", returnedGroup.toString());
         sharedValues.setGroup(returnedGroup);
         groupList.addGroup(returnedGroup);
+        //getGroups();
         //Get updated user
         Call<User> caller = proxy.getUserByEmail(user.getEmail());
         ProxyBuilder.callProxy(getActivity(), caller, returnedUser -> userResponse(returnedUser));
 
 
+    }
+
+    private void getGroups() {
+        Call<List<Group>> caller = proxy.getGroups();
+        ProxyBuilder.callProxy(getActivity(), caller, returnedGroups ->groupsResponse(returnedGroups));
+    }
+
+    private void groupsResponse(List<Group> returnedGroups) {
+//refresh group list
+        groupList.setGroups(returnedGroups);
+
+//        //Log.w(TAG, "All Groups:");
+//        for (Group group : returnedGroups) {
+//            //Log.w(TAG, "    Group: " + group.toString());
+//            groupList.addGroup(group);
+//
+//        }
     }
 
     private void userResponse(User returnedUser) {

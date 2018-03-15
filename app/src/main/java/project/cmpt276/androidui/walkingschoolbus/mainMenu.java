@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Arrays;
@@ -43,6 +44,8 @@ public class mainMenu extends AppCompatActivity {
 
         groupList = GroupCollection.getInstance();
 
+        setupGreeting();
+
         setUpMapButton();
 
         setUpWhoIMonitorBtn();
@@ -55,7 +58,10 @@ public class mainMenu extends AppCompatActivity {
 
     }
 
-
+    private void setupGreeting() {
+        TextView view = findViewById(R.id.greeting);
+        view.setText(user.getName());
+    }
 
 
     private void setupTestGroupButton() {
