@@ -67,15 +67,6 @@ public class mainMenu extends AppCompatActivity {
         }
     }
 
-    private void addUserToMonitorResponse(User returnedUser){
-        Log.w(TAG, "server replied with User: " + returnedUser.toString());
-        Call<List<User>> caller = proxy.addUserToMonitor(user.getId(), returnedUser);
-        ProxyBuilder.callProxy(mainMenu.this, caller, returnedUsers -> response(returnedUsers));
-    }
-
-    private void response(Void returnedNothing){
-        Log.w(TAG, "Server replied with nothing");
-    }
 
     private void setUpMapButton()
     {
