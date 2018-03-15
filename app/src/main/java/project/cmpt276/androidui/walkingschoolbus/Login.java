@@ -2,6 +2,7 @@ package project.cmpt276.androidui.walkingschoolbus;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,11 +31,12 @@ public class Login extends AppCompatActivity {
     private GroupCollection groupList;
 
     public GoogleMapsInterface gmaps;
-    String password;
-    String userName;
+    private String password;
+    private String userName;
 
-    EditText getPassword;
-    EditText getUserName;
+    private EditText getPassword;
+    private EditText getUserName;
+
 
 
     @Override
@@ -49,33 +51,10 @@ public class Login extends AppCompatActivity {
         groupList = GroupCollection.getInstance();
         //Build server proxy
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), null);
-        setUpSkipButton();
         setUpLoginButton();
         setUpSignUpButton();
     }
 
-
-    private void setUpSkipButton()
-    {
-        Button button = (Button) findViewById(R.id.loginBtn);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                setUserInfo();
-
-                if(!errorCheck())
-                {
-                    //look for the user in the server and proceed accordingly
-                    Intent intent = new Intent(Login.this, mainMenu.class);
-                    startActivity(intent);
-                }
-
-
-            }
-        });
-
-    }
 
     private void setUpSignUpButton()
     {
@@ -97,7 +76,7 @@ public class Login extends AppCompatActivity {
     private boolean errorCheck()
     {
         boolean hasError = false;
-        String errors = "please correct the following\n";
+        String errors = "Invalid Credentials\nPlease correct the following\n";
 
         if(userName.length()==0)
         {
@@ -128,6 +107,12 @@ public class Login extends AppCompatActivity {
 
     }
 
+    private void clearInput()
+    {
+        getUserName.setText("");
+        getPassword.setText("");
+    }
+
     private void setUserInfo()
     {
         userName = getUserName.getText().toString();
@@ -147,6 +132,7 @@ public class Login extends AppCompatActivity {
 
     private void setUpLoginButton()
     {
+        TextView message = findViewById(R.id.loginErrorMessages);
 
         Button button = (Button) findViewById(R.id.loginBtn);
 
@@ -156,6 +142,9 @@ public class Login extends AppCompatActivity {
 
             if(!errorCheck()) {
 
+                greetingMessage();
+                clearInput();
+//                message.setText("oh hi");
                 //Set new user
                 ProxyBuilder.setOnTokenReceiveCallback(this::onReceiveToken);
 
@@ -163,9 +152,6 @@ public class Login extends AppCompatActivity {
 
             Call<Void> loginCaller = proxy.login(user);
             ProxyBuilder.callProxy(Login.this, loginCaller, this::response);
-
-//            Intent intent = mainMenu.makeIntent(Login.this, newToken);
-//            startActivity(intent);
 
             }
 
@@ -254,6 +240,22 @@ public class Login extends AppCompatActivity {
 
     public static Intent makeIntent(Context context){
         return new Intent(context, Login.class);
+    }
+
+    private void greetingMessage()
+    {
+        TextView message = findViewById(R.id.loginErrorMessages);
+
+        new CountDownTimer(3000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+               message.setText("Welcome!\nLogging You in Now!");
+            }
+
+            public void onFinish() {
+                message.setText("");
+            }
+        }.start();
     }
 
 }
