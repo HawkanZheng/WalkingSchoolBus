@@ -2,6 +2,7 @@ package project.cmpt276.androidui.walkingschoolbus;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ public class Login extends AppCompatActivity {
 
     private EditText getPassword;
     private EditText getUserName;
+    private boolean skip = false;
 
 
 
@@ -44,6 +46,11 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         gmaps = GoogleMapsInterface.getInstance(this);
+        String savedPassword = getSavedPassword(this);
+        String savedUserName = getSavedUserName(this);
+        //getPassword.setText(savedPassword);
+        //getUserName.setText((savedUserName));
+
 
         getInput();
         user = User.getInstance();
@@ -144,6 +151,7 @@ public class Login extends AppCompatActivity {
 
                 greetingMessage();
                 clearInput();
+                saveUserInfo();
 //                message.setText("oh hi");
                 //Set new user
                 ProxyBuilder.setOnTokenReceiveCallback(this::onReceiveToken);
@@ -256,6 +264,28 @@ public class Login extends AppCompatActivity {
                 message.setText("");
             }
         }.start();
+    }
+
+    private void saveUserInfo()
+    {
+        SharedPreferences prefs = this.getSharedPreferences("user info", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("user name", userName);
+        editor.putString("password", password);
+        editor.apply();
+    }
+
+    static public String getSavedPassword(Context context)
+    {
+        SharedPreferences prefs = context.getSharedPreferences("user info", MODE_PRIVATE);
+        return prefs.getString("password", "");
+
+    }
+
+    static public String getSavedUserName(Context context)
+    {
+        SharedPreferences prefs = context.getSharedPreferences("user info", MODE_PRIVATE);
+        return prefs.getString("user name", "");
     }
 
 }
