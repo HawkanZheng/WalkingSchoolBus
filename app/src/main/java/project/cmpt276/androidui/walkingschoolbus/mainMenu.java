@@ -58,16 +58,6 @@ public class mainMenu extends AppCompatActivity {
         view.setText(getString(R.string.hi) + " " + user.getName() + ". " + getString(R.string.welcome_to_the_walking_school_bus_app));
     }
 
-    private void stopMonitoringResponse(User returnedUser){
-        Call<Void> caller = proxy.stopMonitoringUser(user.getId(), returnedUser.getId());
-        ProxyBuilder.callProxy(mainMenu.this, caller, returnedNothing -> response(returnedNothing));
-    }
-
-    private void addUserToMonitor(String email){
-        Call<User> userCaller = proxy.getUserByEmail(email);
-        ProxyBuilder.callProxy(mainMenu.this, userCaller, returnedUser -> addUserToMonitorResponse(returnedUser));
-    }
-
     private void response(List<User> returnedUsers) {
         String[] users = new String[returnedUsers.size()];
         Log.w(TAG, "All Users:");
