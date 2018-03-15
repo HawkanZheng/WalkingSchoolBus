@@ -30,7 +30,6 @@ import retrofit2.Call;
 public class AddMonitoredUsersToGroup extends AppCompatDialogFragment {
     private User user;
     private View v;
-    private Group currGroup;
     private SharedValues sharedValues;
     private WGServerProxy proxy;
     private GroupCollection groupList;
@@ -47,7 +46,6 @@ public class AddMonitoredUsersToGroup extends AppCompatDialogFragment {
         getMemberOfGroups(user);
         getMonitorsUsers(user);
         currGroup = fragmentData.getGroupToBeAdded();
-        fillMonitorsList();
         setFinishBtn();
         return new AlertDialog.Builder(getActivity()).setView(v).create();
     }
@@ -69,26 +67,10 @@ public class AddMonitoredUsersToGroup extends AppCompatDialogFragment {
 
     private void groupResponse(Group returnedGroup, int i) {
         user.setMemberInList(i,returnedGroup.groupToListString());
-        fillGroupsList();
     }
 
-    private void fillGroupsList(){
-        List<Group> groups = user.getMemberOfGroups();
-        Log.i("MonitorFragment","Group # :" + groups.size());
-        Log.i("MonitorFragment","GroupCall # :" + user.getMemberOfGroups());
-        Log.i("MonitorFragment", "GroupString: " + user.getMemberOfGroupsString());
-        ListView listview = v.findViewById(R.id.usersGroups);
-        ArrayAdapter<String> groupAdapter = new ArrayAdapter<String>(getActivity(),R.layout.users_group_list,user.getMemberOfGroupsString());
-        listview.setAdapter(groupAdapter);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Select a group to add a monitored user to.
-                currGroup = groups.get(position);
 
-            }
-        });
-    }
+
     private void getMonitorsUsers(User currUser) {
         //User user = User.getInstance();
         Call<List<User>> caller = proxy.getUsersMonitered(currUser.getId());
@@ -102,31 +84,22 @@ public class AddMonitoredUsersToGroup extends AppCompatDialogFragment {
             users[i] = "Name: " + monitorUser.getName() + "\nEmail: " + monitorUser.getEmail();
         }
         user.setMonitorsUsersString(users);
-        fillMonitorsList(user);
+        fillMonitorsList(users);
     }
 
-    private void fillMonitorsList(User currUser){
-        List<User> monitored = currUser.getMonitorsUsers();
-        Log.i("MonitorFragment","Monitor # :" + monitored.size());
-        Log.i("MonitorFragment","MonitorCall # :" + currUser.getMonitorsUsers());
-        ListView listview = v.findViewById(R.id.usersMonitored);
-        ArrayAdapter<String> monitoredAdapter = new ArrayAdapter<String>(v.getContext(),R.layout.add_monitors_users_groups_list, currUser.getMonitorsUsersString());
-
-    private void fillMonitorsList(){
+    private void fillMonitorsList(String[] users){
         user = User.getInstance();
         List<User> monitored = user.getMonitorsUsers();
-        List<Long> monitoredUsersID = new ArrayList<>();
+        List<String> monitoredUsersName = new ArrayList<>();
 
-        for(int i = 0; i<monitored.size();i++){
-            monitoredUsersID.add(monitored.get(i).getId());
-        }
 
-        Log.i("Size","" +monitoredUsersID.size());
+        Log.i("Size","" +monitoredUsersName.size());
 
         Log.i("MonitorFragment","Monitor # :" + monitored.size());
         Log.i("MonitorFragment","MonitorCall # :" + user.getMonitorsUsers());
+
         ListView listview = v.findViewById(R.id.usersMonitored);
-        ArrayAdapter<Long> monitoredAdapter = new ArrayAdapter<Long>(v.getContext(),R.layout.monitors_users_list,monitoredUsersID);
+        ArrayAdapter<String> monitoredAdapter = new ArrayAdapter<String>(v.getContext(),R.layout.monitors_users_list,users);
         listview.setAdapter(monitoredAdapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -134,12 +107,16 @@ public class AddMonitoredUsersToGroup extends AppCompatDialogFragment {
 
                 if(currGroup != null){
                     Log.i("MonitorFragment", "Group ID: " + currGroup.getId());
+
                     //If there is a current group selected, clicking on an element within the list will add the user to that group.
+                    Log.i("Condition","bool:" + isInGroup(monitored, monitored.get(position).getId()));
+                    Log.i("Condition","monitored" + monitored.get(position));
+
                     //if(isInGroup(monitored, monitored.get(position).getId())){
                         //currGroup.addMembertoGroup(monitored.get(position));
                         Call<List<User>> caller = proxy.addNewMember(currGroup.getId(), monitored.get(position));
                         ProxyBuilder.callProxy(getActivity(), caller, returnedMembers -> memberResponse(returnedMembers));
-                    //}
+                   // }
                 }
             }
         });
