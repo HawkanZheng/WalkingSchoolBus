@@ -16,6 +16,9 @@ public class fragmentDataCollection {
     private List<Double> waypointsLats;
     private List<Double> waypointsLngs;
 
+    // Used to pass the last selected group
+    private Group groupToBeAdded = new Group();
+
     // Singleton
     private static fragmentDataCollection instance;
 
@@ -31,6 +34,10 @@ public class fragmentDataCollection {
             instance = new fragmentDataCollection();
         }
         return instance;
+    }
+
+    public Group getGroupToBeAdded(){
+        return groupToBeAdded;
     }
 
     public Marker getStartMarker(){
@@ -60,6 +67,10 @@ public class fragmentDataCollection {
     public void setWaypointsLatsLngs(List<Double> lats, List<Double> lngs){
         waypointsLngs = new ArrayList<>(lngs);
         waypointsLats = new ArrayList<>(lats);
+    }
+
+    public void setGroupToBeAdded(Group group){
+        groupToBeAdded = group;
     }
 
     public List<Double> getWaypointsLats(){

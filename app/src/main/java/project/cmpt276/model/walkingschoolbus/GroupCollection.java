@@ -10,6 +10,8 @@ import java.util.List;
 public class GroupCollection {
 
 
+
+
     private List<Group> groups = new ArrayList<>();
 
     /*
@@ -54,6 +56,10 @@ public class GroupCollection {
     }
     public List<Group> getGroups() {
         return groups;
+    }
+
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
     }
 
 }

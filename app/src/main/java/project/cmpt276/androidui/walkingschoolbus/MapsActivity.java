@@ -179,7 +179,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     // Grabs the group objected tagged to the marker
                     Log.i("Marker", "Non-Custom Marker Clicked");
                     Group grp = (Group) marker.getTag();
+
+                    // Store the Last selected group
                     joinGroup = grp;
+                    fragmentData.setGroupToBeAdded(grp);
+
                     Log.i("Marker","" + (joinGroup == null));
 
                     if(grp != null){
@@ -605,7 +609,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Log.i("Group Save - Lats",""+fragmentData.getWaypointsLats());
                 Log.i("Group Save - Lngs", ""+fragmentData.getWaypointsLngs());
 
-
+                refreshUser();
             }
         });
     }
@@ -662,7 +666,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 addMonitoredUsers.show(manager,"AddMonitoredUsers");
 
 
-                Toast.makeText(MapsActivity.this,"Added User",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MapsActivity.this,"Added User",Toast.LENGTH_SHORT).show();
+                refreshUser();
             }
         });
     }
