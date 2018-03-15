@@ -2,6 +2,7 @@ package project.cmpt276.androidui.walkingschoolbus;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -74,6 +75,15 @@ public class signUp extends AppCompatActivity {
                     user.setName(name);
                     Call<User> caller = proxy.createNewUser(user);
                     ProxyBuilder.callProxy(signUp.this, caller, returnedUser -> response(returnedUser));
+
+
+                    SharedPreferences prefs = getSharedPreferences("user info", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("user name", userName);
+                    editor.putString("password", password);
+                    editor.apply();
+
+
                     finish();
                 }
             }
