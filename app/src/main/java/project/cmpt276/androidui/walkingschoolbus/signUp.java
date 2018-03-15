@@ -2,6 +2,7 @@ package project.cmpt276.androidui.walkingschoolbus;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,13 +41,13 @@ public class signUp extends AppCompatActivity {
 //    TextView name = (TextView) findViewById(R.id.getName);
 //    String toName = name.toString();
 
-    String name;
-    String password;
-    String userName;
+    private String name;
+    private String password;
+    private String userName;
 
-    EditText getName;
-    EditText getPassword;
-    EditText getUserName;
+    private EditText getName;
+    private EditText getPassword;
+    private EditText getUserName;
 
 
 
@@ -60,7 +61,6 @@ public class signUp extends AppCompatActivity {
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), null);
         getInput();
         setupSignUpBtn();
-//        setupSignUpBtn();
     }
 
     private void setupSignUpBtn() {
@@ -73,6 +73,8 @@ public class signUp extends AppCompatActivity {
                 setUserInfo();
                 if(!errorCheck())
                 {
+                    greetingMessage();
+
                     user.setPassword(password);
                     user.setEmail(userName);
                     user.setName(name);
@@ -131,12 +133,10 @@ public class signUp extends AppCompatActivity {
 
     }
 
-
-    //
     private boolean errorCheck()
     {
         boolean hasError = false;
-        String errors = "please correct the following\n";
+        String errors = "Credentials Invalid\nPlease Correct the Following\n";
 
         if(name.length()==0)
         {
@@ -173,6 +173,8 @@ public class signUp extends AppCompatActivity {
         getName = (EditText) findViewById(R.id.createName);
     }
 
+
+
     private void setUserInfo()
     {
         userName = getUserName.getText().toString();
@@ -187,5 +189,21 @@ public class signUp extends AppCompatActivity {
         TextView test = findViewById(R.id.errorMessages);
         test.setText(error);
 
+    }
+
+    private void greetingMessage()
+    {
+        TextView message = findViewById(R.id.errorMessages);
+
+        new CountDownTimer(3000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                message.setText("Welcome!\nLogging You in Now!");
+            }
+
+            public void onFinish() {
+                message.setText("");
+            }
+        }.start();
     }
 }

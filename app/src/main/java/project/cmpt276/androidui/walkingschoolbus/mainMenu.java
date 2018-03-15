@@ -2,6 +2,7 @@ package project.cmpt276.androidui.walkingschoolbus;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,38 +45,14 @@ public class mainMenu extends AppCompatActivity {
         groupList = GroupCollection.getInstance();
 
         setUpMapButton();
-
         setUpWhoIMonitorBtn();
         setUpWhoMonitorsMeBtn();
         setUpLogoutBtn();
         setUpManageGroupsBtn();
 
-//        setupTestButton();
-        setupTestGroupButton();
-
     }
 
 
-
-
-    private void setupTestGroupButton() {
-        Button button = findViewById(R.id.groupTestBtn);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createGroup();
-                //getGroup(Long.valueOf(21));
-                //deleteGroup();
-                //getGroups();
-                //getGroupMembers();
-                //addNewMember();
-                //updateGroup(Long.valueOf(20));
-                //deleteGroupMember();
-
-            }
-        });
-    }
 
     private void deleteGroupMember() {
         Call<Void> caller = proxy.deleteGroupMember(Long.valueOf(19), user.getId());
@@ -147,23 +124,6 @@ public class mainMenu extends AppCompatActivity {
 //        list.setAdapter(adapter);
 //    }
 
-    private void setupTestButton() {
-        Button button = findViewById(R.id.monitorUserBtn);
-        button.setOnClickListener(view -> {
-
-            Call<List<User>> caller = proxy.getUsers();
-            ProxyBuilder.callProxy(mainMenu.this,caller, returnedUsers -> response(returnedUsers));
-
-            //addUserToMonitor("anothertest@gmail.com");
-            stopMonitoringUser("test@sfu.ca");
-
-
-
-
-
-        });
-
-    }
 
     private void stopMonitoringUser(String email) {
         Call<User> userCaller = proxy.getUserByEmail(email);
@@ -262,9 +222,7 @@ public class mainMenu extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 sharedValues.setToken(null);
-                Intent intent = Login.makeIntent(mainMenu.this);
-                startActivity(intent);
-                Toast.makeText(mainMenu.this, "You have logged out.",Toast.LENGTH_LONG).show();
+                finish();
             }
         });
 
@@ -276,6 +234,13 @@ public class mainMenu extends AppCompatActivity {
 
         return intent;
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        moveTaskToBack(true);
+    }
+
 }
 
 
