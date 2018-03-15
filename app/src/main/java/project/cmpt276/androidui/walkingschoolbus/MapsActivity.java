@@ -664,7 +664,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Call<List<User>> caller = proxy.addNewMember(joinGroup.getId(), user);
                     ProxyBuilder.callProxy(MapsActivity.this, caller, returnedMembers -> memberResponse(returnedMembers));
 
-                    Toast.makeText(MapsActivity.this, "Joined Group!", Toast.LENGTH_SHORT).show();
+
                 }
                 refreshUser();
             }
@@ -702,6 +702,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void memberResponse(List<User> returnedMembers) {
+        Toast.makeText(MapsActivity.this, "Joined Group!", Toast.LENGTH_SHORT).show();
 
     }
 

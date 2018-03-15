@@ -13,6 +13,8 @@ import android.widget.EditText;
 import java.lang.reflect.Proxy;
 import java.util.List;
 
+import project.cmpt276.model.walkingschoolbus.Group;
+import project.cmpt276.model.walkingschoolbus.GroupCollection;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
@@ -20,6 +22,7 @@ import project.cmpt276.server.walkingschoolbus.WGServerProxy;
 import retrofit2.Call;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
 /* Sign Up Activity
 -Create new user:
@@ -35,6 +38,7 @@ public class signUp extends AppCompatActivity {
     private long userId = 0;
     private User user;
     private SharedValues sharedValues;
+    private GroupCollection groupList;
 
 
 //    User user = new User();
@@ -58,7 +62,9 @@ public class signUp extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         user = User.getInstance();
         sharedValues = SharedValues.getInstance();
+        groupList = GroupCollection.getInstance();
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), null);
+        groupList = GroupCollection.getInstance();
         getInput();
         setupSignUpBtn();
     }
@@ -107,6 +113,7 @@ public class signUp extends AppCompatActivity {
         sharedValues.setToken(token);
 
         setUser();
+        getGroups();
 
 
 
@@ -130,6 +137,27 @@ public class signUp extends AppCompatActivity {
     }
 
     private void loginResponse(Void returnedNothing) {
+        Log.w(TAG, "Server replied to login request (no content was expected).");
+         Toast.makeText(signUp.this, "You have created and account and logged in.", Toast.LENGTH_LONG).show();
+
+    }
+
+    private void getGroups() {
+        Call<List<Group>> caller = proxy.getGroups();
+        ProxyBuilder.callProxy(signUp.this, caller, returnedGroups ->groupsResponse(returnedGroups));
+    }
+
+    private void groupsResponse(List<Group> returnedGroups) {
+
+        groupList.setGroups(returnedGroups);
+
+//        Log.w(TAG, "All Groups:");
+//        for (Group group : returnedGroups) {
+//            Log.w(TAG, "    Group: " + group.toString());
+//            groupList.addGroup(group);
+//
+//        }
+//        populateList();
 
     }
 

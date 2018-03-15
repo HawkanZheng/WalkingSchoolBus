@@ -36,7 +36,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add User to Group"
+            android:text="Add A User to Group"
             android:id="@+id/btnAddUserToGrp"
             android:padding="10dp"
             android:paddingRight="10dp"/>

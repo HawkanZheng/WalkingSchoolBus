@@ -22,6 +22,15 @@ import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
 import retrofit2.Call;
 
+/*Main Menu
+Access to :
+            -Map
+            -Who Monitors You
+            -Who You Monitor
+            -Manage Your Groups
+            -Logout
+ */
+
 public class mainMenu extends AppCompatActivity {
     private WGServerProxy proxy;
     private static final String TAG = "Test";
@@ -45,7 +54,7 @@ public class mainMenu extends AppCompatActivity {
 
         groupList = GroupCollection.getInstance();
 
-        //setupGreeting();
+        setupGreeting();
 
         setUpMapButton();
         setUpWhoIMonitorBtn();
@@ -55,87 +64,12 @@ public class mainMenu extends AppCompatActivity {
 
     }
 
-//    private void setupGreeting() {
-//        TextView view = findViewById(R.id.greeting);
-//        view.setText(user.getName());
-//    }
-
-    private void deleteGroupMember() {
-        Call<Void> caller = proxy.deleteGroupMember(Long.valueOf(19), user.getId());
-        ProxyBuilder.callProxy(mainMenu.this, caller, returnedNothing -> response(returnedNothing));
-    }
-
-    private void addNewMember() {
-        Call<List<User>> caller = proxy.addNewMember(Long.valueOf(19), user);
-        ProxyBuilder.callProxy(mainMenu.this, caller, returnedUsers -> response(returnedUsers));
-    }
-
-    private void getGroupMembers() {
-        Call<List<User>> caller = proxy.getGroupMembers(Long.valueOf(19));
-        ProxyBuilder.callProxy(mainMenu.this, caller, returnedUsers -> response(returnedUsers));
-    }
-
-    private void deleteGroup() {
-        Call<Void> caller = proxy.deleteGroup(Long.valueOf(18));
-        ProxyBuilder.callProxy(mainMenu.this, caller,returnedNothing -> response(returnedNothing));
-
-
-    }
-
-    private void updateGroup(Long groupId) {
-
-        Group group = new Group();
-        group.setLeader(user);
-        group.addRouteLatArray(Double.valueOf(49.15523));
-        group.addRouteLngArray(Double.valueOf(157.25322));
-
-        Call<Group> caller = proxy.updateGroup(groupId, group);
-        ProxyBuilder.callProxy(mainMenu.this, caller, returnedGroup -> groupResponse(returnedGroup));
+    private void setupGreeting() {
+        TextView view = findViewById(R.id.greeting);
+        view.setText(getString(R.string.hi) + " " + user.getName() +". " + getString(R.string.welcome_to_the_walking_school_bus_app));
     }
 
 
-
-    private void getGroup(Long groupId) {
-        Call<Group> caller = proxy.getGroupById(groupId);
-        ProxyBuilder.callProxy(mainMenu.this, caller, returnedGroup -> groupResponse(returnedGroup));
-    }
-
-    private void createGroup() {
-        Group group = new Group();
-        group.setId(-1);
-        group.setGroupDescription("Test 6");
-        group.setLeader(user);
-        //group.setRouteLatArray(Arrays.asList(Double.valueOf(115.2344), Double.valueOf(225.3432)));
-        //group.setRouteLngArray(Arrays.asList(Double.valueOf(142.6621), Double.valueOf(265.3455)));
-        Call<Group> caller = proxy.createGroup(group);
-        ProxyBuilder.callProxy(mainMenu.this, caller, returnedGroup -> groupResponse(returnedGroup));
-    }
-
-    private void groupResponse(Group returnedGroup){
-        Log.w(TAG, "Server replied with Group: " + returnedGroup.toString());
-    }
-
-
-//    private void populateList() {
-//        //Create the list
-//        String[] groups = groupList.getGroupDetails();
-//        //Build Adapter
-//        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-//                this,           //Context for the activity
-//                R.layout.monitors_users_list,      //Layout used
-//                groups);               //Groups/Users displayed
-//
-//        //Configure the list view
-//        ListView list = findViewById(R.id.testListView);
-//        list.setAdapter(adapter);
-//    }
-
-
-    private void stopMonitoringUser(String email) {
-        Call<User> userCaller = proxy.getUserByEmail(email);
-        ProxyBuilder.callProxy(mainMenu.this, userCaller, returnedUser -> stopMonitoringResponse(returnedUser));
-
-    }
 
     private void stopMonitoringResponse(User returnedUser) {
         Call<Void> caller = proxy.stopMonitoringUser(user.getId(), returnedUser.getId());
@@ -155,7 +89,6 @@ public class mainMenu extends AppCompatActivity {
             users[i] = returnedUsers.get(i).toString();
 
         }
-//        populateList(users);
     }
 
     private void addUserToMonitorResponse(User returnedUser){

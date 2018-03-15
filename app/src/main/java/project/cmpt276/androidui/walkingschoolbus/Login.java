@@ -23,6 +23,10 @@ import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
 import retrofit2.Call;
 import project.cmpt276.model.walkingschoolbus.GoogleMapsInterface;
+/*Login Screen
+Login with user email and password
+Create account button takes you to signup activity
+ */
 
 public class Login extends AppCompatActivity {
     private WGServerProxy proxy;
@@ -221,13 +225,6 @@ public class Login extends AppCompatActivity {
 
         groupList.setGroups(returnedGroups);
 
-//        Log.w(TAG, "All Groups:");
-//        for (Group group : returnedGroups) {
-//            Log.w(TAG, "    Group: " + group.toString());
-//            groupList.addGroup(group);
-//
-//        }
-//        populateList();
 
     }
 

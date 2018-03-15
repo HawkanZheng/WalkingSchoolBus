@@ -63,5 +63,6 @@
     <string name="join">join</string>
     <string name="please_enter_your_credentials">Please Enter Your Credentials</string>
     <string name="press_a_user_to_remove_them_from_a_group">Press a user to remove them from a group</string>
+    <string name="hi">Hi</string>
 
 </resources>
