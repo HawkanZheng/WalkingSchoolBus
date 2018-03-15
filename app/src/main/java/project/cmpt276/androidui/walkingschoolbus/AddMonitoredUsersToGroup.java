@@ -23,6 +23,9 @@ import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
 import retrofit2.Call;
+/*Add monitored Users to Group
+Add a user that you are currently monitoring to a pre-selected group
+ */
 
 public class AddMonitoredUsersToGroup extends AppCompatDialogFragment {
     private User user;

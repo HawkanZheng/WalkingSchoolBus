@@ -59,6 +59,7 @@ public class signUp extends AppCompatActivity {
         groupList = GroupCollection.getInstance();
         getInput();
         setupSignUpBtn();
+        previousLogin();
     }
 
     private void setupSignUpBtn() {
@@ -193,5 +194,42 @@ public class signUp extends AppCompatActivity {
                 message.setText("");
             }
         }.start();
+    }
+
+    private void saveUserInfo(){
+        SharedPreferences prefs = this.getSharedPreferences("user info", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("user name", userName);
+        editor.putString("password", password);
+        editor.apply();
+    }
+
+    static public String getSavedPassword(Context context){
+        SharedPreferences prefs = context.getSharedPreferences("user info", MODE_PRIVATE);
+        return prefs.getString("password", "");
+    }
+
+    static public String getSavedUserName(Context context){
+        SharedPreferences prefs = context.getSharedPreferences("user info", MODE_PRIVATE);
+        return prefs.getString("user name", "");
+    }
+
+    //Allows instant login if previously logged in. "remember me" feature.
+    private void previousLogin() {
+        String savedPassword = getSavedPassword(this);
+        String savedUserName = getSavedUserName(this);
+        if(!savedUserName.equals("")&&!savedPassword.equals("")) {
+            greetingMessage();
+            ProxyBuilder.setOnTokenReceiveCallback(this::onReceiveToken);
+            userName = savedUserName;
+            password = savedPassword;
+            user.setEmail(userName);
+            user.setPassword(password);
+
+            Call<Void> loginCaller = proxy.login(user);
+            ProxyBuilder.callProxy(signUp.this, loginCaller, this::loginResponse);
+            userName = "";
+            password = "";
+        }
     }
 }

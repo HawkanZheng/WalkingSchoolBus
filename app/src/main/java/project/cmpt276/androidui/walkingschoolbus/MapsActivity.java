@@ -656,6 +656,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void memberResponse(List<User> returnedMembers) {
         Toast.makeText(MapsActivity.this, "Joined Group!", Toast.LENGTH_SHORT).show();
+        refreshUser();
 
     }
 
