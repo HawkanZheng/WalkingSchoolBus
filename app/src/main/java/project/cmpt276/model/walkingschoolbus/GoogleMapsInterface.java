@@ -29,7 +29,7 @@ import java.net.URL;
 public class GoogleMapsInterface {
     private Context context;
     private FusedLocationProviderClient locationService;
-    private int radius = 1000000000;
+    private int radius = 500;
     private static GoogleMapsInterface mapsInterface;
     private static final float CIRCLE_THICKNESS = 2.0f;
 
