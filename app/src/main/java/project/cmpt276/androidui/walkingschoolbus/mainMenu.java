@@ -2,6 +2,7 @@ package project.cmpt276.androidui.walkingschoolbus;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -120,6 +121,15 @@ public class mainMenu extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 sharedValues.setToken(null);
+
+                // Trash saved values
+                SharedPreferences prefs = getSharedPreferences("user info", MODE_PRIVATE) ;
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("user name", "");
+                editor.putString("password", "");
+                editor.apply();
+
+
                 finish();
             }
         });
