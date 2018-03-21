@@ -51,7 +51,8 @@
         <activity android:name=".WhoMonitorsMe" />
         <activity android:name=".ManageGroups" />
         <activity android:name=".AddMonitoredUsersToGroup" />
-        <activity android:name=".monitoredUserGroupsActivity"></activity>
+        <activity android:name=".monitoredUserGroupsActivity" />
+        <activity android:name=".ParentDashboardActivity"></activity>
     </application>
 
 </manifest>

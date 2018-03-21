@@ -76,4 +76,6 @@
     <string name="fragmentTitle">Custom Waypoint</string>
     <string name="markerTitleLabel">Marker Title</string>
     <string name="marketTypeLabel">Type of Marker</string>
+    <string name="parents_dashboard">Parents Dashboard</string>
+    <string name="back">Back</string>
 </resources>
