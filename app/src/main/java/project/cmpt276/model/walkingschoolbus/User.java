@@ -27,6 +27,11 @@ public class User {
     private String[] monitoredByUsersString;
     private List<String> memberOfGroupsString = new ArrayList<>();
 
+
+
+    private List<Message> unreadMessages = new ArrayList<>();
+    private List<Message> readMessages = new ArrayList<>();
+
     /*
     Singleton Support
     */
@@ -154,6 +159,22 @@ public class User {
 
     public void setMemberInList(int i, String string){
         this.memberOfGroupsString.set(i, string );
+    }
+
+    public List<Message> getUnreadMessages() {
+        return unreadMessages;
+    }
+
+    public void setUnreadMessages(List<Message> unreadMessages) {
+        this.unreadMessages = unreadMessages;
+    }
+
+    public List<Message> getReadMessages() {
+        return readMessages;
+    }
+
+    public void setReadMessages(List<Message> readMessages) {
+        this.readMessages = readMessages;
     }
 
     @Override
