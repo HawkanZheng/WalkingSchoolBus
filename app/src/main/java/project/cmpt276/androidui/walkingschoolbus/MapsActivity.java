@@ -48,6 +48,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import project.cmpt276.model.walkingschoolbus.GoogleMapsInterface;
 import project.cmpt276.model.walkingschoolbus.Group;
@@ -101,6 +103,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int LOCATION_PERMISSION_REQUESTCODE = 076;
     private final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
     private static final long LOCATION_UPDATE_RATE_IN_MS = 10000;
+    private static final int UPLOAD_RATE_MS = 30000;
+    private static final int CANCEL_DURATION = 600000;
 
     private WGServerProxy proxy;
     private GroupCollection groupList;
@@ -330,6 +334,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
                 Location lastLocation = locationResult.getLastLocation();
+                startUploadingLocation(locationResult);
                 deviceLocation = gMapsInterface.calculateDeviceLocation(lastLocation);
                 if(userRadius == null){
                     //If there is no circle, make one.
@@ -360,9 +365,37 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    //Begins uploading the last location to the server to store.
+    private void startUploadingLocation(LocationResult locationResult){
+        Timer timer = gMapsInterface.getTimer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Location lastLocation = locationResult.getLastLocation();
+                lastLocation.getLongitude();
+                lastLocation.getLatitude();
+                //Upload coordinates to the server.
+            }
+        }, UPLOAD_RATE_MS);
+    }
 
-
-
+    //Stops uploading.
+    private void stopUploadingLocation(){
+        //If user is within 100m radius of destination, stop the timer after 10 minutes.
+        Timer timeOut = new Timer();
+        //If the user is within the destination radius, start the timer to kill the uploading timer.
+        if(1 + 2 == 5) {
+            timeOut.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    gMapsInterface.stopUploading();
+                }
+            }, CANCEL_DURATION);
+        }else{
+            //Cancel the timer if they are outside the radius.
+            timeOut.cancel();
+        }
+    }
 
     // Clears all polylines and end locations on the map
     public void clearDisplayInfo(){
@@ -623,8 +656,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if(joinGroup != null) {
                     Call<List<User>> caller = proxy.addNewMember(joinGroup.getId(), user);
                     ProxyBuilder.callProxy(MapsActivity.this, caller, returnedMembers -> memberResponse(returnedMembers));
-
-
                 }
                 refreshUser();
             }

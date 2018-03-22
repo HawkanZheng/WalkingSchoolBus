@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Timer;
 
 /**
  * Created by Jerry on 2018-03-02.
@@ -32,6 +33,8 @@ public class GoogleMapsInterface {
     private int radius = 500;
     private static GoogleMapsInterface mapsInterface;
     private static final float CIRCLE_THICKNESS = 2.0f;
+    private static Timer uploader;
+
 
     private GoogleMapsInterface(Context c){
         context = c;
@@ -92,6 +95,22 @@ public class GoogleMapsInterface {
     //Generalized camera settings.
     public CameraUpdate cameraSettings(LatLng location, float zoomLevel){
         return CameraUpdateFactory.newLatLngZoom(location,zoomLevel);
+    }
+
+    //Creates the timer for uploading the last known coordinates to the server.
+    public Timer getTimer(){
+        if(uploader == null){
+            uploader = new Timer();
+        }
+        return uploader;
+    }
+
+    //Cancel the timer and delete it (by setting it to null).
+    public void stopUploading(){
+        if(uploader != null){
+            uploader.cancel();
+            uploader = null;
+        }
     }
 
     // Constructs google url to create a path
