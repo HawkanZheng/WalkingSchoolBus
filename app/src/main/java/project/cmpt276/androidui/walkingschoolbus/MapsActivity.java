@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -92,13 +91,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private GoogleMapsInterface gMapsInterface;
     private FusedLocationProviderClient locationService;
+    private FusedLocationProviderClient uploadLocationService;
     private LatLng deviceLocation;
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
     private LocationSettingsRequest locationSettings;
     private Circle userRadius;
-    private GoogleApiClient gApi;
-
+    private LocationRequest uploader;
+    private LocationCallback uploadTask;
     //Variables in use
     private static final int LOCATION_PERMISSION_REQUESTCODE = 076;
     private final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
@@ -119,6 +119,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         locationService = LocationServices.getFusedLocationProviderClient(this);
+        uploadLocationService = LocationServices.getFusedLocationProviderClient(this);
         gMapsInterface =  GoogleMapsInterface.getInstance(this);
         checkLocationsEnabled();
         // Setup  buttons -- These need to come after the map creation
@@ -221,6 +222,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //Start all location related activities.
         createLocationRequest();
         createLocationCallback();
+        createLocationsUploader();
+        createUploaderTask();
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                 .addLocationRequest(locationRequest);
         builder.setAlwaysShow(true);
@@ -334,7 +337,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
                 Location lastLocation = locationResult.getLastLocation();
-                startUploadingLocation(locationResult);
                 deviceLocation = gMapsInterface.calculateDeviceLocation(lastLocation);
                 if(userRadius == null){
                     //If there is no circle, make one.
@@ -354,47 +356,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationSettings = builder.build();
     }
 
-
     //Begin listening for updates.
     private void startLocationUpdates(){
         if (ActivityCompat.checkSelfPermission(this, perms[0]) == PackageManager.PERMISSION_GRANTED) {
             locationService.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
+            uploadLocationService.requestLocationUpdates(uploader,uploadTask,Looper.myLooper());
         }else {
             //Prompt user for access to their device's location.
             ActivityCompat.requestPermissions(this, perms, LOCATION_PERMISSION_REQUESTCODE);
         }
     }
 
-    //Begins uploading the last location to the server to store.
-    private void startUploadingLocation(LocationResult locationResult){
-        Timer timer = gMapsInterface.getTimer();
-        timer.schedule(new TimerTask() {
+    //Creates a LocationRequest to request the last location every 30s.
+    private void createLocationsUploader(){
+        uploader = new LocationRequest()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(UPLOAD_RATE_MS);
+    }
+
+    //Create a task to upload the user's last location to the server.
+    private void createUploaderTask(){
+        uploadTask = new LocationCallback(){
             @Override
-            public void run() {
-                Location lastLocation = locationResult.getLastLocation();
-                lastLocation.getLongitude();
-                lastLocation.getLatitude();
-                //Upload coordinates to the server.
+            public void onLocationResult(LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+                Location l = locationResult.getLastLocation();
+                /**
+                 * Store the location into the user.
+                 * Upload the coordinates to the server.
+                 */
+                Log.i("Maps", "Uploading: " + l.getLatitude() + l.getLongitude());
             }
-        }, UPLOAD_RATE_MS);
+        };
     }
 
     //Stops uploading.
     private void stopUploadingLocation(){
-        //If user is within 100m radius of destination, stop the timer after 10 minutes.
-        Timer timeOut = new Timer();
-        //If the user is within the destination radius, start the timer to kill the uploading timer.
-        if(1 + 2 == 5) {
-            timeOut.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    gMapsInterface.stopUploading();
-                }
-            }, CANCEL_DURATION);
-        }else{
-            //Cancel the timer if they are outside the radius.
-            timeOut.cancel();
-        }
+        //TODO -- Maybe stop the looper of the uploader.
     }
 
     // Clears all polylines and end locations on the map
