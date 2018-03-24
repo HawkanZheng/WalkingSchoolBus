@@ -22,6 +22,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -39,10 +40,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import org.json.JSONObject;
 
+import java.security.Security;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -369,30 +372,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     //Creates a LocationRequest to request the last location every 30s.
     private void createLocationsUploader(){
+        //Make it wait a maximum of 30s before getting the location updates.
         uploader = new LocationRequest()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(UPLOAD_RATE_MS);
+                .setFastestInterval(UPLOAD_RATE_MS).setMaxWaitTime(UPLOAD_RATE_MS);
     }
 
     //Create a task to upload the user's last location to the server.
     private void createUploaderTask(){
-        uploadTask = new LocationCallback(){
+        uploadTask = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
                 Location l = locationResult.getLastLocation();
+                Log.i("Uploader", "Uploading " + l.getLatitude() + " ," + l.getLongitude());
                 /**
-                 * Store the location into the user.
-                 * Upload the coordinates to the server.
-                 */
-                Log.i("Maps", "Uploading: " + l.getLatitude() + l.getLongitude());
+                 * Pack locations into user class
+                 * Upload data to the server.
+                 **/
             }
         };
     }
 
     //Stops uploading.
     private void stopUploadingLocation(){
-        //TODO -- Maybe stop the looper of the uploader.
+        //TODO Remove when within a certain distance from the destination after 10 mins.
+        //Removes the callback.
+        uploadLocationService.removeLocationUpdates(uploadTask);
     }
 
     // Clears all polylines and end locations on the map
