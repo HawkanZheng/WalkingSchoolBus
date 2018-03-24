@@ -52,7 +52,9 @@
         <activity android:name=".ManageGroups" />
         <activity android:name=".AddMonitoredUsersToGroup" />
         <activity android:name=".monitoredUserGroupsActivity" />
-        <activity android:name=".MessagingActivity"></activity>
+        <activity android:name=".MessagingActivity" />
+        <activity android:name=".OldMessagesActivity" />
+        <activity android:name=".SendingMessageActivity"></activity>
     </application>
 
 </manifest>
