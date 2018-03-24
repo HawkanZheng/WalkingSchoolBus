@@ -1,11 +1,14 @@
 package project.cmpt276.model.walkingschoolbus;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Created by Hawkan Zheng on 3/21/2018.
  */
 /*
 Message Object Class
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Message {
 
     //private variables
