@@ -21,21 +21,21 @@ public class Message {
     /*
    Singleton Support
    */
-    private static Message instance;
-    private Message(){
-        //Private to prevent anyone else from instantiating
-    }
-    public static Message getInstance(){
-        if (instance == null){
-            instance = new Message();
-        }
-        return instance;
-    }
+//    private static Message instance;
+//    private Message(){
+//        //Private to prevent anyone else from instantiating
+//    }
+//    public static Message getInstance(){
+//        if (instance == null){
+//            instance = new Message();
+//        }
+//        return instance;
+//    }
 
     //set instance
-    public static void setUser(Message message){
-        instance = message;
-    }
+//    public static void setMessage(Message message){
+//        instance = message;
+//    }
 
     //getters and setters
     public long getId() {

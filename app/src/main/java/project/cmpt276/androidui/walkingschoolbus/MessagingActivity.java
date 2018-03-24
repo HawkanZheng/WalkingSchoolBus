@@ -7,13 +7,32 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.List;
+
+import project.cmpt276.model.walkingschoolbus.Message;
+import project.cmpt276.model.walkingschoolbus.SharedValues;
+import project.cmpt276.model.walkingschoolbus.User;
+import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
+import project.cmpt276.server.walkingschoolbus.WGServerProxy;
+import retrofit2.Call;
+
 public class MessagingActivity extends AppCompatActivity {
+    WGServerProxy proxy;
+    SharedValues sharedValues;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messaging);
+        //Get instances
+        user = User.getInstance();
+        sharedValues = SharedValues.getInstance();
 
+        //Get proxy
+        proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
+        //Get messages
+//        getMessagesForUser();
         setupActionBarBack();
         setupOldMessagesBtn();
         setupSendAMessageBtn();
@@ -57,5 +76,17 @@ public class MessagingActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void getMessagesForUser(){
+        Call<List<Message>> caller = proxy.getMessagesToUserUnread(user.getId());
+        ProxyBuilder.callProxy(MessagingActivity.this, caller, returnedMessages -> messagesResponse(returnedMessages));
+
+    }
+
+    private void messagesResponse(List<Message> returnedMessages) {
+        /*
+        TODO: FILL MESSAGE LIST
+         */
     }
 }
