@@ -196,6 +196,9 @@ public class User {
         this.memberOfGroupsString.set(i, string );
     }
 
+    public String toNameAndEmailString(){
+        return name + "\n" + "email: " + email;
+    }
     @Override
     public String toString() {
         return "User{" +

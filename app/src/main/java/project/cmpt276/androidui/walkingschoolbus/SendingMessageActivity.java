@@ -81,9 +81,13 @@ public class SendingMessageActivity extends AppCompatActivity {
     }
 
     private void populateList() {
+        //make group list of strings
+        for(Group group : user.getMemberOfGroups()){
+            user.addMemberOfGroupsString(group.groupToListString());
+        }
 
         // Build adapter and show the items
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.groups_to_send_messages_layout, groupSendList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.groups_to_send_messages_layout, user.getMemberOfGroupsString() );
         ListView list = (ListView) findViewById(R.id.lstGroupsToSendTo);
         list.setAdapter(adapter);
 
@@ -132,6 +136,7 @@ public class SendingMessageActivity extends AppCompatActivity {
                 String message = getMessage();
 
                 // TODO: Server Send message;
+                sendMessageToParents(message);
                 Toast.makeText(SendingMessageActivity.this, "Message:" + message, Toast.LENGTH_SHORT).show();
             }
         });
@@ -145,7 +150,8 @@ public class SendingMessageActivity extends AppCompatActivity {
                 String message = getMessage();
 
                 // TODO: Server Send message;
-                Toast.makeText(SendingMessageActivity.this, "Message:" + message, Toast.LENGTH_SHORT).show();
+                //sendMessageToGroup(groupSelected, message);
+                Toast.makeText(SendingMessageActivity.this, "Message: " + message, Toast.LENGTH_SHORT).show();
 
             }
         });

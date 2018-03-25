@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -42,13 +43,13 @@ public class MessagingActivity extends AppCompatActivity {
         //Get proxy
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
         //Get messages
-//        getMessagesForUser();
+        getMessagesForUser();
         setupActionBarBack();
         setupOldMessagesBtn();
         setupSendAMessageBtn();
 
         // Configure the List
-        populateList();
+        //populateList();
         listClickCallback();
     }
 
@@ -101,7 +102,8 @@ public class MessagingActivity extends AppCompatActivity {
 
     // Displays the unread Messages in the List View
     // Should be used in the callback from the server call
-    private void populateList() {
+    private void populateList(){//List<String> messages) {
+
 
         // Get the List
         ListView list = (ListView) findViewById(R.id.lstUnreadMessages);
@@ -126,14 +128,19 @@ public class MessagingActivity extends AppCompatActivity {
     }
 
     private void getMessagesForUser(){
-        Call<List<Message>> caller = proxy.getMessagesToUserUnread(user.getId());
+        Call<List<Message>> caller = proxy.getMessagesToUserUnread(user.getId(), "unread");
         ProxyBuilder.callProxy(MessagingActivity.this, caller, returnedMessages -> messagesResponse(returnedMessages));
 
     }
 
     private void messagesResponse(List<Message> returnedMessages) {
+        Log.i("Response", "Call to server successful");
         /*
         TODO: FILL MESSAGE LIST
          */
+        for(Message message: returnedMessages){
+            unreadMessages.add(message.messageToString());
+        }
+        populateList();
     }
 }

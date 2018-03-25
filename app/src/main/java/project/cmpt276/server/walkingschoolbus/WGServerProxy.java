@@ -114,27 +114,27 @@ public interface WGServerProxy {
     Call<List<Message>> getEmergencyMessages();
 
     //Only return messages sent to specific group
-    @GET("/messages?togroup={id}")
-    Call<List<Message>> getMessagesToGroup(@Path("id") long groupId);
+    @GET("/messages")
+    Call<List<Message>> getMessagesToGroup(@Query("togroup") long groupId);
 
-    @GET("/messages?togroup={id}&is-emergency=true")
-    Call<List<Message>> getMessagesToGroupEmergency(@Path("id") long groupId);
+    @GET("/messages")
+    Call<List<Message>> getMessagesToGroupEmergency(@Query("togroup") long groupId, @Query("is-emergency") Boolean emergency);
 
     //Only return messages for user
-    @GET("/messages?foruser={id}")
-    Call<List<Message>> getMessagesToUser(@Path("id") long userId);
+    @GET("/messages")
+    Call<List<Message>> getMessagesToUser(@Query("foruser") Long userId);
 
     //Only return messages for user which are unread
-    @GET("/messages?foruser={id}&status=unread")
-    Call<List<Message>> getMessagesToUserUnread(@Path("id") long userId);
+    @GET("/messages")
+    Call<List<Message>> getMessagesToUserUnread(@Query("foruser") Long userId,@Query("status") String unread);
 
     //Only return messages for user which are read
-    @GET("/messages?foruser={id}&status=read")
-    Call<List<Message>> getMessagesToUserRead(@Path("id") long userId);
+    @GET("/messages")
+    Call<List<Message>> getMessagesToUserRead(@Query("foruser") Long userId, @Query("status") String read);
 
     //Only return messages for user which are unread and emergency
-    @GET("/messages?foruser={id}&status=unread&is-emergency=true")
-    Call<List<Message>> getMessagesToUserUnreadEmergency(@Path("id") long userId);
+    @GET("/messages")
+    Call<List<Message>> getMessagesToUserUnreadEmergency(@Query("foruser") Long userId, @Query("is-emergency") Boolean emergency);
 
     //New message to group
     @POST("/messages/togroup/{groupId}")
@@ -152,7 +152,7 @@ public interface WGServerProxy {
     @DELETE("/messages/{id}")
     Call<Void> deleteMessage(@Path("id") long id);
 
-    //Mark message as read/unread by user
+    //Mark message as read/unread by user, true for unread and false for read
     @POST("/messages/{messageId}/readby/{userId}")
-    Call<User> markMessage(@Path("messageId") long messageId, @Path("userId") long userId, @Body boolean read);
+    Call<User> markMessage(@Path("messageId") long messageId, @Path("userId") long userId, @Body boolean unread);
 }

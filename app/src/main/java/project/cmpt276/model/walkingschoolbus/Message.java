@@ -12,11 +12,12 @@ Message Object Class
 public class Message {
 
     //private variables
-    private long id;
+    private Long id;
     private String text;
     private User fromUser;
     private Group toGroup;
     private Boolean emergency;
+    String href;
 
     /*
    Singleton Support
@@ -38,11 +39,11 @@ public class Message {
 //    }
 
     //getters and setters
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -78,7 +79,35 @@ public class Message {
         this.emergency = emergency;
     }
 
+    public String getHref() {return href;}
 
+    public void setHref(String href) {
+        this.href = href;
+    }
+
+    //Change message to string that can be populated into list
+    public String messageToString(){
+        String stringMessage = "Message:\n" + text + "\nFrom User: " + fromUser.toNameAndEmailString();
+        if(toGroup != null) {
+            stringMessage = "Message:\n" + text + "\nFrom User: " + fromUser.toNameAndEmailString() + "\nTo Group:\n" + toGroup.groupToListString();
+        }
+        return stringMessage;
+    }
+
+    public String toString() {
+        return "Message{" +
+                "id :" + id +
+                ", text : '" + text+ '\'' +
+                ", from user : {" +
+                "id : " + fromUser +
+                "}" +
+                ", toGroup : {" +
+                "id : " + toGroup +
+                "}" +
+                ", emergency : {" +
+                emergency +
+                "}";
+    }
 
 
 
