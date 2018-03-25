@@ -123,8 +123,16 @@ public class MessagingActivity extends AppCompatActivity {
 
                 // TODO: Clicked messages are considered 'Read'
                 parent.getChildAt(position).setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
+                Call<User> caller = proxy.markMessage(user.getUnreadMessages().get(position).getId(), user.getId(), true);
+                ProxyBuilder.callProxy(MessagingActivity.this, caller, returnedUser -> userResponse(returnedUser));
             }
         });
+    }
+
+    private void userResponse(User returnedUser) {
+        Log.i("Message Marked:", "Message now read");
+        User.setUser(returnedUser);
+
     }
 
     private void getMessagesForUser(){

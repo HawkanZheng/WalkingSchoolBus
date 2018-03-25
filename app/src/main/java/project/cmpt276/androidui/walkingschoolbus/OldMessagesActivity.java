@@ -9,16 +9,48 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import project.cmpt276.model.walkingschoolbus.Message;
+import project.cmpt276.model.walkingschoolbus.SharedValues;
+import project.cmpt276.model.walkingschoolbus.User;
+import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
+import project.cmpt276.server.walkingschoolbus.WGServerProxy;
+import retrofit2.Call;
+
 public class OldMessagesActivity extends AppCompatActivity {
+    User user;
+    SharedValues sharedValues;
+    WGServerProxy proxy;
+
 
     ArrayList<String> readMessages = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_old_messages);
+        //Get class instances
+        user = User.getInstance();
+        sharedValues = SharedValues.getInstance();
+        proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
 
         setupActionBarBack();
-        
+        //get read messages from server
+        getReadMessagesForUser();
+
+    }
+
+    //get all read messages from server
+    private void getReadMessagesForUser() {
+        Call<List<Message>> caller = proxy.getMessagesToUserRead(user.getId(), "read");
+        ProxyBuilder.callProxy(OldMessagesActivity.this, caller, returnedMessages -> messagesResponse(returnedMessages));
+    }
+
+
+    private void messagesResponse(List<Message> returnedMessages) {
+        //add string messages to readMessages list
+        for(Message message: returnedMessages){
+            readMessages.add(message.messageToString());
+        }
+
         // List Config
         populateList();
     }

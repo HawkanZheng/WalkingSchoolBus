@@ -142,7 +142,7 @@ public interface WGServerProxy {
 
     //New message to parents of a user
     @POST("/messages/toparentsof/{userId}")
-    Call<Message> parentMessage(@Path("userId") long userId, @Body Message message);
+    Call<Message> parentMessage(@Path("userId") Long userId, @Body Message message);
 
     //Get one message
     @GET("/messages/{id}")
@@ -154,5 +154,5 @@ public interface WGServerProxy {
 
     //Mark message as read/unread by user, true for unread and false for read
     @POST("/messages/{messageId}/readby/{userId}")
-    Call<User> markMessage(@Path("messageId") long messageId, @Path("userId") long userId, @Body boolean unread);
+    Call<User> markMessage(@Path("messageId") long messageId, @Path("userId") Long userId, @Body boolean read);
 }

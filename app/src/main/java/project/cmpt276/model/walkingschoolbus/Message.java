@@ -17,12 +17,16 @@ public class Message {
     private User fromUser;
     private Group toGroup;
     private Boolean emergency;
+    private Boolean unread;
     private String href;
+
 
     /*
    Singleton Support
    */
-//    private static Message instance;
+
+
+    //    private static Message instance;
 //    private Message(){
 //        //Private to prevent anyone else from instantiating
 //    }
