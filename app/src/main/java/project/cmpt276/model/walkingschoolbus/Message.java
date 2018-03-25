@@ -17,7 +17,7 @@ public class Message {
     private User fromUser;
     private Group toGroup;
     private Boolean emergency;
-    String href;
+    private String href;
 
     /*
    Singleton Support

@@ -141,7 +141,7 @@ public interface WGServerProxy {
     Call<Message> groupMessage(@Path("groupId") long groupId, @Body Message message);
 
     //New message to parents of a user
-    @POST("/messages/toparents/{userId}")
+    @POST("/messages/toparentsof/{userId}")
     Call<Message> parentMessage(@Path("userId") long userId, @Body Message message);
 
     //Get one message
