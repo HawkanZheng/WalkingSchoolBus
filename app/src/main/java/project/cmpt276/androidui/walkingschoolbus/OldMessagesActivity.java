@@ -3,15 +3,24 @@ package project.cmpt276.androidui.walkingschoolbus;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OldMessagesActivity extends AppCompatActivity {
 
+    ArrayList<String> readMessages = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_old_messages);
 
         setupActionBarBack();
+        
+        // List Config
+        populateList();
     }
 
     // Add a Back button on the Action Bar
@@ -29,5 +38,14 @@ public class OldMessagesActivity extends AppCompatActivity {
             this.finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void populateList() {
+
+        // Build adapter and show the items
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.older_messages_layout, readMessages);
+        ListView list = (ListView) findViewById(R.id.lstOldMessagesList);
+        list.setAdapter(adapter);
+
     }
 }

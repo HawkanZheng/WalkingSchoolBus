@@ -47,7 +47,7 @@
 
     <ListView
         android:id="@+id/lstUnreadMessages"
-        android:layout_width="368dp"
+        android:layout_width="343dp"
         android:layout_height="356dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
