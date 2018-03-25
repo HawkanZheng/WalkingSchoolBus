@@ -16,19 +16,24 @@ public class User {
     private String email;
     private String password;
     private String href;
+    private lastGpsLocation lastGpsLocation;
 
     //Containers
     private List<User> monitoredByUsers = new ArrayList<>();
     private List<User> monitorsUsers = new ArrayList<>();
-    private List<Group> walkingGroups = new ArrayList<>();   // <-- TO BE IMPLEMENTED
+    private List<Group> walkingGroups = new ArrayList<>();
+
+
+
     private List<Group> memberOfGroups = new ArrayList<>();
     private List<Group> leadsGroups = new ArrayList<>();
+    //For UI Display
     private String[] monitorsUsersString;
     private String[] monitoredByUsersString;
     private List<String> memberOfGroupsString = new ArrayList<>();
 
 
-
+//For messaging
     private List<Message> unreadMessages = new ArrayList<>();
     private List<Message> readMessages = new ArrayList<>();
 
@@ -81,7 +86,7 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-    @JsonIgnore
+//    @JsonIgnore
     public List<User> getMonitoredByUsers() {
         return monitoredByUsers;
     }
@@ -121,7 +126,7 @@ public class User {
     public void setMemberOfGroups(List<Group> memberOfGroups) {
         this.memberOfGroups = memberOfGroups;
     }
-    @JsonIgnore
+//    @JsonIgnore
     public List<Group> getLeadsGroups() {
         return leadsGroups;
     }
@@ -129,6 +134,36 @@ public class User {
     public void setLeadsGroups(List<Group> leadsGroups) {
         this.leadsGroups = leadsGroups;
     }
+
+//Getters and Setters for messaging
+
+
+    public List<Message> getUnreadMessages() {
+        return unreadMessages;
+    }
+
+    public void setUnreadMessages(List<Message> unreadMessages) {
+        this.unreadMessages = unreadMessages;
+    }
+
+    public List<Message> getReadMessages() {
+        return readMessages;
+    }
+
+    public void setReadMessages(List<Message> readMessages) {
+        this.readMessages = readMessages;
+    }
+
+    //Get and set last gps location
+    public lastGpsLocation getLastGpsLocation() {
+        return lastGpsLocation;
+    }
+
+    public void setLastGpsLocation (lastGpsLocation lastGpsLocation) {
+        this.lastGpsLocation = lastGpsLocation;
+    }
+
+//Getters and setters for UI display arrays
 
     public String[] getMonitorsUsersString() {
         return monitorsUsersString;
@@ -159,22 +194,6 @@ public class User {
 
     public void setMemberInList(int i, String string){
         this.memberOfGroupsString.set(i, string );
-    }
-
-    public List<Message> getUnreadMessages() {
-        return unreadMessages;
-    }
-
-    public void setUnreadMessages(List<Message> unreadMessages) {
-        this.unreadMessages = unreadMessages;
-    }
-
-    public List<Message> getReadMessages() {
-        return readMessages;
-    }
-
-    public void setReadMessages(List<Message> readMessages) {
-        this.readMessages = readMessages;
     }
 
     @Override

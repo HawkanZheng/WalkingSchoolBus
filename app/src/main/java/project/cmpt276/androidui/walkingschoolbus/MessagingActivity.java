@@ -15,7 +15,19 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.List;
+
+import project.cmpt276.model.walkingschoolbus.Message;
+import project.cmpt276.model.walkingschoolbus.SharedValues;
+import project.cmpt276.model.walkingschoolbus.User;
+import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
+import project.cmpt276.server.walkingschoolbus.WGServerProxy;
+import retrofit2.Call;
+
 public class MessagingActivity extends AppCompatActivity {
+    WGServerProxy proxy;
+    SharedValues sharedValues;
+    User user;
 
     ArrayList<String> unreadMessages = new ArrayList<>();
 
@@ -23,11 +35,14 @@ public class MessagingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messaging);
+        //Get instances
+        user = User.getInstance();
+        sharedValues = SharedValues.getInstance();
 
-        // Generate Junk Data for testing
-        testFoo();
-
-        // Setup Buttons
+        //Get proxy
+        proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
+        //Get messages
+//        getMessagesForUser();
         setupActionBarBack();
         setupOldMessagesBtn();
         setupSendAMessageBtn();
@@ -108,5 +123,17 @@ public class MessagingActivity extends AppCompatActivity {
                 parent.getChildAt(position).setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
             }
         });
+    }
+
+    private void getMessagesForUser(){
+        Call<List<Message>> caller = proxy.getMessagesToUserUnread(user.getId());
+        ProxyBuilder.callProxy(MessagingActivity.this, caller, returnedMessages -> messagesResponse(returnedMessages));
+
+    }
+
+    private void messagesResponse(List<Message> returnedMessages) {
+        /*
+        TODO: FILL MESSAGE LIST
+         */
     }
 }

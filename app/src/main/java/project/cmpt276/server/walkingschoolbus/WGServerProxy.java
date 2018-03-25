@@ -5,6 +5,7 @@ import java.util.List;
 import project.cmpt276.model.walkingschoolbus.Group;
 import project.cmpt276.model.walkingschoolbus.Message;
 import project.cmpt276.model.walkingschoolbus.User;
+import project.cmpt276.model.walkingschoolbus.lastGpsLocation;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -38,6 +39,13 @@ public interface WGServerProxy {
 
     @DELETE("/users/{id}")
     Call<Void> deleteUser();
+
+    //Users last gps location
+    @GET("/users/{id}/lastGpsLocation")
+    Call<lastGpsLocation> getLastGpsLocation(@Path("id") long userId);
+
+    @POST("/users/{id}/lastGpsLocation")
+    Call<lastGpsLocation> setLastGpsLocation(@Path("id") long userId, @Body lastGpsLocation location);
 
     /**
      * MORE GOES HERE:
@@ -146,5 +154,5 @@ public interface WGServerProxy {
 
     //Mark message as read/unread by user
     @POST("/messages/{messageId}/readby/{userId}")
-    Call<User> markMessage(@Path("messageId") long messageId, @Path("userId") long userId);
+    Call<User> markMessage(@Path("messageId") long messageId, @Path("userId") long userId, @Body boolean read);
 }
