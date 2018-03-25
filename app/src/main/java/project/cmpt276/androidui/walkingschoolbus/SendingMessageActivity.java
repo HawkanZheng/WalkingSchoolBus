@@ -32,11 +32,11 @@ public class SendingMessageActivity extends AppCompatActivity {
     private SharedValues sharedValues;
     private User user;
 
-    public SendingMessageActivity() {
-    }
-
     private ArrayList<String> groupSendList = new ArrayList<>();
     private ArrayList<Boolean> groupsSelected = new ArrayList<>();
+
+    public SendingMessageActivity() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,7 +150,6 @@ public class SendingMessageActivity extends AppCompatActivity {
             }
         });
     }
-}
 
 //Send message to chosen group
     public void sendMessageToGroup(Group group, String text){
