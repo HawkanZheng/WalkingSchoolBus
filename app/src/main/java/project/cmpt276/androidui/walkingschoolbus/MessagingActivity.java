@@ -1,7 +1,6 @@
 package project.cmpt276.androidui.walkingschoolbus;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,11 +10,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import java.util.List;
 
 import project.cmpt276.model.walkingschoolbus.Message;
@@ -46,7 +42,8 @@ public class MessagingActivity extends AppCompatActivity {
         getMessagesForUser();
         setupActionBarBack();
         setupOldMessagesBtn();
-        setupSendAMessageBtn();
+        setupSendAMessageAsLeaderBtn();
+        setupSendAMessageAsUserBtn();
 
         // Configure the List
         //populateList();
@@ -88,8 +85,7 @@ public class MessagingActivity extends AppCompatActivity {
         });
     }
 
-
-    private void setupSendAMessageBtn() {
+    private void setupSendAMessageAsLeaderBtn() {
         Button btn = (Button) findViewById(R.id.btnSendMessage);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +95,7 @@ public class MessagingActivity extends AppCompatActivity {
             }
         });
     }
+
 
     // Displays the unread Messages in the List View
     // Should be used in the callback from the server call
@@ -150,5 +147,16 @@ public class MessagingActivity extends AppCompatActivity {
             unreadMessages.add(message.messageToString());
         }
         populateList();
+    }
+
+    private void setupSendAMessageAsUserBtn() {
+        Button btn = findViewById(R.id.btnUserSendMessage);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MessagingActivity.this, SendUserMessageActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

@@ -35,6 +35,9 @@ public class SendingMessageActivity extends AppCompatActivity {
     private ArrayList<String> groupSendList = new ArrayList<>();
     private ArrayList<Boolean> groupsSelected = new ArrayList<>();
 
+    private View lastViewClicked;
+    private Group groupSelected = new Group();
+
     public SendingMessageActivity() {
     }
 
@@ -86,6 +89,7 @@ public class SendingMessageActivity extends AppCompatActivity {
             user.addMemberOfGroupsString(group.groupToListString());
         }
 
+
         // Build adapter and show the items
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.groups_to_send_messages_layout, user.getMemberOfGroupsString() );
         ListView list = (ListView) findViewById(R.id.lstGroupsToSendTo);
@@ -99,13 +103,15 @@ public class SendingMessageActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
 
-                if(groupsSelected.get(position)){
-                    parent.getChildAt(position).setBackgroundColor(getResources().getColor(android.R.color.transparent));
-                    groupsSelected.set(position,false);
-                }
-                else{
+                if(viewClicked != lastViewClicked){
                     parent.getChildAt(position).setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
-                    groupsSelected.set(position,true);
+
+                    if(lastViewClicked != null){
+                        lastViewClicked.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                    }
+                    lastViewClicked = viewClicked;
+
+                    // TODO: Extract group selected from onclick
                 }
 
                 Toast.makeText(SendingMessageActivity.this, "Clicked" + position,Toast.LENGTH_SHORT).show();

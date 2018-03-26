@@ -19,31 +19,31 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.032" />
 
-    <LinearLayout
-        android:layout_width="320dp"
-        android:layout_height="59dp"
-        android:orientation="horizontal"
-        android:weightSum="2"
+    <Button
+        android:id="@+id/btnViewOlderMessages"
+        android:layout_width="115dp"
+        android:layout_height="67dp"
+        android:layout_weight="1"
+        android:text="@string/view_older_messages"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.059"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.92">
+        app:layout_constraintVertical_bias="0.963" />
 
-        <Button
-            android:id="@+id/btnViewOlderMessages"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:text="@string/view_older_messages" />
-
-        <Button
-            android:id="@+id/btnSendMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:text="@string/send_a_message" />
-    </LinearLayout>
+    <Button
+        android:id="@+id/btnSendMessage"
+        android:layout_width="115dp"
+        android:layout_height="67dp"
+        android:layout_weight="1"
+        android:text="@string/send_a_message_as_a_leader"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.963" />
 
     <ListView
         android:id="@+id/lstUnreadMessages"
@@ -54,4 +54,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.27" />
+
+    <Button
+        android:id="@+id/btnUserSendMessage"
+        android:layout_width="115dp"
+        android:layout_height="67dp"
+        android:text="@string/send_a_message_as_a_user"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.94"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.963" />
+
 </android.support.constraint.ConstraintLayout>
