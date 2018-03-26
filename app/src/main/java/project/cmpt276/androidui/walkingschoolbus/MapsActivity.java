@@ -175,8 +175,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     if(grp != null){
                         // Draws a path from the Group start location to the end location
+
+                        List<Double> tmpLat = grp.getRouteLatArray();
+                        List<Double> tmpLng = grp.getRouteLngArray();
+
+                        LatLng grpEnd = new LatLng(tmpLat.get(tmpLat.size()-1), tmpLng.get(tmpLng.size()-1));
+
+                        String URL = gMapsInterface.getDirectionsUrl(marker.getPosition(),grpEnd);
+                        DownloadDataFromUrl DownloadDataFromUrl = new DownloadDataFromUrl();
+
+                        DownloadDataFromUrl.execute(URL);
+
+                        grpEndLocationMarker =  mMap.addMarker(gMapsInterface.makeMarker(grpEnd,END_TYPE,"End Location"));
+
+                        /*
                         mapSelectedGroupPath mapSelectedGroupPath = new mapSelectedGroupPath();
                         mapSelectedGroupPath.execute(grp);
+                        */
+
                         Toast.makeText(MapsActivity.this, grp.getGroupDescription(), Toast.LENGTH_SHORT).show();
                     }else{
                         Log.i("onMarkerClicked", "Group Invalid");
@@ -510,7 +526,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     double lat = Double.parseDouble(point.get("lat"));
                     double lng = Double.parseDouble(point.get("lng"));
 
-                    createLatLngList(lat,lng);
+                    // Store the first and last Waypoints only
+                    if(j == 0 || j == path.size()-1){
+                        createLatLngList(lat,lng);
+                    }
                     LatLng position = new LatLng(lat, lng);
 
                     points.add(position);
