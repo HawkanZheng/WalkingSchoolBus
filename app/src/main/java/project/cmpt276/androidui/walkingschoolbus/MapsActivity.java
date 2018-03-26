@@ -102,6 +102,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Circle userRadius;
     private LocationRequest uploader;
     private LocationCallback uploadTask;
+    private Timer timer;
     //Variables in use
     private static final int LOCATION_PERMISSION_REQUESTCODE = 076;
     private final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
@@ -134,6 +135,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         user = User.getInstance();
         sharedValues = SharedValues.getInstance();
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
+        timer = gMapsInterface.getTimer();
     }
 
     @Override
@@ -165,7 +167,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     // Clicking a Marker will display the coordinates of the marker.
                     String URL = gMapsInterface.getDirectionsUrl(marker.getPosition(),fragmentData.getEndMarker().getPosition());
                     DownloadDataFromUrl DownloadDataFromUrl = new DownloadDataFromUrl();
-
                     DownloadDataFromUrl.execute(URL);
                 }
 
@@ -180,7 +181,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     fragmentData.setGroupToBeAdded(grp);
 
                     Log.i("Marker","" + (joinGroup == null));
-
+                    sharedValues.setGroup(grp);
                     if(grp != null){
                         // Draws a path from the Group start location to the end location
                         mapSelectedGroupPath mapSelectedGroupPath = new mapSelectedGroupPath();
@@ -390,15 +391,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                  * Pack locations into user class
                  * Upload data to the server.
                  **/
+                //When there is an end marker selected and device location is available.
+                if(fragmentData.getEndMarker() != null && deviceLocation != null){
+                    //Get the end marker and compare it to the user's current location.
+                    LatLng endCoords = fragmentData.getEndMarker().getPosition();
+                    Log.i("Uploader", "End Coords: " + endCoords.latitude + ", " + endCoords.longitude );
+                    if(gMapsInterface.isLocationInRadius(deviceLocation,endCoords)){
+                        //TODO: Make a seperate radius for end markers as the user one is too big.
+                        //Removes the callback after 10 mins.
+                        timer.schedule(makeCancellationTask(),CANCEL_DURATION);
+                    }
+                }
             }
         };
     }
 
     //Stops uploading.
-    private void stopUploadingLocation(){
-        //TODO Remove when within a certain distance from the destination after 10 mins.
-        //Removes the callback.
-        uploadLocationService.removeLocationUpdates(uploadTask);
+    private TimerTask makeCancellationTask(){
+        return new TimerTask() {
+            @Override
+            public void run() {
+                Log.i("Uploader","Cancelling the task");
+                uploadLocationService.removeLocationUpdates(uploadTask);
+            }
+        };
     }
 
     // Clears all polylines and end locations on the map
