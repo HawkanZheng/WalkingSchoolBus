@@ -42,10 +42,10 @@ public interface WGServerProxy {
 
     //Users last gps location
     @GET("/users/{id}/lastGpsLocation")
-    Call<lastGpsLocation> getLastGpsLocation(@Path("id") long userId);
+    Call<lastGpsLocation> getLastGpsLocation(@Path("id") Long userId);
 
     @POST("/users/{id}/lastGpsLocation")
-    Call<lastGpsLocation> setLastGpsLocation(@Path("id") long userId, @Body lastGpsLocation location);
+    Call<lastGpsLocation> setLastGpsLocation(@Path("id") Long userId, @Body lastGpsLocation location);
 
     /**
      * MORE GOES HERE:
