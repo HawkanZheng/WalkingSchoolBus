@@ -85,9 +85,11 @@ public class SendingMessageActivity extends AppCompatActivity {
 
     private void populateList() {
         //make group list of strings
+        List<String> groupList = new ArrayList<>();
         for(Group group : user.getMemberOfGroups()){
-            user.addMemberOfGroupsString(group.groupToListString());
+            groupList.add(group.groupToListString());
         }
+        user.setMemberOfGroupsString(groupList);
 
 
         // Build adapter and show the items
