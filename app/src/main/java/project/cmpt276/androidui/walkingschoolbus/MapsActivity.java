@@ -22,7 +22,6 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -40,12 +39,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import org.json.JSONObject;
 
-import java.security.Security;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -344,7 +341,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 deviceLocation = gMapsInterface.calculateDeviceLocation(lastLocation);
                 if(userRadius == null){
                     //If there is no circle, make one.
-                    userRadius = gMapsInterface.generateRadius(mMap, deviceLocation,Color.RED);
+                    userRadius = gMapsInterface.generateUserRadius(mMap, deviceLocation,Color.RED);
                 } else{
                     //otherwise, recenter the circle.
                     userRadius.setCenter(deviceLocation);
@@ -388,18 +385,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Location l = locationResult.getLastLocation();
                 Log.i("Uploader", "Uploading " + l.getLatitude() + " ," + l.getLongitude());
                 /**
+                 * So far, no way to start the upload when on walk. The upload starts as soon as maps activity starts.
                  * Pack locations into user class
                  * Upload data to the server.
                  **/
                 //When there is an end marker selected and device location is available.
                 if(fragmentData.getEndMarker() != null && deviceLocation != null){
                     //Get the end marker and compare it to the user's current location.
-                    LatLng endCoords = fragmentData.getEndMarker().getPosition();
-                    Log.i("Uploader", "End Coords: " + endCoords.latitude + ", " + endCoords.longitude );
-                    if(gMapsInterface.isLocationInRadius(deviceLocation,endCoords)){
-                        //TODO: Make a seperate radius for end markers as the user one is too big.
+                    LatLng endLocation = fragmentData.getEndMarker().getPosition();
+                    if(gMapsInterface.isUserInRadius(deviceLocation,fragmentData.getEndMarker().getPosition())) {
                         //Removes the callback after 10 mins.
-                        timer.schedule(makeCancellationTask(),CANCEL_DURATION);
+                        Log.i("Uploader", "Current End Location: " + fragmentData.getMarkerTitle() + ": (" + endLocation.latitude + ", " + endLocation.longitude + ")");
+                        timer.schedule(makeCancellationTask(), CANCEL_DURATION);
                     }
                 }
             }
