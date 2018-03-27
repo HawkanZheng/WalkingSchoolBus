@@ -86,7 +86,7 @@ public class SendingMessageActivity extends AppCompatActivity {
     private void populateList() {
         //make group list of strings
         List<String> groupList = new ArrayList<>();
-        for(Group group : user.getMemberOfGroups()){
+        for(Group group : user.getLeadsGroups()){
             groupList.add(group.groupToListString());
         }
         user.setMemberOfGroupsString(groupList);
@@ -113,10 +113,11 @@ public class SendingMessageActivity extends AppCompatActivity {
                     }
                     lastViewClicked = viewClicked;
 
-                    // TODO: Extract group selected from onclick
+                    //Extract group selected from onclick
+                    groupSelected = user.getLeadsGroups().get(position);
                 }
 
-                Toast.makeText(SendingMessageActivity.this, "Clicked" + position,Toast.LENGTH_SHORT).show();
+                Toast.makeText(SendingMessageActivity.this, "Clicked " + position,Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -143,7 +144,7 @@ public class SendingMessageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String message = getMessage();
 
-                // TODO: Server Send message;
+                //Server Send message;
                 sendMessageToParents(message);
                 Toast.makeText(SendingMessageActivity.this, "Message:" + message, Toast.LENGTH_SHORT).show();
             }
@@ -157,8 +158,8 @@ public class SendingMessageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String message = getMessage();
 
-                // TODO: Server Send message;
-                //sendMessageToGroup(groupSelected, message);
+                //Server Send message;
+                sendMessageToGroup(message);
                 Toast.makeText(SendingMessageActivity.this, "Message: " + message, Toast.LENGTH_SHORT).show();
 
             }
@@ -166,11 +167,11 @@ public class SendingMessageActivity extends AppCompatActivity {
     }
 
 //Send message to chosen group
-    public void sendMessageToGroup(Group group, String text){
+    public void sendMessageToGroup(String text){
         Message message = new Message();
         message.setText(text);
         message.setEmergency(false);
-        Call<Message> caller = proxy.groupMessage(group.getId(), message);
+        Call<Message> caller = proxy.groupMessage(groupSelected.getId(), message);
         ProxyBuilder.callProxy(SendingMessageActivity.this, caller, returnedMessage -> messageResponse(returnedMessage) );
 
 
@@ -180,13 +181,14 @@ public class SendingMessageActivity extends AppCompatActivity {
         Log.i("Returned Message", "Message returned " + returnedMessage.getText() + "\n");
     }
 
-    //Send message to users parents
+    //Send message to group members' parents
     public void sendMessageToParents(String text){
         Message message = new Message();
         message.setText(text);
         message.setEmergency(false);
-        Call<Message> caller = proxy.parentMessage(user.getId(), message);
-        ProxyBuilder.callProxy(SendingMessageActivity.this, caller, returnedMessage -> messageResponse(returnedMessage));
-
+        for(User member : groupSelected.getMemberUsers()) {
+            Call<Message> caller = proxy.parentMessage(member.getId(), message);
+            ProxyBuilder.callProxy(SendingMessageActivity.this, caller, returnedMessage -> messageResponse(returnedMessage));
+        }
     }
 }

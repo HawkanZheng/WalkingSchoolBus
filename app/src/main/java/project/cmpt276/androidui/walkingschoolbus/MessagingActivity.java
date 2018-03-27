@@ -121,7 +121,7 @@ public class MessagingActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
 
-                // TODO: Clicked messages are considered 'Read'
+                //Clicked messages are considered 'Read'
                 parent.getChildAt(position).setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
                 Call<User> caller = proxy.markMessage(user.getUnreadMessages().get(position).getId(), user.getId(), true);
                 ProxyBuilder.callProxy(MessagingActivity.this, caller, returnedUser -> userResponse(returnedUser));
@@ -144,7 +144,7 @@ public class MessagingActivity extends AppCompatActivity {
     private void messagesResponse(List<Message> returnedMessages) {
         Log.i("Response", "Call to server successful");
         /*
-        TODO: FILL MESSAGE LIST
+        FILL MESSAGE LIST
          */
         for(Message message: returnedMessages){
             unreadMessages.add(message.messageToString());
