@@ -86,4 +86,6 @@
     <string name="send_to_parents">Send To Parents</string>
     <string name="send_to_selected_group">Send To Selected Group</string>
     <string name="enter_your_message">Enter Your Message:</string>
+    <string name="send_message_to_group_leader">Send Message To group Leader</string>
+    <string name="send_message_to_parents">Send Message To Parents</string>
 </resources>

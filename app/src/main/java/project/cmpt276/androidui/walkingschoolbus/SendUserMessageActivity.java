@@ -25,7 +25,8 @@ public class SendUserMessageActivity extends AppCompatActivity {
 
         setupActionBarBack();
 
-        setupSendButton();
+        setupSendGroupLeaderButton();
+        setupSendParentsButton();
         populateList();
         listClickCallback();
 
@@ -53,8 +54,21 @@ public class SendUserMessageActivity extends AppCompatActivity {
         return edt.getText().toString();
     }
 
-    private void setupSendButton() {
-        Button btn = findViewById(R.id.btnUserSend);
+    private void setupSendGroupLeaderButton() {
+        Button btn = findViewById(R.id.btnUserSendGroupLeader);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //TODO: Server call
+                Toast.makeText(SendUserMessageActivity.this,getMessage(),Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
+    private void setupSendParentsButton() {
+        Button btn = findViewById(R.id.btnUserSendParents);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

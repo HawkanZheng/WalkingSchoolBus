@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import java.lang.reflect.Proxy;
@@ -77,7 +78,7 @@ public class MessagingActivity extends AppCompatActivity {
     }
 
     private void setupOldMessagesBtn() {
-        Button btn = (Button) findViewById(R.id.btnViewOlderMessages);
+        ImageButton btn = findViewById(R.id.btnViewOlderMessages);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
