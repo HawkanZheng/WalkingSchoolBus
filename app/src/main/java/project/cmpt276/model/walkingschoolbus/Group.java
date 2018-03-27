@@ -1,6 +1,8 @@
 package project.cmpt276.model.walkingschoolbus;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,8 @@ public class Group {
     private User leader;
     private String leaderHref;
     private List<User> memberUsers;
+    private LatLng startMarker;
+    private LatLng endMarker;
 
     public String getLeaderHref() {
         return leaderHref;
@@ -58,6 +62,7 @@ public class Group {
     public void setRouteLngArray(List<Double> routeLngArray) {
         this.routeLngArray = routeLngArray;
     }
+
     public void addRouteLatArray(Double coordinate) {
         this.routeLatArray.add(coordinate);
     }
@@ -72,6 +77,26 @@ public class Group {
 
     public void setGroupDescription(String groupDescription) {
         this.groupDescription = groupDescription;
+    }
+
+    //Needed for defining the group's start location.
+    public void setStartMarker(LatLng s){
+        startMarker = s;
+    }
+
+    //Needed to pull the group's starting location.
+    public LatLng getStartMarker(){
+        return startMarker;
+    }
+
+    //Needed for defining the group's end location.
+    public void setEndMarker(LatLng e){
+        endMarker = e;
+    }
+
+    //Needed to pull the group's end location.
+    public LatLng getEndMarker(){
+        return endMarker;
     }
 
     public long getId() {
