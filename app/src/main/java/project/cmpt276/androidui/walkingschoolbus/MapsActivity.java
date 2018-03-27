@@ -57,6 +57,7 @@ import project.cmpt276.model.walkingschoolbus.MapsJsonParser;
 import project.cmpt276.model.walkingschoolbus.fragmentDataCollection;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
+import project.cmpt276.model.walkingschoolbus.lastGpsLocation;
 import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
 import retrofit2.Call;
@@ -406,6 +407,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                  * Pack locations into user class
                  * Upload data to the server.
                  **/
+                //Set lastGpsLocation object
+                lastGpsLocation lastLoc = user.getLastGpsLocation();
+                lastLoc.setLat(l.getLatitude());
+                lastLoc.setLng(l.getLongitude());
+
+
+                Call<lastGpsLocation> caller = proxy.setLastGpsLocation(user.getId(), lastLoc);
+                ProxyBuilder.callProxy(MapsActivity.this, caller, returnedLocation -> locResponse(returnedLocation));
                 //When there is an end marker selected and device location is available.
                 if(fragmentData.getEndMarker() != null && deviceLocation != null){
                     //Get the end marker and compare it to the user's current location.
@@ -418,6 +427,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         };
+    }
+
+    //Response to set last gps location server call
+    private void locResponse(lastGpsLocation returnedLocation) {
+        Log.i("Server Call", "Set GPS Location call successful\n" + returnedLocation.toString() );
     }
 
     //Stops uploading.

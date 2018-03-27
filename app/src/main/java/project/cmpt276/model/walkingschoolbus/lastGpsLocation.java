@@ -2,6 +2,8 @@ package project.cmpt276.model.walkingschoolbus;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.Date;
+
 /**
  * Created by Hawkan Zheng on 3/23/2018.
  */
@@ -13,7 +15,7 @@ public class lastGpsLocation {
 
     Double lat;
     Double lng;
-    String timestamp;
+    Date timestamp;
 
     public Double getLat() {
         return lat;
@@ -31,11 +33,16 @@ public class lastGpsLocation {
         this.lng = lng;
     }
 
-    public String getTimestamp() {
+    public Date getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    @Override
+    public String toString() {
+        return "lastGpsLocation{\n" + lat + "\n" + lng + "\n" + timestamp;
     }
 }
