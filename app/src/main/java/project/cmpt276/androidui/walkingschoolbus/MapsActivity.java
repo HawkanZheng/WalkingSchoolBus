@@ -402,6 +402,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Log.i("Uploader", "Uploading " + l.getLatitude() + " ," + l.getLongitude());
                 /**
                  * So far, no way to start the upload when on walk. The upload starts as soon as maps activity starts.
+                 * Probably have to select a current group from manage groups page to determine which end location is going to be used.
                  * Pack locations into user class
                  * Upload data to the server.
                  **/
