@@ -48,6 +48,7 @@ public class mainMenu extends AppCompatActivity {
         //Set up Main Menu views.
         setupGreeting();
         setUpMapButton();
+        setUpMessagingButton();
         setUpWhoIMonitorBtn();
         setUpWhoMonitorsMeBtn();
         setUpLogoutBtn();
@@ -77,6 +78,19 @@ public class mainMenu extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mainMenu.this, MapsActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void setUpMessagingButton()
+    {
+        Button button = findViewById(R.id.btnMessagingActivity);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mainMenu.this, MessagingActivity.class);
                 startActivity(intent);
             }
         });

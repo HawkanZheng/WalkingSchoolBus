@@ -2,16 +2,17 @@ package project.cmpt276.androidui.walkingschoolbus;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -30,7 +31,6 @@ public class CustomizeMarkerFragment extends AppCompatDialogFragment {
     private GoogleMapsInterface gMapsOption;
     private LatLng coordinates;
     private float type;
-
     private final float[] PIN_COLORS = {HUE_RED, HUE_BLUE};
     private final String[] PIN_OPTIONS = {"Start", "Finish"};
     private final int NUM_PIN_OPTIONS = 2;
@@ -58,7 +58,6 @@ public class CustomizeMarkerFragment extends AppCompatDialogFragment {
 
     //Manages markers on the map so that only two exist at a time.
     private void manageMarkers(){
-
         //Create marker options.
         MarkerOptions options = gMapsOption.makeMarker(coordinates,type,"");
         //Manage start markers
@@ -74,17 +73,19 @@ public class CustomizeMarkerFragment extends AppCompatDialogFragment {
         }
         //Manage finish markers
         else{
-            if(fragmentData.getEndMarker() != null){
-                //Removes an existing start marker if there is one...
+            if(fragmentData.getEndMarker() != null && fragmentData.getEndMarkerRadius() != null){
+                //Removes an existing end marker and its radius if there is one...
                 Marker m = fragmentData.getEndMarker();
+                Circle c = fragmentData.getEndMarkerRadius();
                 m.remove();
+                c.remove();
             }
-            //Place a marker
+            //Place a marker and the end location radius.
             Marker m = map.addMarker(options);
             fragmentData.storeEndMarker(m);
-
-            // clear previous routes
+            fragmentData.storeEndMarkerRadius(gMapsOption.generateLocationRadius(map,m.getPosition(),Color.BLUE));
         }
+        // clear previous routes
         fragmentData.clearRoutes();
         dismiss();
     }

@@ -86,7 +86,7 @@ public class GroupCreationFragment extends AppCompatDialogFragment {
             return;
 
         }
-        group.setId(-1);
+        //group.setId(-1);
         group.setLeader(user);
         Call<Group> caller = proxy.createGroup(group);
         ProxyBuilder.callProxy(getActivity(), caller, returnedGroup -> groupResponse(returnedGroup));
@@ -119,15 +119,17 @@ public class GroupCreationFragment extends AppCompatDialogFragment {
 
     private void userResponse(User returnedUser) {
         User.setUser(returnedUser);
-        Call<List<User>> caller = proxy.addNewMember(sharedValues.getGroup().getId(), returnedUser);
-        ProxyBuilder.callProxy(getActivity(), caller, returnedMembers -> membersResponse(returnedMembers));
-    }
-
-    private void membersResponse(List<User> returnedMembers) {
-        Log.i("New Group:", "Now member of group");
         //Dismiss the dialog once a group is successfully made.
         dismiss();
+//        Call<List<User>> caller = proxy.addNewMember(sharedValues.getGroup().getId(), returnedUser);
+//        ProxyBuilder.callProxy(getActivity(), caller, returnedMembers -> membersResponse(returnedMembers));
     }
+
+//    private void membersResponse(List<User> returnedMembers) {
+//        Log.i("New Group:", "Now member of group");
+//        //Dismiss the dialog once a group is successfully made.
+//        dismiss();
+//    }
 
 
 }

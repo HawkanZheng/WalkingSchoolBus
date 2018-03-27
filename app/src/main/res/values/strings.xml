@@ -78,4 +78,16 @@
     <string name="marketTypeLabel">Type of Marker</string>
     <string name="parents_dashboard">Parents Dashboard</string>
     <string name="back">Back</string>
+    <string name="unread_messages">Unread Messages</string>
+    <string name="view_older_messages">View Older Messages</string>
+    <string name="send_a_message">Send A Message</string>
+    <string name="send_a_message_as_a_leader">send a message as a leader</string>
+    <string name="send_a_message_as_a_user">Send a message as a user</string>
+    <string name="enter_message">Enter Message:</string>
+    <string name="send_message">Send Message</string>
+    <string name="send_to_parents">Send To Parents</string>
+    <string name="send_to_selected_group">Send To Selected Group</string>
+    <string name="enter_your_message">Enter Your Message:</string>
+    <string name="send_message_to_group_leader">Send Message To group Leader</string>
+    <string name="send_message_to_parents">Send Message To Parents</string>
 </resources>
