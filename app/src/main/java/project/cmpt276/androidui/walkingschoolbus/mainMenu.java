@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 import project.cmpt276.model.walkingschoolbus.GroupCollection;
@@ -47,25 +46,12 @@ public class mainMenu extends AppCompatActivity {
         groupList = GroupCollection.getInstance();
 
         //Set up Main Menu views.
-        setUpParentsDashboardBtn();
         setupGreeting();
         setUpMapButton();
         setUpWhoIMonitorBtn();
         setUpWhoMonitorsMeBtn();
         setUpLogoutBtn();
         setUpManageGroupsBtn();
-    }
-
-    private void setUpParentsDashboardBtn() {
-        Button button = findViewById(R.id.parentDashBtn);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mainMenu.this, ParentDashboardActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     private void setupGreeting() {
@@ -101,7 +87,7 @@ public class mainMenu extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = WhoIMonitor.makeIntent(mainMenu.this);
+                Intent intent = ParentsDashboardActivity.makeIntent(mainMenu.this);
                 startActivity(intent);
             }
         });

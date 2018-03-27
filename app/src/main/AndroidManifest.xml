@@ -47,12 +47,15 @@
             android:name=".MapsActivity"
             android:label="@string/app_name" />
         <activity android:name=".mainMenu" />
-        <activity android:name=".WhoIMonitor" />
+        <activity android:name=".ParentsDashboardActivity" />
         <activity android:name=".WhoMonitorsMe" />
         <activity android:name=".ManageGroups" />
         <activity android:name=".AddMonitoredUsersToGroup" />
         <activity android:name=".monitoredUserGroupsActivity" />
-        <activity android:name=".ParentDashboardActivity"></activity>
+        <activity
+            android:name=".ParentDashUserInfoActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".ParentDashMessagingActivity"></activity>
     </application>
 
 </manifest>
