@@ -85,7 +85,7 @@ public class signUp extends AppCompatActivity {
                     editor.apply();
 
 
-                    finish();
+
                 }
             }
         });
@@ -120,6 +120,7 @@ public class signUp extends AppCompatActivity {
 
     private void userResponse(User returnedUser) {
         Log.i(TAG, "userResponse used here");
+        finish();
         User.setUser(returnedUser);
         Intent intent = mainMenu.makeIntent(signUp.this);
         startActivity(intent);
@@ -127,7 +128,7 @@ public class signUp extends AppCompatActivity {
 
     private void loginResponse(Void returnedNothing) {
         Log.w(TAG, "Server replied to login request (no content was expected).");
-         Toast.makeText(signUp.this, "You have created and account and logged in.", Toast.LENGTH_LONG).show();
+        Toast.makeText(signUp.this, "You have created and account and logged in.", Toast.LENGTH_LONG).show();
 
     }
 
