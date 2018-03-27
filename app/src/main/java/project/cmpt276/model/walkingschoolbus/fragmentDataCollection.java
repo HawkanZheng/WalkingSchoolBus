@@ -1,5 +1,6 @@
 package project.cmpt276.model.walkingschoolbus;
 
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.Marker;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 public class fragmentDataCollection {
     // Track the markers made
     private Marker[] markers = new Marker[2];
+    private Circle endLocationRadius;
     private String markerTitle;
     private List<Double> waypointsLats;
     private List<Double> waypointsLngs;
@@ -62,6 +64,14 @@ public class fragmentDataCollection {
 
     public void setMarkerTitle(String title){
         markerTitle = title;
+    }
+
+    public void storeEndMarkerRadius(Circle c){
+        endLocationRadius = c;
+    }
+
+    public Circle getEndMarkerRadius(){
+        return endLocationRadius;
     }
 
     public void setWaypointsLatsLngs(List<Double> lats, List<Double> lngs){
