@@ -95,4 +95,6 @@
     <string name="emergency">EMERGENCY</string>
     <string name="emergency_message">EMERGENCY MESSAGE</string>
     <string name="send">SEND</string>
+    <string name="you_are_the_leader_of_the_following_groups">You are the leader of the following groups</string>
+    <string name="groups_i_lead">Groups I Lead</string>
 </resources>
