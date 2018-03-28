@@ -86,7 +86,7 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-//    @JsonIgnore
+    @JsonIgnore
     public List<User> getMonitoredByUsers() {
         return monitoredByUsers;
     }
@@ -94,7 +94,7 @@ public class User {
     public void setMonitoredByUsers(List<User> monitoredByUsers) {
         this.monitoredByUsers = monitoredByUsers;
     }
-    //@JsonIgnore
+    @JsonIgnore
     public List<User> getMonitorsUsers() {
         return monitorsUsers;
     }
@@ -102,7 +102,7 @@ public class User {
     public void setMonitorsUsers(List<User> monitorsUsers) {
         this.monitorsUsers = monitorsUsers;
     }
-   // @JsonIgnore
+    @JsonIgnore
     public List<Group> getWalkingGroups() {
         return walkingGroups;
     }
@@ -126,7 +126,7 @@ public class User {
     public void setMemberOfGroups(List<Group> memberOfGroups) {
         this.memberOfGroups = memberOfGroups;
     }
-//    @JsonIgnore
+    //@JsonIgnore
     public List<Group> getLeadsGroups() {
         return leadsGroups;
     }
@@ -137,7 +137,7 @@ public class User {
 
 //Getters and Setters for messaging
 
-
+    //@JsonIgnore
     public List<Message> getUnreadMessages() {
         return unreadMessages;
     }
@@ -155,6 +155,7 @@ public class User {
     }
 
     //Get and set last gps location
+    //@JsonIgnore
     public lastGpsLocation getLastGpsLocation() {
         return lastGpsLocation;
     }
@@ -164,7 +165,7 @@ public class User {
     }
 
 //Getters and setters for UI display arrays
-
+@JsonIgnore
     public String[] getMonitorsUsersString() {
         return monitorsUsersString;
     }
@@ -172,7 +173,7 @@ public class User {
     public void setMonitorsUsersString(String[] monitorsUsersString) {
         this.monitorsUsersString = monitorsUsersString;
     }
-
+    @JsonIgnore
     public String[] getMonitoredByUsersString() {
         return monitoredByUsersString;
     }
@@ -180,7 +181,7 @@ public class User {
     public void setMonitoredByUsersString(String[] monitoredByUsersString) {
         this.monitoredByUsersString = monitoredByUsersString;
     }
-
+    @JsonIgnore
     public List<String> getMemberOfGroupsString() {
         return memberOfGroupsString;
     }
