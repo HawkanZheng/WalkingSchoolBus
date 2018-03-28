@@ -69,6 +69,7 @@ public class mainMenu extends AppCompatActivity {
     }
 
     private void setupGreeting() {
+        user = User.getInstance();
         TextView view = findViewById(R.id.greeting);
         view.setText(getString(R.string.hi) + " " + user.getName() + ". " + getString(R.string.welcome_to_the_walking_school_bus_app));
     }

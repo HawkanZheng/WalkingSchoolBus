@@ -21,7 +21,6 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
 
 
     private WGServerProxy proxy;
-    private static final String TAG = "Test";
     private User user;
     private GroupCollection groupList;
     private SharedValues sharedValues;
@@ -59,6 +58,7 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
 
 
                 setNewInfo();
+
 
                 finish();
             }
