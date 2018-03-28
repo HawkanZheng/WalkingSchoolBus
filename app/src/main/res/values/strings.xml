@@ -55,7 +55,7 @@
     <string name="enter_your_email">Enter Your Email</string>
     <string name="create_your_password">Create Your Password</string>
     <string name="please_enter_your_credentials">Please Enter Your Credentials</string>
-    <string name="press_a_user_to_remove_them_from_a_group">Press a user to remove them from a group</string>
+    <string name="press_a_user_to_remove_them_from_a_group">Press a user to remove them from a group or long press to edit</string>
 
     <!--Generic Strings-->
     <string name="hi">Hi</string>
