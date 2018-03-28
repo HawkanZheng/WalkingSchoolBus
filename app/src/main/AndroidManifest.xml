@@ -65,13 +65,14 @@
         <activity
             android:name=".SendUserMessageActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".editUserInfo"></activity>
+        <activity android:name=".editUserInfo" />
         <activity
             android:name=".SendUserMessageActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ParentMapsActivity"
-            android:label="@string/title_activity_parent_maps"></activity>
+            android:label="@string/title_activity_parent_maps" />
+        <activity android:name=".editChildInfo"></activity>
     </application>
 
 </manifest>

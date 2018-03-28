@@ -1,5 +1,7 @@
 package project.cmpt276.androidui.walkingschoolbus;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,19 +14,19 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import project.cmpt276.model.walkingschoolbus.GroupCollection;
+import project.cmpt276.model.walkingschoolbus.ParentDashDataCollection;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
+import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
+import retrofit2.Call;
 
-public class editUserInfo extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-
-
-    private WGServerProxy proxy;
-    private static final String TAG = "Test";
-    private User user;
-    private GroupCollection groupList;
+public class editChildInfo extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private SharedValues sharedValues;
+    private User user;
+    private WGServerProxy proxy;
+
+    private ParentDashDataCollection parentData = ParentDashDataCollection.getInstance();
 
     private EditText updateName;
     private EditText updateAddress;
@@ -33,13 +35,15 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
     private EditText updateTeacherName;
     private EditText updateEmergencyInfo;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_user_info);
-        user = User.getInstance();
+        setContentView(R.layout.activity_edit_child_info);
 
+        sharedValues = SharedValues.getInstance();
+        proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
+        user = sharedValues.getUser();
+        getUser(user);
         setCurrentInfo();
         setUpDoneButton();
         setUpMonthSpinner();
@@ -48,15 +52,26 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
     }
 
 
+    private void getUser(User aUser) {
+        Call<User> caller = proxy.getUserById(aUser.getId());
+        ProxyBuilder.callProxy(editChildInfo.this, caller, returnedUser -> userResponse(returnedUser));
+    }
+
+    private void userResponse(User returnedUser) {
+        //Set text view
+//        setView(returnedUser);
+        sharedValues.setUser(returnedUser);
+        user = sharedValues.getUser();
+//        getMemberOfGroups(user);
+    }
+
     private void setUpDoneButton()
     {
-        Button button = findViewById(R.id.doneBtn);
+        Button button = findViewById(R.id.doneChildBtn);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
 
                 setNewInfo();
 
@@ -67,22 +82,22 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
 
     private void setCurrentInfo()
     {
-        updateName = findViewById(R.id.updateName);
+        updateName = findViewById(R.id.updateChildName);
         updateName.setText(user.getName(), TextView.BufferType.EDITABLE);
 
-        updateAddress = findViewById(R.id.updateAddress);
+        updateAddress = findViewById(R.id.updateChildAddress);
         updateAddress.setText(user.getAddress(), TextView.BufferType.EDITABLE);
 
-        updateHomePhone = findViewById(R.id.updateHomeNumber);
+        updateHomePhone = findViewById(R.id.updateChildHomeNumber);
         updateHomePhone.setText(user.getHomePhone(), TextView.BufferType.EDITABLE);
 
-        updateCellPhone = findViewById(R.id.updateCellNumber);
+        updateCellPhone = findViewById(R.id.updateChildCellNumber);
         updateCellPhone.setText(user.getCellPhone(), TextView.BufferType.EDITABLE);
 
-        updateTeacherName = findViewById(R.id.updateTeacher);
+        updateTeacherName = findViewById(R.id.updateChildTeacher);
         updateTeacherName.setText(user.getTeacherName(), TextView.BufferType.EDITABLE);
 
-        updateEmergencyInfo = findViewById(R.id.updateEmergencyInfo);
+        updateEmergencyInfo = findViewById(R.id.updateChildEmergencyInfo);
         updateEmergencyInfo.setText(user.getEmergencyContactInfo(), TextView.BufferType.EDITABLE);
 
     }
@@ -114,7 +129,7 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
 
     private void setUpMonthSpinner()
     {
-        Spinner spinner = findViewById(R.id.updateMonth);
+        Spinner spinner = findViewById(R.id.updateChildMonth);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.months_array, android.R.layout.simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -137,7 +152,7 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
 
 
         ArrayAdapter<String> adapter =  new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, years);
-        Spinner spinner = findViewById(R.id.updateYear);
+        Spinner spinner = findViewById(R.id.updateChildYear);
         spinner.setAdapter(adapter);
 
         if(user.getBirthYear()!=null)
@@ -150,7 +165,7 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
 
     private void setUpGradeSpinner()
     {
-        Spinner spinner = findViewById(R.id.updateGrade);
+        Spinner spinner = findViewById(R.id.updateChildGrade);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.grades_array, android.R.layout.simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -172,7 +187,7 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
 
         switch (adapterView.getId())
         {
-            case R.id.updateYear:
+            case R.id.updateChildYear:
                 if(i!=0)
                 {
                     user.setBirthYear(Integer.parseInt(info));
@@ -184,11 +199,11 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
                 }
                 break;
 
-            case R.id.updateMonth:
+            case R.id.updateChildMonth:
                 user.setBirthMonth(i);
                 break;
 
-            case R.id.updateGrade:
+            case R.id.updateChildGrade:
 
                 if(i!=0)
                 {
@@ -211,5 +226,9 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    public static Intent makeIntent(Context context){
+        return new Intent(context, editChildInfo.class);
     }
 }
