@@ -2,6 +2,7 @@ package project.cmpt276.androidui.walkingschoolbus;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,7 +16,9 @@ import java.util.ArrayList;
 import project.cmpt276.model.walkingschoolbus.GroupCollection;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
+import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
+import retrofit2.Call;
 
 public class editUserInfo extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -38,7 +41,12 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_user_info);
+        //Get instances
         user = User.getInstance();
+        sharedValues = SharedValues.getInstance();
+
+        //Get proxy
+        proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
 
         setCurrentInfo();
         setUpDoneButton();
@@ -57,9 +65,17 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
             public void onClick(View view) {
 
                 setNewInfo();
-                finish();
+                //Push new info to server
+                Call<User> caller = proxy.editUser(user, user.getId());
+                ProxyBuilder.callProxy(editUserInfo.this, caller, returnedUser -> userResponse(returnedUser));
             }
         });
+    }
+
+    //response to edit user server call
+    private void userResponse(User returnedUser) {
+        Log.i("Edited User", "User Edit Successful.");
+        finish();
     }
 
     private void setCurrentInfo()
@@ -105,6 +121,7 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
 
         String newEmergencyInfo = updateEmergencyInfo.getText().toString();
         user.setEmergencyContactInfo(newEmergencyInfo);
+
 
 
     }

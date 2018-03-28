@@ -16,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import project.cmpt276.model.walkingschoolbus.Group;
 import project.cmpt276.model.walkingschoolbus.ParentDashDataCollection;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
@@ -35,6 +37,7 @@ public class monitoredUserGroupsActivity extends AppCompatActivity {
 
     private ParentDashDataCollection parentData = ParentDashDataCollection.getInstance();
 
+    List<String> groupList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,25 +49,31 @@ public class monitoredUserGroupsActivity extends AppCompatActivity {
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
         user = sharedValues.getUser();
         //Get full user info
-        getUser(user);
+        //getUser(user);
+        getMemberOfGroups(user);
         setupRemoveFromGroupButton();
         setupActionBarBack();
 
         listCallback();
     }
 
-    private void getUser(User aUser) {
-        Call<User> caller = proxy.getUserById(aUser.getId());
-        ProxyBuilder.callProxy(monitoredUserGroupsActivity.this, caller, returnedUser -> userResponse(returnedUser));
-    }
+//    private void getUser(User aUser) {
+//        Call<User> caller = proxy.getUserById(aUser.getId());
+//        ProxyBuilder.callProxy(monitoredUserGroupsActivity.this, caller, returnedUser -> userResponse(returnedUser));
+//    }
 
+
+    //get groups that user is member of
     private void getMemberOfGroups(User currUser){
-        currUser.setMemberOfGroupsString(new ArrayList<String>());
-        for(int i = 0; i < currUser.getMemberOfGroups().size(); i++){
-            Group aGroup = currUser.getMemberOfGroups().get(i);
-            Call<Group> caller = proxy.getGroupById(aGroup.getId());
-            ProxyBuilder.callProxy(monitoredUserGroupsActivity.this, caller, returnedGroup -> groupResponse(returnedGroup));
+        for(Group group : user.getMemberOfGroups()){
+            groupList.add(group.groupToListString());
         }
+//        currUser.setMemberOfGroupsString(new ArrayList<String>());
+//        for(int i = 0; i < currUser.getMemberOfGroups().size(); i++){
+//            Group aGroup = currUser.getMemberOfGroups().get(i);
+//            Call<Group> caller = proxy.getGroupById(aGroup.getId());
+//            ProxyBuilder.callProxy(monitoredUserGroupsActivity.this, caller, returnedGroup -> groupResponse(returnedGroup));
+//        }
         populateList();
     }
 
@@ -78,7 +87,7 @@ public class monitoredUserGroupsActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,           //Context for the activity
                 R.layout.users_group_list,      //Layout used
-                user.getMemberOfGroupsString());               //Groups/Users displayed
+                groupList);               //Groups/Users displayed
         //Configure the list view
         ListView view = findViewById(R.id.usersGroupsList);
         adapter.notifyDataSetChanged();
@@ -150,7 +159,8 @@ public class monitoredUserGroupsActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 //TODO: extract group and save it to the singleton to access group info later
-                //parentData.setLastGroupSelected( GROUP_ADDED_HERE );
+                Group group = user.getMemberOfGroups().get(i);
+                sharedValues.setGroup(group);
 
                 Intent intent = new Intent(monitoredUserGroupsActivity.this, ParentDashUserInfoActivity.class);
                 startActivity(intent);
