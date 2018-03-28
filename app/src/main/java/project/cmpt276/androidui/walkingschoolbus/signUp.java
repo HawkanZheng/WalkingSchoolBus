@@ -247,9 +247,6 @@ public class signUp extends AppCompatActivity {
 
                 setUserInfo();
                 if(!errorCheck()) {
-
-
-//                Intent intent = new Intent(signUp.this, signUpOptionalInfo.class);
                     Intent intent = signUpOptionalInfo.makeIntent(signUp.this, name, password, userName);
                     startActivity(intent);
 

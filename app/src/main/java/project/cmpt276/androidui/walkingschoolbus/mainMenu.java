@@ -157,7 +157,8 @@ public class mainMenu extends AppCompatActivity {
                 editor.putString("password", "");
                 editor.apply();
 
-
+                Intent intent = new Intent(mainMenu.this, Login.class);
+                startActivity(intent);
                 finish();
             }
         });
