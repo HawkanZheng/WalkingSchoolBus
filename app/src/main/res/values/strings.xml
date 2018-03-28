@@ -91,4 +91,8 @@
     <string name="send_message_to_group_leader">Send Message To group Leader</string>
     <string name="send_message_to_parents">Send Message To Parents</string>
     <string name="title_activity_parent_maps">Map</string>
+    <string name="messages">Messages</string>
+    <string name="emergency">EMERGENCY</string>
+    <string name="emergency_message">EMERGENCY MESSAGE</string>
+    <string name="send">SEND</string>
 </resources>
