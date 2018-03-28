@@ -187,6 +187,7 @@ public class ParentsDashboardActivity extends AppCompatActivity {
             }
         });
 
+        //on  long click, edit user selected
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {

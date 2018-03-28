@@ -4,15 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import project.cmpt276.model.walkingschoolbus.ParentDashDataCollection;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
@@ -24,6 +27,7 @@ import retrofit2.Call;
 public class editChildInfo extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private SharedValues sharedValues;
     private User user;
+    private User theUser;
     private WGServerProxy proxy;
 
     private ParentDashDataCollection parentData = ParentDashDataCollection.getInstance();
@@ -40,10 +44,12 @@ public class editChildInfo extends AppCompatActivity implements AdapterView.OnIt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_child_info);
 
+        //get proxy and instances
+        theUser = User.getInstance();
         sharedValues = SharedValues.getInstance();
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
         user = sharedValues.getUser();
-        getUser(user);
+//        getUser(user);
         setCurrentInfo();
         setUpDoneButton();
         setUpMonthSpinner();
@@ -52,18 +58,18 @@ public class editChildInfo extends AppCompatActivity implements AdapterView.OnIt
     }
 
 
-    private void getUser(User aUser) {
-        Call<User> caller = proxy.getUserById(aUser.getId());
-        ProxyBuilder.callProxy(editChildInfo.this, caller, returnedUser -> userResponse(returnedUser));
-    }
-
-    private void userResponse(User returnedUser) {
-        //Set text view
-//        setView(returnedUser);
-        sharedValues.setUser(returnedUser);
-        user = sharedValues.getUser();
-//        getMemberOfGroups(user);
-    }
+//    private void getUser(User aUser) {
+//        Call<User> caller = proxy.getUserById(aUser.getId());
+//        ProxyBuilder.callProxy(editChildInfo.this, caller, returnedUser -> userResponse(returnedUser));
+//    }
+//
+//    private void userResponse(User returnedUser) {
+//        //Set text view
+////        setView(returnedUser);
+//        sharedValues.setUser(returnedUser);
+//        user = sharedValues.getUser();
+////        getMemberOfGroups(user);
+//    }
 
     private void setUpDoneButton()
     {
@@ -74,10 +80,17 @@ public class editChildInfo extends AppCompatActivity implements AdapterView.OnIt
             public void onClick(View view) {
 
                 setNewInfo();
-
+                //Push new info to server
+                Call<User> caller = proxy.editUser(user, user.getId());
+                ProxyBuilder.callProxy(editChildInfo.this, caller, returnedUser -> userResponse(returnedUser));
                 finish();
             }
         });
+    }
+    //response to edit user server call
+    private void userResponse(User returnedUser) {
+        Log.i("Edited User", "User Edit Successful.");
+        finish();
     }
 
     private void setCurrentInfo()
