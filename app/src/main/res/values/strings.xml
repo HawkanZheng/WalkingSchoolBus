@@ -76,6 +76,47 @@
     <string name="fragmentTitle">Custom Waypoint</string>
     <string name="markerTitleLabel">Marker Title</string>
     <string name="marketTypeLabel">Type of Marker</string>
+
+
+
+
+    <string-array name="months_array">
+        <item>Month</item>
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+
+
+
+
+    <string-array name="grades_array">
+        <item>Grade</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
+
+
+
     <string name="unread_messages">Unread Messages</string>
     <string name="view_older_messages">View Older Messages</string>
     <string name="send_a_message">Send A Message</string>

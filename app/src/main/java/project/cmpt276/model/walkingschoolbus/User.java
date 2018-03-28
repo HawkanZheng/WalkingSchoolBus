@@ -15,6 +15,14 @@ public class User {
     private String name;
     private String email;
     private String password;
+    private Integer birthYear = null;
+    private Integer birthMonth = null;
+    private String address = null;
+    private String cellPhone = null;
+    private String homePhone = null;
+    private String grade = null;
+    private String teacherName = null;
+    private String emergencyContactInfo = null;
     private String href;
     private lastGpsLocation lastGpsLocation;
 
@@ -188,6 +196,76 @@ public class User {
     public void setMemberOfGroupsString(List<String> memberOfGroupsString) {
         this.memberOfGroupsString = memberOfGroupsString;
     }
+
+
+    public Integer getBirthYear() {
+        return birthYear;
+    }
+
+    public void setBirthYear(Integer birthYear) {
+        this.birthYear = birthYear;
+    }
+
+    public Integer getBirthMonth() {
+        return birthMonth;
+    }
+
+    public void setBirthMonth(Integer birthMonth) {
+        this.birthMonth = birthMonth;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCellPhone() {
+        return cellPhone;
+    }
+
+    public void setCellPhone(String cellPhone) {
+        this.cellPhone = cellPhone;
+    }
+
+    public String getHomePhone() {
+        return homePhone;
+    }
+
+    public void setHomePhone(String homePhone) {
+        this.homePhone = homePhone;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
+    }
+
+    public String getEmergencyContactInfo() {
+        return emergencyContactInfo;
+    }
+
+    public void setEmergencyContactInfo(String emergencyContactInfo) {
+        this.emergencyContactInfo = emergencyContactInfo;
+    }
+
+    public static void setInstance(User instance) {
+        User.instance = instance;
+    }
+
     public void addMemberOfGroupsString(String group){
         this.memberOfGroupsString.add(group);
     }

@@ -60,6 +60,7 @@ public class signUp extends AppCompatActivity {
         getInput();
         setupSignUpBtn();
         previousLogin();
+        setUpNextButton();
     }
 
     private void setupSignUpBtn() {
@@ -233,4 +234,22 @@ public class signUp extends AppCompatActivity {
             password = "";
         }
     }
+
+
+    private void setUpNextButton()
+    {
+
+        Button button = findViewById(R.id.nextStepSignUp);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+//                Intent intent = new Intent(signUp.this, signUpOptionalInfo.class);
+                Intent intent = signUpOptionalInfo.makeIntent(signUp.this, name, password, userName);
+                startActivity(intent);
+            }
+        });
+    }
+
 }

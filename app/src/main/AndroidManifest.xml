@@ -52,6 +52,8 @@
         <activity android:name=".ManageGroups" />
         <activity android:name=".AddMonitoredUsersToGroup" />
         <activity android:name=".monitoredUserGroupsActivity" />
+        <activity android:name=".signUpOptionalInfo"></activity>
+        <activity android:name=".monitoredUserGroupsActivity" />
         <activity android:name=".MessagingActivity" />
         <activity android:name=".OldMessagesActivity" />
         <activity
