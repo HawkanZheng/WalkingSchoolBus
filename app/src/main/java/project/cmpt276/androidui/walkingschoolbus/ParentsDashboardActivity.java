@@ -53,6 +53,15 @@ public class ParentsDashboardActivity extends AppCompatActivity {
         registerListClickCallBack();
     }
 
+    //refresh list on resume
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        Log.i("Resume", "On Resume here");
+        getMonitorsUsers(user);
+    }
+
     private void getMonitorsUsers(User currUser) {
         //User user = User.getInstance();
         Call<List<User>> caller = proxy.getUsersMonitered(currUser.getId());
@@ -68,16 +77,16 @@ public class ParentsDashboardActivity extends AppCompatActivity {
             users[i] = "Name: " + monitorUser.getName() + "\nEmail: " + monitorUser.getEmail();
         }
         user.setMonitorsUsersString(users);
-        populateList(user);
+        populateList();
     }
 
-    private void populateList(User currUser) {
+    private void populateList() {
 
         //Build Adapter
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,           //Context for the activity
                 R.layout.monitors_users_list,      //Layout used
-                currUser.getMonitorsUsersString());               //Groups/Users displayed
+                user.getMonitorsUsersString());               //Groups/Users displayed
         //Configure the list view
         ListView list = findViewById(R.id.currentlyMonitoringList);
         list.setAdapter(adapter);
@@ -202,6 +211,7 @@ public class ParentsDashboardActivity extends AppCompatActivity {
 
 
     }
+
 
     public static Intent makeIntent(Context context){
         return new Intent(context, ParentsDashboardActivity.class);

@@ -83,14 +83,14 @@ public class editChildInfo extends AppCompatActivity implements AdapterView.OnIt
                 //Push new info to server
                 Call<User> caller = proxy.editUser(user, user.getId());
                 ProxyBuilder.callProxy(editChildInfo.this, caller, returnedUser -> userResponse(returnedUser));
-                finish();
+
             }
         });
     }
     //response to edit user server call
     private void userResponse(User returnedUser) {
         Log.i("Edited User", "User Edit Successful.");
-        finish();
+        this.finish();
     }
 
     private void setCurrentInfo()
