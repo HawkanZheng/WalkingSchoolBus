@@ -15,11 +15,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+
+import project.cmpt276.model.walkingschoolbus.Group;
 import project.cmpt276.model.walkingschoolbus.GroupCollection;
+import project.cmpt276.model.walkingschoolbus.Message;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
+import retrofit2.Call;
 
 /*Main Menu
 Access to :
@@ -198,10 +202,33 @@ public class mainMenu extends AppCompatActivity {
         emergencySendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Server Calls
+                //refresh user
+                user = User.getInstance();
+                //Emergency message Server Calls
+                Message message = new Message();
+                message.setText(getEmergencyMessage());
+                message.setEmergency(true);
+                //if user is part of at least one group, sent to group leader, group members and parents
+                if(!user.getMemberOfGroups().isEmpty()) {
+
+                    for (Group group : user.getMemberOfGroups()) {
+                        Call<Message> caller = proxy.groupMessage(group.getId(), message);
+                        ProxyBuilder.callProxy(mainMenu.this, caller, returnedMessage -> emergencyResponse(returnedMessage));
+                    }
+                }
+                //if user is not part of any group, send to parents
+                else{
+
+                    Call<Message> caller = proxy.parentMessage(user.getId(), message);
+                    ProxyBuilder.callProxy(mainMenu.this, caller, returnedMessage -> emergencyResponse(returnedMessage));
+                }
                 Toast.makeText(mainMenu.this, "Message Sent: " + getEmergencyMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+//Emergency message server response
+    private void emergencyResponse(Message returnedMessage) {
+        Log.i("Emergency Message", "Emergency message sent");
     }
 
     public static Intent makeIntent(Context context) {
