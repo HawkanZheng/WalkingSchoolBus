@@ -94,7 +94,13 @@ public class Message {
         String stringMessage = "Message:\n" + text + "\nFrom User: " + fromUser.toNameAndEmailString();
         if(toGroup != null) {
             stringMessage = "Message:\n" + text + "\nFrom User: " + fromUser.toNameAndEmailString() + "\nTo Group:\n" + toGroup.groupToListString();
+
         }
+        else if(emergency){
+            stringMessage ="EMERGENCY!!!\n" + "Message:\n" + text + "\nFrom User: " + fromUser.toNameAndEmailString() + "\n";
+        }
+
+
         return stringMessage;
     }
 
