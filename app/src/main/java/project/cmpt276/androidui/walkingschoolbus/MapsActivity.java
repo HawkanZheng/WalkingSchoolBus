@@ -64,6 +64,7 @@ import retrofit2.Call;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_YELLOW;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -106,7 +107,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
     private static final long LOCATION_UPDATE_RATE_IN_MS = 10000;
     private static final int UPLOAD_RATE_MS = 30000;
-    private static final int CANCEL_DURATION = 600000;
+    private static final int CANCEL_DURATION = 60000;
 
     private WGServerProxy proxy;
     private GroupCollection groupList;
@@ -179,7 +180,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     fragmentData.setGroupToBeAdded(grp);
 
                     Log.i("Marker","" + (joinGroup == null));
-                    sharedValues.setGroup(grp);
                     if(grp != null){
                         // Draws a path from the Group start location to the end location
 
@@ -315,9 +315,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 gMapsInterface.makeMarker(grpStartLocation,GROUP_TYPE,grp.getGroupDescription());
                 if (gMapsInterface.isLocationInRadius(deviceLocation, grpStartLocation)) {
                     groupInRadius.add(grp);
-                    Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, GROUP_TYPE, grp.getGroupDescription()));
-                    marker.setTag(grp);
-                    groupMarkersPlaced.add(marker);
+                    if(sharedValues.getGroup() != null){
+                        //Colors the currently selected group, if there is one, yellow.
+                        if(sharedValues.getGroup().getId() == grp.getId()){
+                            Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, HUE_YELLOW, grp.getGroupDescription()));
+                            marker.setTag(grp);
+                            groupMarkersPlaced.add(marker);
+                        }
+                    }else{
+                        Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, GROUP_TYPE, grp.getGroupDescription()));
+                        marker.setTag(grp);
+                        groupMarkersPlaced.add(marker);
+                    }
                 }
             }
         }
@@ -378,7 +387,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void startLocationUpdates(){
         if (ActivityCompat.checkSelfPermission(this, perms[0]) == PackageManager.PERMISSION_GRANTED) {
             locationService.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
-            uploadLocationService.requestLocationUpdates(uploader,uploadTask,Looper.myLooper());
+            if(sharedValues.getGroup() != null){
+                uploadLocationService.requestLocationUpdates(uploader,uploadTask,Looper.myLooper());
+            }
         }else {
             //Prompt user for access to their device's location.
             ActivityCompat.requestPermissions(this, perms, LOCATION_PERMISSION_REQUESTCODE);
@@ -399,33 +410,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
+
+                //Calculate last location
                 Location l = locationResult.getLastLocation();
                 Log.i("Uploader", "Uploading " + l.getLatitude() + " ," + l.getLongitude());
-                /**
-                 * So far, no way to start the upload when on walk. The upload starts as soon as maps activity starts.
-                 * Probably have to select a current group from manage groups page to determine which end location is going to be used.
-                 * Pack locations into user class
-                 * Upload data to the server.
-                 **/
-                //Set lastGpsLocation object
+
+                //Set lastGpsLocation object and save to server.
                 lastGpsLocation lastLoc = user.getLastGpsLocation();
                 lastLoc.setLat(l.getLatitude());
                 lastLoc.setLng(l.getLongitude());
-
-
                 Call<lastGpsLocation> caller = proxy.setLastGpsLocation(user.getId(), lastLoc);
                 ProxyBuilder.callProxy(MapsActivity.this, caller, returnedLocation -> locResponse(returnedLocation));
+
                 //When there is an end marker selected and device location is available.
-                if(fragmentData.getEndMarker() != null && deviceLocation != null){
-                    //Get the end marker and compare it to the user's current location.
-                    LatLng endLocation = fragmentData.getEndMarker().getPosition();
-                    if(gMapsInterface.isUserInRadius(deviceLocation,fragmentData.getEndMarker().getPosition())) {
-                        //Removes the callback after 10 mins.
-                        Log.i("Uploader", "Current End Location: " + fragmentData.getMarkerTitle() + ": (" + endLocation.latitude + ", " + endLocation.longitude + ")");
-                        timer.schedule(makeCancellationTask(), CANCEL_DURATION);
+                if(sharedValues.getGroup() != null) {
+                    Group currentGrp = sharedValues.getGroup();
+                    LatLng grpEnd = currentGrp.getEndLocation();
+                    if (grpEnd != null && deviceLocation != null) {
+                        //Get the end marker and compare it to the user's current location.
+                        if (gMapsInterface.isUserInRadius(deviceLocation, grpEnd) && !gMapsInterface.timerIsUploading()) {
+                            Log.i("Uploader", "Preparing to stop upload: user is within endLocation");
+                            timer.schedule(makeCancellationTask(), CANCEL_DURATION);
+                            gMapsInterface.toggleTimer(true);
+                        }
                     }
                 }
             }
+
         };
     }
 
@@ -439,8 +450,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return new TimerTask() {
             @Override
             public void run() {
-                Log.i("Uploader","Cancelling the task");
+                Log.i("Uploader","Duration over, upload cancelled");
+                //Removes the callback so location uploading stops indefinitely.
                 uploadLocationService.removeLocationUpdates(uploadTask);
+                //Cancel the timer as its no longer in use and purge the cancelled task.
+                timer.cancel();
+                timer.purge();
+                //timer is no longer running, set it back to false in case user decides to exit map and reenter, this allows the timer to run again.
+                gMapsInterface.toggleTimer(false);
             }
         };
     }

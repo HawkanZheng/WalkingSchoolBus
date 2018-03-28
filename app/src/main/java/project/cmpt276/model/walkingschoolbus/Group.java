@@ -79,24 +79,16 @@ public class Group {
         this.groupDescription = groupDescription;
     }
 
-    //Needed for defining the group's start location.
-    public void setStartMarker(LatLng s){
-        startMarker = s;
-    }
-
     //Needed to pull the group's starting location.
-    public LatLng getStartMarker(){
-        return startMarker;
-    }
-
-    //Needed for defining the group's end location.
-    public void setEndMarker(LatLng e){
-        endMarker = e;
+    public LatLng getStartLocation(){
+        LatLng startLatLng = new LatLng(getRouteLatArray().get(0),getRouteLngArray().get(0));
+        return startLatLng;
     }
 
     //Needed to pull the group's end location.
-    public LatLng getEndMarker(){
-        return endMarker;
+    public LatLng getEndLocation(){
+        LatLng endLatLng = new LatLng(getRouteLatArray().get(1),getRouteLngArray().get(1));
+        return endLatLng;
     }
 
     public long getId() {
