@@ -1,6 +1,5 @@
 package project.cmpt276.androidui.walkingschoolbus;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,11 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 import project.cmpt276.model.walkingschoolbus.GroupCollection;
@@ -37,8 +33,6 @@ public class mainMenu extends AppCompatActivity {
     private GroupCollection groupList;
     private SharedValues sharedValues;
 
-    private boolean isEmergencyVisible = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +52,6 @@ public class mainMenu extends AppCompatActivity {
         setUpWhoMonitorsMeBtn();
         setUpLogoutBtn();
         setUpManageGroupsBtn();
-        setupEmergencyBtn();
-        setupEmergencySendBtn();
     }
 
     private void setupGreeting() {
@@ -75,6 +67,7 @@ public class mainMenu extends AppCompatActivity {
             users[i] = returnedUsers.get(i).toString();
         }
     }
+
 
     private void setUpMapButton()
     {
@@ -101,7 +94,6 @@ public class mainMenu extends AppCompatActivity {
             }
         });
     }
-
 
     private void setUpWhoIMonitorBtn(){
         Button button = findViewById(R.id.whoIMonitorBtn);
@@ -155,53 +147,6 @@ public class mainMenu extends AppCompatActivity {
             }
         });
 
-    }
-
-    private String getEmergencyMessage(){
-        EditText edit = findViewById(R.id.edtEmergencyMessage);
-        return edit.getText().toString();
-    }
-
-    private void setupEmergencyBtn() {
-        Button emergencyBtn = findViewById(R.id.btnPanic);
-        emergencyBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Button sendEmergencyBtn = findViewById(R.id.btnSendEmergencyText);
-                EditText messageEdt = findViewById(R.id.edtEmergencyMessage);
-
-                if(!isEmergencyVisible){
-                    sendEmergencyBtn.setVisibility(View.VISIBLE);
-                    messageEdt.setVisibility(View.VISIBLE);
-
-                    messageEdt.getText().clear();
-
-                    isEmergencyVisible = true;
-                }
-                else{
-                    sendEmergencyBtn.setVisibility(View.INVISIBLE);
-                    messageEdt.setVisibility(View.INVISIBLE);
-
-                    // Hide Keyboard
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-
-                    isEmergencyVisible = false;
-
-                }
-            }
-        });
-    }
-
-    private void setupEmergencySendBtn() {
-        Button emergencySendBtn = findViewById(R.id.btnSendEmergencyText);
-        emergencySendBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO: Server Calls
-                Toast.makeText(mainMenu.this, "Message Sent: " + getEmergencyMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     public static Intent makeIntent(Context context) {
