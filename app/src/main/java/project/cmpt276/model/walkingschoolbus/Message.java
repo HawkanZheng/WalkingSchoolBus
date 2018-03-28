@@ -92,7 +92,7 @@ public class Message {
     //Change message to string that can be populated into list
     public String messageToString(){
         String stringMessage = "Message:\n" + text + "\nFrom User: " + fromUser.toNameAndEmailString();
-        if(toGroup != null) {
+        if(toGroup != null && !emergency) {
             stringMessage = "Message:\n" + text + "\nFrom User: " + fromUser.toNameAndEmailString() + "\nTo Group:\n" + toGroup.groupToListString();
 
         }
