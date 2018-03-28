@@ -92,7 +92,7 @@ public class editChildInfo extends AppCompatActivity implements AdapterView.OnIt
         Log.i("Edited User", "User Edit Successful.");
         this.finish();
     }
-
+    //set current views on start activity
     private void setCurrentInfo()
     {
         updateName = findViewById(R.id.updateChildName);
@@ -115,10 +115,10 @@ public class editChildInfo extends AppCompatActivity implements AdapterView.OnIt
 
     }
 
-
+    //set new user info
     private void setNewInfo()
     {
-        // TODO: 2018-03-27  make it so all changed info is saved on the server
+
         String newName = updateName.getText().toString();
         user.setName(newName);
 
@@ -139,7 +139,7 @@ public class editChildInfo extends AppCompatActivity implements AdapterView.OnIt
 
 
     }
-
+    //month spinner for birthday
     private void setUpMonthSpinner()
     {
         Spinner spinner = findViewById(R.id.updateChildMonth);
@@ -149,7 +149,7 @@ public class editChildInfo extends AppCompatActivity implements AdapterView.OnIt
         spinner.setSelection(user.getBirthMonth());
         spinner.setOnItemSelectedListener(this);
     }
-
+    //year spinner for birthday
     private void setUpYearSpinner()
     {
         ArrayList<String> years = new ArrayList<>();
@@ -175,7 +175,7 @@ public class editChildInfo extends AppCompatActivity implements AdapterView.OnIt
 
         spinner.setOnItemSelectedListener(this);
     }
-
+    //grade spinner for grade
     private void setUpGradeSpinner()
     {
         Spinner spinner = findViewById(R.id.updateChildGrade);
@@ -191,11 +191,11 @@ public class editChildInfo extends AppCompatActivity implements AdapterView.OnIt
         spinner.setOnItemSelectedListener(this);
 
     }
-
+    //when spinner item selected, set user info
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
-        // TODO: 2018-03-27 make it so changed info from spinners is saved on the server
+
         String info = adapterView.getItemAtPosition(i).toString();
 
         switch (adapterView.getId())
