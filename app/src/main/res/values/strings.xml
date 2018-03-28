@@ -78,8 +78,6 @@
     <string name="marketTypeLabel">Type of Marker</string>
 
 
-
-
     <string-array name="months_array">
         <item>Month</item>
         <item>January</item>
@@ -97,8 +95,6 @@
     </string-array>
 
 
-
-
     <string-array name="grades_array">
         <item>Grade</item>
         <item>1</item>
@@ -114,7 +110,6 @@
         <item>11</item>
         <item>12</item>
     </string-array>
-
 
 
     <string name="unread_messages">Unread Messages</string>

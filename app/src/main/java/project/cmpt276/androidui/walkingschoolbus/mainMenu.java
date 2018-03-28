@@ -52,6 +52,7 @@ public class mainMenu extends AppCompatActivity {
         setUpWhoMonitorsMeBtn();
         setUpLogoutBtn();
         setUpManageGroupsBtn();
+        setUpEditButton();
     }
 
     private void setupGreeting() {
@@ -147,6 +148,18 @@ public class mainMenu extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void setUpEditButton()
+    {
+        Button button = findViewById(R.id.editInfoBtn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mainMenu.this, editUserInfo.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public static Intent makeIntent(Context context) {

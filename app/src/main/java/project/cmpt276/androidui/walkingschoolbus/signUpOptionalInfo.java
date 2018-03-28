@@ -73,11 +73,13 @@ public class signUpOptionalInfo extends AppCompatActivity implements AdapterView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_optional_info);
+        extractDataFromIntent();
         user = User.getInstance();
         sharedValues = SharedValues.getInstance();
         groupList = GroupCollection.getInstance();
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), null);
         groupList = GroupCollection.getInstance();
+
         setUpMonthsSpinner();
         setUpYearsSpinner();
         setUpGradeSpinner();
@@ -98,19 +100,7 @@ public class signUpOptionalInfo extends AppCompatActivity implements AdapterView
             public void onClick(View view) {
                 setInfo();
                 greetingMessage();
-                extractDataFromIntent();
-//                setNewUser();
-                user.setPassword(password);
-                user.setName(name);
-                user.setEmail("test");
-                user.setBirthYear(birthYear);
-                user.setBirthMonth(birthMonth);
-                user.setAddress(address);
-                user.setCellPhone(cellPhone);
-                user.setHomePhone(homePhone);
-                user.setTeacherName(teacherName);
-                user.setEmergencyContactInfo(emergencyContactInfo);
-                user.setGrade(grade);
+                setNewUser();
 
                 Call<User> caller = proxy.createNewUser(user);
                 ProxyBuilder.callProxy(signUpOptionalInfo.this, caller, returnedUser -> response(returnedUser));
@@ -139,10 +129,6 @@ public class signUpOptionalInfo extends AppCompatActivity implements AdapterView
         user.setTeacherName(teacherName);
         user.setEmergencyContactInfo(emergencyContactInfo);
         user.setGrade(grade);
-    }
-
-    public static Intent makeIntent(Context context) {
-        return new Intent(context, signUp.class);
     }
 
     private void response(User returnedUser) {
@@ -178,7 +164,7 @@ public class signUpOptionalInfo extends AppCompatActivity implements AdapterView
 
     private void loginResponse(Void returnedNothing) {
         Log.w(TAG, "Server replied to login request (no content was expected).");
-        Toast.makeText(signUpOptionalInfo.this, "You have created and account and logged in.", Toast.LENGTH_LONG).show();
+        Toast.makeText(signUpOptionalInfo.this, "You have created an account and logged in.", Toast.LENGTH_LONG).show();
 
     }
 
