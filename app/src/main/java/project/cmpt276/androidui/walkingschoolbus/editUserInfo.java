@@ -64,8 +64,6 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onClick(View view) {
 
-
-
                 setNewInfo();
                 //Push new info to server
                 Call<User> caller = proxy.editUser(user, user.getId());
