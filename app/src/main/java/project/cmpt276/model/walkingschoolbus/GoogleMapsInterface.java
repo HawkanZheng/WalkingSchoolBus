@@ -35,6 +35,7 @@ public class GoogleMapsInterface {
     private static GoogleMapsInterface mapsInterface;
     private static final float CIRCLE_THICKNESS = 2.0f;
     private static Timer uploader;
+    private boolean timerRunning = false;
 
 
     private GoogleMapsInterface(Context c){
@@ -124,12 +125,13 @@ public class GoogleMapsInterface {
         return uploader;
     }
 
+    public void toggleTimer(boolean b){
+        timerRunning = b;
+    }
+
     //Cancel the timer and delete it (by setting it to null).
-    public void stopUploading(){
-        if(uploader != null){
-            uploader.cancel();
-            uploader = null;
-        }
+    public boolean timerIsUploading(){
+        return timerRunning;
     }
 
     // Constructs google url to create a path
