@@ -1,5 +1,7 @@
 package project.cmpt276.model.walkingschoolbus;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,4 +59,5 @@ public class SharedValues {
     public void setUserList(List<User> userList) {
         this.userList = userList;
     }
+
 }

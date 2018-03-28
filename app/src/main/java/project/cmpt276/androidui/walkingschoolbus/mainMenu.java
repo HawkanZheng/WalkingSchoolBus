@@ -25,6 +25,7 @@ import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
 import retrofit2.Call;
 
+
 /*Main Menu
 Access to :
             -Map
@@ -112,7 +113,7 @@ public class mainMenu extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = WhoIMonitor.makeIntent(mainMenu.this);
+                Intent intent = ParentsDashboardActivity.makeIntent(mainMenu.this);
                 startActivity(intent);
             }
         });

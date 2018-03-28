@@ -25,9 +25,9 @@ import project.cmpt276.server.walkingschoolbus.WGServerProxy;
 import retrofit2.Call;
 
 public class MessagingActivity extends AppCompatActivity {
-    WGServerProxy proxy;
-    SharedValues sharedValues;
-    User user;
+    private WGServerProxy proxy;
+    private SharedValues sharedValues;
+    private User user;
 
     ArrayList<String> unreadMessages = new ArrayList<>();
 

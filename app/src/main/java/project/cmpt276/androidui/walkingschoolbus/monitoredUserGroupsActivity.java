@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import project.cmpt276.model.walkingschoolbus.Group;
+import project.cmpt276.model.walkingschoolbus.ParentDashDataCollection;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
@@ -30,6 +33,8 @@ public class monitoredUserGroupsActivity extends AppCompatActivity {
     private User user;
     private WGServerProxy proxy;
 
+    private ParentDashDataCollection parentData = ParentDashDataCollection.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +48,9 @@ public class monitoredUserGroupsActivity extends AppCompatActivity {
         //Get full user info
         getUser(user);
         setupRemoveFromGroupButton();
-        setUpReturnToWhoIMonitorButton();
+        setupActionBarBack();
+
+        listCallback();
     }
 
     private void getUser(User aUser) {
@@ -110,19 +117,45 @@ public class monitoredUserGroupsActivity extends AppCompatActivity {
         getMemberOfGroups(user);
     }
 
-    private void setUpReturnToWhoIMonitorButton(){
-        Button button = findViewById(R.id.returnToMonitorsBtn);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+    // Add a Back button on the Action Bar
+    private void setupActionBarBack() {
+        // set the button to be visible
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+
+
+    // On back button click, finish the activity
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        if(id == android.R.id.home){
+            this.finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void setView(User theUser){
         TextView view = findViewById(R.id.userGroupsView);
         view.setText(theUser.getName() + getString(R.string.userGroupsView));
 
+    }
+
+
+
+    private void listCallback() {
+        ListView list = findViewById(R.id.usersGroupsList);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                //TODO: extract group and save it to the singleton to access group info later
+                //parentData.setLastGroupSelected( GROUP_ADDED_HERE );
+
+                Intent intent = new Intent(monitoredUserGroupsActivity.this, ParentDashUserInfoActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public static Intent makeIntent(Context context){

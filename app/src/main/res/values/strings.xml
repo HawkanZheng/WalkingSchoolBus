@@ -76,6 +76,8 @@
     <string name="fragmentTitle">Custom Waypoint</string>
     <string name="markerTitleLabel">Marker Title</string>
     <string name="marketTypeLabel">Type of Marker</string>
+    <string name="parents_dashboard">Parents Dashboard</string>
+    <string name="back">Back</string>
     <string name="unread_messages">Unread Messages</string>
     <string name="view_older_messages">View Older Messages</string>
     <string name="send_a_message">Send A Message</string>
@@ -88,6 +90,7 @@
     <string name="enter_your_message">Enter Your Message:</string>
     <string name="send_message_to_group_leader">Send Message To group Leader</string>
     <string name="send_message_to_parents">Send Message To Parents</string>
+    <string name="title_activity_parent_maps">Map</string>
     <string name="messages">Messages</string>
     <string name="emergency">EMERGENCY</string>
     <string name="emergency_message">EMERGENCY MESSAGE</string>

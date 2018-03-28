@@ -103,7 +103,6 @@ public class Group {
         this.id = id;
     }
 
-
     public String getHref() {
         return href;
     }
