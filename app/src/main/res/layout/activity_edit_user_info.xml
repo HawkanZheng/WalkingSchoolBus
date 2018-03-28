@@ -5,40 +5,102 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    tools:context="project.cmpt276.androidui.walkingschoolbus.editUserInfo">
+    tools:context="project.cmpt276.androidui.walkingschoolbus.editUserInfo"
+    tools:layout_editor_absoluteY="81dp">
 
     <TextView
-        android:id="@+id/testGreeting"
+        android:id="@+id/editGreeting"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginBottom="36dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="you name is "
+        android:text="Edit Your Info"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/updateAddress"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/updateAddress"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="393dp"
-        android:layout_marginStart="16dp"
         android:ems="10"
         android:hint="New Address"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/testGreeting" />
+        app:layout_constraintBottom_toTopOf="@+id/updateHomeNumber"
+        app:layout_constraintEnd_toEndOf="@+id/updateCellNumber"
+        app:layout_constraintStart_toStartOf="@+id/updateHomeNumber"
+        app:layout_constraintTop_toBottomOf="@+id/editGreeting" />
 
     <Button
         android:id="@+id/doneBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="43dp"
-        android:layout_marginEnd="65dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
         android:text="Done"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <EditText
+        android:id="@+id/updateHomeNumber"
+        android:layout_width="238dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="86dp"
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:hint="New Home Phone Number"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/updateBirthDay"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/updateAddress" />
+
+    <EditText
+        android:id="@+id/updateCellNumber"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="43dp"
+        android:ems="10"
+        android:hint="New Cellphone Number"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="@+id/updateTeacher"
+        app:layout_constraintEnd_toEndOf="@+id/updateTeacher"
+        app:layout_constraintStart_toStartOf="@+id/updateHomeNumber" />
+
+    <EditText
+        android:id="@+id/updateTeacher"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="18dp"
+        android:ems="10"
+        android:hint="New Teacher's Name"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="@+id/updateBirthDay"
+        app:layout_constraintEnd_toEndOf="@+id/updateEmergencyInfo"
+        app:layout_constraintStart_toStartOf="@+id/updateBirthDay" />
+
+    <TextView
+        android:id="@+id/updateBirthDay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="63dp"
+        android:layout_marginStart="16dp"
+        android:text="Edit Birth Day (MM/YY)"
+        app:layout_constraintBottom_toTopOf="@+id/updateEmergencyInfo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/updateHomeNumber" />
+
+    <EditText
+        android:id="@+id/updateEmergencyInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="121dp"
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:hint="New Emergency Info"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/updateBirthDay" />
 </android.support.constraint.ConstraintLayout>
