@@ -4,52 +4,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context="project.cmpt276.androidui.walkingschoolbus.monitoredUserGroupsActivity"
-    tools:layout_editor_absoluteY="81dp"
-    android:background="@drawable/background">
+    tools:layout_editor_absoluteY="81dp">
 
-    <TextView
-        android:id="@+id/userGroupsView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/usersGroupsList"
-        app:layout_constraintStart_toStartOf="@+id/usersGroupsList"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ListView
-        android:id="@+id/usersGroupsList"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="19dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/userLeaveGroupView"
+    <LinearLayout
+        android:layout_width="355dp"
+        android:layout_height="373dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userGroupsView" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.115">
+
+        <TextView
+            android:id="@+id/userGroupsView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.041"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.032" />
+
+        <ListView
+            android:id="@+id/usersGroupsList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toTopOf="@+id/userLeaveGroupView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/userGroupsView"
+            app:layout_constraintVertical_bias="0.231" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/removeFromGroupBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="118dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="31dp"
-        android:layout_marginStart="22dp"
         android:text="@string/remove_from_group"
-        app:layout_constraintBottom_toTopOf="@+id/returnToMonitorsBtn"
-        app:layout_constraintStart_toStartOf="@+id/userGroupIDEdit"
-        app:layout_constraintTop_toBottomOf="@+id/userGroupIDEdit" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.939"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.914" />
 
     <TextView
         android:id="@+id/userLeaveGroupView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
         android:text="@string/enter_group_to_be_removed_from"
-        app:layout_constraintBottom_toTopOf="@+id/userGroupIDEdit"
-        app:layout_constraintStart_toStartOf="@+id/userGroupIDEdit"
-        app:layout_constraintTop_toBottomOf="@+id/usersGroupsList" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.093"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.808" />
 
     <EditText
         android:id="@+id/userGroupIDEdit"
@@ -58,19 +73,11 @@
         android:ems="10"
         android:hint="@string/group_id"
         android:inputType="number"
-        app:layout_constraintBottom_toTopOf="@+id/removeFromGroupBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userLeaveGroupView" />
-
-    <Button
-        android:id="@+id/returnToMonitorsBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="@string/return_to_who_i_monitor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.094"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/removeFromGroupBtn" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.916" />
+
 </android.support.constraint.ConstraintLayout>

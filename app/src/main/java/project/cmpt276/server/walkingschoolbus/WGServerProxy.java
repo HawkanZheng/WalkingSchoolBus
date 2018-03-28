@@ -134,7 +134,7 @@ public interface WGServerProxy {
 
     //Only return messages for user which are unread and emergency
     @GET("/messages")
-    Call<List<Message>> getMessagesToUserUnreadEmergency(@Query("foruser") Long userId, @Query("is-emergency") Boolean emergency);
+    Call<List<Message>> getMessagesToUserUnreadEmergency(@Query("foruser") Long userId,@Query("status") String unread, @Query("is-emergency") Boolean emergency);
 
     //New message to group
     @POST("/messages/togroup/{groupId}")

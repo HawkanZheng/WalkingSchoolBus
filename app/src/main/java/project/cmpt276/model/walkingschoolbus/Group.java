@@ -40,7 +40,7 @@ public class Group {
         this.leader = leader;
     }
 
-//    @JsonIgnore
+    @JsonIgnore
     public List<User> getMemberUsers() {
         return memberUsers;
     }
@@ -102,7 +102,6 @@ public class Group {
     public void setId(long id) {
         this.id = id;
     }
-
 
     public String getHref() {
         return href;
