@@ -84,7 +84,7 @@ public class GroupsLeaderActivity extends AppCompatActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // TODO: extract the group selected and then populate the UserInfo accordingly
+                //extract the group selected and then populate the UserInfo accordingly
                 Group group = user.getLeadsGroups().get(i);
                 sharedValues.setGroup(group);
 
