@@ -244,6 +244,11 @@ public class signUpOptionalInfo extends AppCompatActivity implements AdapterView
                     birthYear = Integer.parseInt(info);
                 }
 
+                else
+                {
+                    birthYear = null;
+                }
+
 
                 break;
 
@@ -253,8 +258,15 @@ public class signUpOptionalInfo extends AppCompatActivity implements AdapterView
                 break;
 
             case R.id.grade:
-                grade = info;
 
+                if(i!=0) {
+                    grade = info;
+                }
+
+                else
+                {
+                    grade = null;
+                }
             default:
                 break;
         }

@@ -172,6 +172,7 @@ public class mainMenu extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(mainMenu.this, editUserInfo.class);
                 startActivity(intent);
+                setupGreeting();
             }
         });
     }
