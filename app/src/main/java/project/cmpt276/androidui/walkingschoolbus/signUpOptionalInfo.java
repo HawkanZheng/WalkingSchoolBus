@@ -275,10 +275,7 @@ public class signUpOptionalInfo extends AppCompatActivity implements AdapterView
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
-       // birthYear = null;
     }
-
-
 
     private void getInput()
     {

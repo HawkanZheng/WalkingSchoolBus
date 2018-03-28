@@ -55,8 +55,6 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onClick(View view) {
 
-
-
                 setNewInfo();
 
 

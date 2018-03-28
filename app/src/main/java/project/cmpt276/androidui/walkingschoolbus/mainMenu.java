@@ -68,10 +68,28 @@ public class mainMenu extends AppCompatActivity {
         setUpEditButton();
     }
 
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        setupGreeting();
+    }
+
     private void setupGreeting() {
         user = User.getInstance();
         TextView view = findViewById(R.id.greeting);
-        view.setText(getString(R.string.hi) + " " + user.getName() + ". " + getString(R.string.welcome_to_the_walking_school_bus_app));
+
+        if(!user.getName().equals(""))
+        {
+            view.setText(getString(R.string.hi) + " " + user.getName() + ". " + getString(R.string.welcome_to_the_walking_school_bus_app));
+        }
+
+        else
+        {
+            view.setText(getString(R.string.hi) + ". " + getString(R.string.welcome_to_the_walking_school_bus_app));
+        }
+
     }
 
     private void response(List<User> returnedUsers) {
@@ -158,7 +176,8 @@ public class mainMenu extends AppCompatActivity {
                 editor.putString("password", "");
                 editor.apply();
 
-
+                Intent intent = new Intent(mainMenu.this, Login.class);
+                startActivity(intent);
                 finish();
             }
         });
