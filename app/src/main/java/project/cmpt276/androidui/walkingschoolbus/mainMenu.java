@@ -252,6 +252,20 @@ public class mainMenu extends AppCompatActivity {
         return intent;
     }
 
+    //TODO: Make a textview that shows the number of unread messages for the user and refreshes every minute
+
+    //server call that gets all the unread messages
+    private void getUnreadMessages(){
+        Call<List<Message>> caller = proxy.getMessagesToUserUnread(user.getId(), "unread");
+        ProxyBuilder.callProxy(mainMenu.this, caller, returnedMessages -> messagesResponse(returnedMessages));
+    }
+
+    private void messagesResponse(List<Message> returnedMessages) {
+        //number of unread messages
+        int numNewMessages = returnedMessages.size();
+        //TODO: Put number in Textview notification that says how many unread messages the user has
+    }
+
     @Override
     public void onBackPressed()
     {
