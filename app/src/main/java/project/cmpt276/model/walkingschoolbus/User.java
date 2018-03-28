@@ -278,6 +278,13 @@ public class User {
     public String toNameAndEmailString(){
         return name + "\n" + "email: " + email;
     }
+
+    public String userInfoToString() {
+        return "Name: " + name +
+                "\nHome Phone Number: " + homePhone +
+                "\nCell Phone Number: " + cellPhone +
+                "\nAddress: " + address;
+    }
     @Override
     public String toString() {
         return "User{" +

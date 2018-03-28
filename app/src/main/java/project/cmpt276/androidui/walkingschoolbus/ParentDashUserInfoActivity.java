@@ -11,12 +11,20 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import project.cmpt276.model.walkingschoolbus.ParentDashDataCollection;
+import project.cmpt276.model.walkingschoolbus.SharedValues;
+import project.cmpt276.model.walkingschoolbus.User;
+import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
+import project.cmpt276.server.walkingschoolbus.WGServerProxy;
+import retrofit2.Call;
 
 public class ParentDashUserInfoActivity extends AppCompatActivity {
 
-    // TODO: Populate the array of users in the selected group
+    private WGServerProxy proxy;
+    private SharedValues sharedValues;
+    private User user;
     private ArrayList<String> users = new ArrayList<>();
 
 
@@ -26,14 +34,31 @@ public class ParentDashUserInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_dash_user_info);
+        //Get instances
+        user = User.getInstance();
+        sharedValues = SharedValues.getInstance();
 
-        // TODO: Remove this when done
-        users.add("Test");
-
+        //get proxy
+        proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
 
         setupActionBarBack();
-        populateList();
+        //get member users and populate list
+        getUsers();
         setListCallback();
+    }
+
+    private void getUsers() {
+        Call<List<User>> caller = proxy.getGroupMembers(sharedValues.getGroup().getId());
+        ProxyBuilder.callProxy(ParentDashUserInfoActivity.this, caller, returnedUsers -> usersResponse(returnedUsers));
+
+    }
+
+    private void usersResponse(List<User> returnedUsers) {
+        sharedValues.setUserList(returnedUsers);
+        for(User member : returnedUsers){
+            users.add(member.toNameAndEmailString());
+        }
+        populateList();
     }
 
     // Add a Back button on the Action Bar
@@ -54,6 +79,7 @@ public class ParentDashUserInfoActivity extends AppCompatActivity {
     }
 
     private void populateList() {
+
         // Build adapter and show the items
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.parent_dash_user_info_layout, users);
         ListView list = (ListView) findViewById(R.id.lstUserInGroupSelected);
@@ -65,8 +91,9 @@ public class ParentDashUserInfoActivity extends AppCompatActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //TODO: save the user in the singleton, in order to view the correct users info
-                //parentData.setLastUserSelected( ADD_USER_HERE);
+                //save the user in the singleton, in order to view the correct users info
+                User userSelected = sharedValues.getUserList().get(i);
+                sharedValues.setUser(userSelected);
                 setupDialog();
 
             }
