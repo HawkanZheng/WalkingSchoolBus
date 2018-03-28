@@ -10,8 +10,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import project.cmpt276.model.walkingschoolbus.Group;
+import project.cmpt276.model.walkingschoolbus.SharedValues;
+import project.cmpt276.model.walkingschoolbus.User;
+import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
+import project.cmpt276.server.walkingschoolbus.WGServerProxy;
 
 public class GroupsLeaderActivity extends AppCompatActivity {
+    private WGServerProxy proxy;
+    private User user;
+    private SharedValues sharedValues;
 
     private ArrayList<String> groupsILead = new ArrayList<>();
 
@@ -20,13 +30,28 @@ public class GroupsLeaderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_groups_leader);
 
-        // TODO: Remove when server calls to populate list are added
-        groupsILead.add("TMP");
+        //Get instances
+        user = User.getInstance();
+        sharedValues = SharedValues.getInstance();
+
+        //get proxy
+        proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
+
 
         setupActionBarBack();
-        populateList();
+        getGroupsLead();
 
         setupListCallback();
+    }
+
+
+    private void getGroupsLead() {
+        List<Group> groupsLead = user.getLeadsGroups();
+        for(Group group : groupsLead){
+            groupsILead.add(group.groupToListString());
+        }
+        populateList();
+
     }
 
     // Add a Back button on the Action Bar
@@ -47,7 +72,7 @@ public class GroupsLeaderActivity extends AppCompatActivity {
     }
 
     private void populateList(){
-        // TODO: populate with server pulled groups
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.groups_i_lead_layout, groupsILead);
         ListView list = (ListView) findViewById(R.id.lstGroupsILead);
         list.setAdapter(adapter);
@@ -60,6 +85,8 @@ public class GroupsLeaderActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // TODO: extract the group selected and then populate the UserInfo accordingly
+                Group group = user.getLeadsGroups().get(i);
+                sharedValues.setGroup(group);
 
                 Intent intent = new Intent(GroupsLeaderActivity.this, ParentDashUserInfoActivity.class);
                 startActivity(intent);

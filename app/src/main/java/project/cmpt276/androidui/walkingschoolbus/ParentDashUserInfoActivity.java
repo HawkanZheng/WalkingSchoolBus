@@ -11,12 +11,19 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import project.cmpt276.model.walkingschoolbus.ParentDashDataCollection;
+import project.cmpt276.model.walkingschoolbus.SharedValues;
+import project.cmpt276.model.walkingschoolbus.User;
+import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
+import project.cmpt276.server.walkingschoolbus.WGServerProxy;
 
 public class ParentDashUserInfoActivity extends AppCompatActivity {
 
-    // TODO: Populate the array of users in the selected group
+    private WGServerProxy proxy;
+    private SharedValues sharedValues;
+    private User user;
     private ArrayList<String> users = new ArrayList<>();
 
 
@@ -26,14 +33,23 @@ public class ParentDashUserInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_dash_user_info);
+        //Get instances
+        user = User.getInstance();
+        sharedValues = SharedValues.getInstance();
 
-        // TODO: Remove this when done
-        users.add("Test");
-
-
+        //get proxy
+        proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
+        getUsers();
         setupActionBarBack();
         populateList();
         setListCallback();
+    }
+
+    private void getUsers() {
+        List<User> userList = sharedValues.getGroup().getMemberUsers();
+        for(User member : userList){
+            //users.add(member.to)
+        }
     }
 
     // Add a Back button on the Action Bar

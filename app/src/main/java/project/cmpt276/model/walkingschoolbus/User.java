@@ -86,7 +86,7 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-    @JsonIgnore
+    //@JsonIgnore
     public List<User> getMonitoredByUsers() {
         return monitoredByUsers;
     }
@@ -94,7 +94,7 @@ public class User {
     public void setMonitoredByUsers(List<User> monitoredByUsers) {
         this.monitoredByUsers = monitoredByUsers;
     }
-    @JsonIgnore
+    //@JsonIgnore
     public List<User> getMonitorsUsers() {
         return monitorsUsers;
     }
@@ -102,7 +102,7 @@ public class User {
     public void setMonitorsUsers(List<User> monitorsUsers) {
         this.monitorsUsers = monitorsUsers;
     }
-    @JsonIgnore
+    //@JsonIgnore
     public List<Group> getWalkingGroups() {
         return walkingGroups;
     }
