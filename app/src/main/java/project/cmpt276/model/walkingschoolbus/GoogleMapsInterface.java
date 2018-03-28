@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Timer;
 
 /**
  * Created by Jerry on 2018-03-02.
@@ -29,9 +30,13 @@ import java.net.URL;
 public class GoogleMapsInterface {
     private Context context;
     private FusedLocationProviderClient locationService;
-    private int radius = 500;
+    private int userRadius = 500;
+    private int locationRadius = 75;
     private static GoogleMapsInterface mapsInterface;
     private static final float CIRCLE_THICKNESS = 2.0f;
+    private static Timer uploader;
+    private boolean timerRunning = false;
+
 
     private GoogleMapsInterface(Context c){
         context = c;
@@ -45,20 +50,20 @@ public class GoogleMapsInterface {
         return mapsInterface;
     }
 
-    public int getRadius() {
-        return radius;
+    public int getUserRadius() {
+        return userRadius;
     }
 
-    public void setRadius(int radius) {
-        if (radius > 0) {
-            this.radius = radius;
+    public void setUserRadius(int userRadius) {
+        if (userRadius > 0) {
+            this.userRadius = userRadius;
         } else {
             // Just a default value, should be moved to a const later
-            this.radius = 100;
+            this.userRadius = 100;
         }
     }
 
-    // Computes if a location is within the radius of the person's current location
+    // Computes if a location is within the userRadius of the person's current location
     public boolean isLocationInRadius(LatLng currentLocation, LatLng groupMeetLocation){
         // Needed to store the computed value
         float distanceResult[] = new float[2];
@@ -68,8 +73,21 @@ public class GoogleMapsInterface {
 
         // if the value is in the range -> true, else -> false
         Log.i("isLocationInRadius","distance: " + distanceResult[0]);
-        return (distanceResult[0] < this.radius);
+        return (distanceResult[0] < this.userRadius);
+    }
 
+    // Computes if the user is within the locationRadius.
+    //TODO Temporary function -- Make it more robust so that we're not repeating the above function.
+    public boolean isUserInRadius(LatLng currentLocation, LatLng groupMeetLocation){
+        // Needed to store the computed value
+        float distanceResult[] = new float[2];
+
+        Location.distanceBetween(currentLocation.latitude, currentLocation.longitude,
+                groupMeetLocation.latitude, groupMeetLocation.longitude, distanceResult);
+
+        // if the value is in the range -> true, else -> false
+        Log.i("isLocationInRadius","distance: " + distanceResult[0]);
+        return (distanceResult[0] < this.locationRadius);
     }
 
     public LatLng calculateDeviceLocation(Location l){
@@ -78,12 +96,17 @@ public class GoogleMapsInterface {
         return new LatLng(lat, lng);
     }
     
-    public Circle generateRadius(GoogleMap map, LatLng location,int outline){
-        CircleOptions options = new CircleOptions().center(location).strokeWidth(CIRCLE_THICKNESS).radius(this.radius).strokeColor(outline);
+    public Circle generateUserRadius(GoogleMap map, LatLng location, int outline){
+        CircleOptions options = new CircleOptions().center(location).strokeWidth(CIRCLE_THICKNESS).radius(this.userRadius).strokeColor(outline);
         Circle userRadius = map.addCircle(options);
         return userRadius;
     }
 
+    public Circle generateLocationRadius(GoogleMap map, LatLng location, int outline){
+        CircleOptions options = new CircleOptions().center(location).strokeWidth(CIRCLE_THICKNESS).radius(this.locationRadius).strokeColor(outline);
+        Circle locationRadius = map.addCircle(options);
+        return locationRadius;
+    }
     //Generalized custom marker.
     public MarkerOptions makeMarker(LatLng location, float type, String title){
         return new MarkerOptions().position(location).icon(BitmapDescriptorFactory.defaultMarker(type)).title(title);
@@ -92,6 +115,23 @@ public class GoogleMapsInterface {
     //Generalized camera settings.
     public CameraUpdate cameraSettings(LatLng location, float zoomLevel){
         return CameraUpdateFactory.newLatLngZoom(location,zoomLevel);
+    }
+
+    //Creates the timer for uploading the last known coordinates to the server.
+    public Timer getTimer(){
+        if(uploader == null){
+            uploader = new Timer();
+        }
+        return uploader;
+    }
+
+    public void toggleTimer(boolean b){
+        timerRunning = b;
+    }
+
+    //Cancel the timer and delete it (by setting it to null).
+    public boolean timerIsUploading(){
+        return timerRunning;
     }
 
     // Constructs google url to create a path

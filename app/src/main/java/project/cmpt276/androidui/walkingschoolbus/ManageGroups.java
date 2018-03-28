@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -58,6 +60,23 @@ public class ManageGroups extends AppCompatActivity {
         //Configure the list view
         ListView list = findViewById(R.id.myGroupsList);
         list.setAdapter(adapter);
+
+        //On long click, set the current walking group to the group selected.
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Group aGroup = user.getMemberOfGroups().get(i);
+                Call<Group> caller = proxy.getGroupById(aGroup.getId());
+                ProxyBuilder.callProxy(ManageGroups.this, caller, response -> saveGroupDataLocal(response));
+                return false;
+            }
+        });
+    }
+
+    private void saveGroupDataLocal(Group grp){
+        sharedValues.setGroup(grp);
+        Toast.makeText(ManageGroups.this, "Current Group is: " + grp.getGroupDescription(), Toast.LENGTH_SHORT).show();
+        Log.i("GroupsList", grp.groupToListString());
     }
 
     private void setupLeaveGroupButton() {

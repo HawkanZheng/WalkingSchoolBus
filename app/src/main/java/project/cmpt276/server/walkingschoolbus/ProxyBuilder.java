@@ -178,6 +178,8 @@ public class ProxyBuilder {
             if (token != null) {
                 builder.header("Authorization", token);
             }
+
+            builder.header("JSON-DEPTH", "1");
             Request modifiedRequest = builder.build();
 
             return chain.proceed(modifiedRequest);

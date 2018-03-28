@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -48,6 +47,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import project.cmpt276.model.walkingschoolbus.GoogleMapsInterface;
 import project.cmpt276.model.walkingschoolbus.Group;
@@ -56,12 +57,14 @@ import project.cmpt276.model.walkingschoolbus.MapsJsonParser;
 import project.cmpt276.model.walkingschoolbus.fragmentDataCollection;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
+import project.cmpt276.model.walkingschoolbus.lastGpsLocation;
 import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
 import retrofit2.Call;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_YELLOW;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -90,17 +93,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private GoogleMapsInterface gMapsInterface;
     private FusedLocationProviderClient locationService;
+    private FusedLocationProviderClient uploadLocationService;
     private LatLng deviceLocation;
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
     private LocationSettingsRequest locationSettings;
     private Circle userRadius;
-    private GoogleApiClient gApi;
-
+    private LocationRequest uploader;
+    private LocationCallback uploadTask;
+    private Timer timer;
     //Variables in use
     private static final int LOCATION_PERMISSION_REQUESTCODE = 076;
     private final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
     private static final long LOCATION_UPDATE_RATE_IN_MS = 10000;
+    private static final int UPLOAD_RATE_MS = 30000;
+    private static final int CANCEL_DURATION = 60000;
 
     private WGServerProxy proxy;
     private GroupCollection groupList;
@@ -115,6 +122,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         locationService = LocationServices.getFusedLocationProviderClient(this);
+        uploadLocationService = LocationServices.getFusedLocationProviderClient(this);
         gMapsInterface =  GoogleMapsInterface.getInstance(this);
         checkLocationsEnabled();
         // Setup  buttons -- These need to come after the map creation
@@ -126,6 +134,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         user = User.getInstance();
         sharedValues = SharedValues.getInstance();
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
+        timer = gMapsInterface.getTimer();
     }
 
     @Override
@@ -157,7 +166,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     // Clicking a Marker will display the coordinates of the marker.
                     String URL = gMapsInterface.getDirectionsUrl(marker.getPosition(),fragmentData.getEndMarker().getPosition());
                     DownloadDataFromUrl DownloadDataFromUrl = new DownloadDataFromUrl();
-
                     DownloadDataFromUrl.execute(URL);
                 }
 
@@ -172,11 +180,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     fragmentData.setGroupToBeAdded(grp);
 
                     Log.i("Marker","" + (joinGroup == null));
-
                     if(grp != null){
                         // Draws a path from the Group start location to the end location
+
+                        List<Double> tmpLat = grp.getRouteLatArray();
+                        List<Double> tmpLng = grp.getRouteLngArray();
+
+                        LatLng grpEnd = new LatLng(tmpLat.get(tmpLat.size()-1), tmpLng.get(tmpLng.size()-1));
+
+                        String URL = gMapsInterface.getDirectionsUrl(marker.getPosition(),grpEnd);
+                        DownloadDataFromUrl DownloadDataFromUrl = new DownloadDataFromUrl();
+
+                        DownloadDataFromUrl.execute(URL);
+
+                        grpEndLocationMarker =  mMap.addMarker(gMapsInterface.makeMarker(grpEnd,END_TYPE,"End Location"));
+
+                        /*
                         mapSelectedGroupPath mapSelectedGroupPath = new mapSelectedGroupPath();
                         mapSelectedGroupPath.execute(grp);
+                        */
+
                         Toast.makeText(MapsActivity.this, grp.getGroupDescription(), Toast.LENGTH_SHORT).show();
                     }else{
                         Log.i("onMarkerClicked", "Group Invalid");
@@ -217,6 +240,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //Start all location related activities.
         createLocationRequest();
         createLocationCallback();
+        createLocationsUploader();
+        createUploaderTask();
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                 .addLocationRequest(locationRequest);
         builder.setAlwaysShow(true);
@@ -290,9 +315,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 gMapsInterface.makeMarker(grpStartLocation,GROUP_TYPE,grp.getGroupDescription());
                 if (gMapsInterface.isLocationInRadius(deviceLocation, grpStartLocation)) {
                     groupInRadius.add(grp);
-                    Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, GROUP_TYPE, grp.getGroupDescription()));
-                    marker.setTag(grp);
-                    groupMarkersPlaced.add(marker);
+                    if(sharedValues.getGroup() != null){
+                        //Colors the currently selected group, if there is one, yellow.
+                        if(sharedValues.getGroup().getId() == grp.getId()){
+                            Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, HUE_YELLOW, grp.getGroupDescription()));
+                            marker.setTag(grp);
+                            groupMarkersPlaced.add(marker);
+                        }
+                    }else{
+                        Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, GROUP_TYPE, grp.getGroupDescription()));
+                        marker.setTag(grp);
+                        groupMarkersPlaced.add(marker);
+                    }
                 }
             }
         }
@@ -333,7 +367,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 deviceLocation = gMapsInterface.calculateDeviceLocation(lastLocation);
                 if(userRadius == null){
                     //If there is no circle, make one.
-                    userRadius = gMapsInterface.generateRadius(mMap, deviceLocation,Color.RED);
+                    userRadius = gMapsInterface.generateUserRadius(mMap, deviceLocation,Color.RED);
                 } else{
                     //otherwise, recenter the circle.
                     userRadius.setCenter(deviceLocation);
@@ -349,20 +383,84 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationSettings = builder.build();
     }
 
-
     //Begin listening for updates.
     private void startLocationUpdates(){
         if (ActivityCompat.checkSelfPermission(this, perms[0]) == PackageManager.PERMISSION_GRANTED) {
             locationService.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
+            if(sharedValues.getGroup() != null){
+                uploadLocationService.requestLocationUpdates(uploader,uploadTask,Looper.myLooper());
+            }
         }else {
             //Prompt user for access to their device's location.
             ActivityCompat.requestPermissions(this, perms, LOCATION_PERMISSION_REQUESTCODE);
         }
     }
 
+    //Creates a LocationRequest to request the last location every 30s.
+    private void createLocationsUploader(){
+        //Make it wait a maximum of 30s before getting the location updates.
+        uploader = new LocationRequest()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setFastestInterval(UPLOAD_RATE_MS).setMaxWaitTime(UPLOAD_RATE_MS);
+    }
 
+    //Create a task to upload the user's last location to the server.
+    private void createUploaderTask(){
+        uploadTask = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                super.onLocationResult(locationResult);
 
+                //Calculate last location
+                Location l = locationResult.getLastLocation();
+                Log.i("Uploader", "Uploading " + l.getLatitude() + " ," + l.getLongitude());
 
+                //Set lastGpsLocation object and save to server.
+                lastGpsLocation lastLoc = user.getLastGpsLocation();
+                lastLoc.setLat(l.getLatitude());
+                lastLoc.setLng(l.getLongitude());
+                Call<lastGpsLocation> caller = proxy.setLastGpsLocation(user.getId(), lastLoc);
+                ProxyBuilder.callProxy(MapsActivity.this, caller, returnedLocation -> locResponse(returnedLocation));
+
+                //When there is an end marker selected and device location is available.
+                if(sharedValues.getGroup() != null) {
+                    Group currentGrp = sharedValues.getGroup();
+                    LatLng grpEnd = currentGrp.getEndLocation();
+                    if (grpEnd != null && deviceLocation != null) {
+                        //Get the end marker and compare it to the user's current location.
+                        if (gMapsInterface.isUserInRadius(deviceLocation, grpEnd) && !gMapsInterface.timerIsUploading()) {
+                            Log.i("Uploader", "Preparing to stop upload: user is within endLocation");
+                            timer.schedule(makeCancellationTask(), CANCEL_DURATION);
+                            gMapsInterface.toggleTimer(true);
+                        }
+                    }
+                }
+            }
+
+        };
+    }
+
+    //Response to set last gps location server call
+    private void locResponse(lastGpsLocation returnedLocation) {
+        Log.i("Server Call", "Set GPS Location call successful\n" + returnedLocation.toString() );
+    }
+
+    //Stops uploading.
+    private TimerTask makeCancellationTask(){
+        return new TimerTask() {
+            @Override
+            public void run() {
+                Log.i("Uploader","Duration over, upload cancelled");
+                //Removes the callback so location uploading stops indefinitely.
+                uploadLocationService.removeLocationUpdates(uploadTask);
+                //Cancel the timer as its no longer in use and purge the cancelled task.
+                timer.cancel();
+                timer.purge();
+                //timer is no longer running, set it back to false in case user decides to exit map and reenter, this allows the timer to run again.
+                gMapsInterface.toggleTimer(false);
+            }
+        };
+    }
 
     // Clears all polylines and end locations on the map
     public void clearDisplayInfo(){
@@ -510,7 +608,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     double lat = Double.parseDouble(point.get("lat"));
                     double lng = Double.parseDouble(point.get("lng"));
 
-                    createLatLngList(lat,lng);
+                    // Store the first and last Waypoints only
+                    if(j == 0 || j == path.size()-1){
+                        createLatLngList(lat,lng);
+                    }
                     LatLng position = new LatLng(lat, lng);
 
                     points.add(position);
@@ -623,8 +724,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if(joinGroup != null) {
                     Call<List<User>> caller = proxy.addNewMember(joinGroup.getId(), user);
                     ProxyBuilder.callProxy(MapsActivity.this, caller, returnedMembers -> memberResponse(returnedMembers));
-
-
                 }
                 refreshUser();
             }
