@@ -90,11 +90,6 @@ public class GroupCreationFragment extends AppCompatDialogFragment {
         group.setLeader(user);
         Call<Group> caller = proxy.createGroup(group);
         ProxyBuilder.callProxy(getActivity(), caller, returnedGroup -> groupResponse(returnedGroup));
-
-
-
-
-
     }
 
     private void groupResponse(Group returnedGroup) {

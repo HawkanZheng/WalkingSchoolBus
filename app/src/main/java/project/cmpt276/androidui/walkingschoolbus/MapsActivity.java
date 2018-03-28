@@ -73,6 +73,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<Group> groupInRadius = new ArrayList<Group>();
     private ArrayList<Marker> groupMarkersPlaced = new ArrayList<Marker>();
     private Marker grpEndLocationMarker;
+    private Circle grpEndLocationCircle;
 
     //Pin Types
     private final float GROUP_TYPE = HUE_RED;
@@ -194,7 +195,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         DownloadDataFromUrl.execute(URL);
 
                         grpEndLocationMarker =  mMap.addMarker(gMapsInterface.makeMarker(grpEnd,END_TYPE,"End Location"));
-
+                        grpEndLocationCircle = gMapsInterface.generateLocationRadius(mMap,grpEndLocationMarker.getPosition(), Color.BLUE);
                         /*
                         mapSelectedGroupPath mapSelectedGroupPath = new mapSelectedGroupPath();
                         mapSelectedGroupPath.execute(grp);
@@ -312,17 +313,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 LatLng grpStartLocation = new LatLng(grpLatLocation.get(0), grpLngLocation.get(0));
                 Log.i("grp@",""+grpStartLocation);
                 Log.i("isLocationInRadius","" + gMapsInterface.isLocationInRadius(deviceLocation,grpStartLocation));
-                gMapsInterface.makeMarker(grpStartLocation,GROUP_TYPE,grp.getGroupDescription());
+                //gMapsInterface.makeMarker(grpStartLocation,GROUP_TYPE,grp.getGroupDescription());
                 if (gMapsInterface.isLocationInRadius(deviceLocation, grpStartLocation)) {
                     groupInRadius.add(grp);
-                    if(sharedValues.getGroup() != null){
+                    if(sharedValues.getGroup() != null) {
                         //Colors the currently selected group, if there is one, yellow.
-                        if(sharedValues.getGroup().getId() == grp.getId()){
+                        if (sharedValues.getGroup().getId() == grp.getId()) {
                             Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, HUE_YELLOW, grp.getGroupDescription()));
                             marker.setTag(grp);
                             groupMarkersPlaced.add(marker);
+                        }else{
+                            Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, GROUP_TYPE, grp.getGroupDescription()));
+                            marker.setTag(grp);
+                            groupMarkersPlaced.add(marker);
                         }
-                    }else{
+                    } else {
                         Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, GROUP_TYPE, grp.getGroupDescription()));
                         marker.setTag(grp);
                         groupMarkersPlaced.add(marker);
@@ -472,8 +477,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             line.remove();
         }
         polylines.clear();
-        if(grpEndLocationMarker != null){
+        //Cleans up the group preview when clicking a marker.
+        if(grpEndLocationMarker != null && grpEndLocationCircle != null){
             grpEndLocationMarker.remove();
+            grpEndLocationCircle.remove();
         }
     }
 
@@ -707,6 +714,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 if(fragmentData.getStartMarker() != null || fragmentData.getEndMarker() != null ){
                     fragmentData.clearData();
+                }
+
+                if(fragmentData.getEndMarkerRadius() != null){
+                    fragmentData.getEndMarkerRadius().remove();
                 }
 
                 clearDisplayInfo();

@@ -32,7 +32,6 @@ public class ParentsDashboardActivity extends AppCompatActivity {
     private WGServerProxy proxy;
     private User user;
     private SharedValues sharedValues;
-
     private ParentDashDataCollection parentData = ParentDashDataCollection.getInstance();
 
     @Override
@@ -50,6 +49,7 @@ public class ParentsDashboardActivity extends AppCompatActivity {
         setupActionBarBack();
         setupMessagingBtn();
         setUpRemoveMonitoredUserButton();
+        setupParentMapsBtn();
         registerListClickCallBack();
     }
 
@@ -122,8 +122,6 @@ public class ParentsDashboardActivity extends AppCompatActivity {
                 ProxyBuilder.callProxy(ParentsDashboardActivity.this, caller, returnedUser -> addUserResponse(returnedUser));
             }
         });
-
-
     }
 
     private void addUserResponse(User returnedUser) {
@@ -142,6 +140,17 @@ public class ParentsDashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ParentsDashboardActivity.this, ParentDashMessagingActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void setupParentMapsBtn(){
+        Button btn = findViewById(R.id.btnViewUsersOnMap);
+        btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ParentsDashboardActivity.this, ParentMapsActivity.class);
                 startActivity(intent);
             }
         });
