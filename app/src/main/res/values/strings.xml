@@ -27,7 +27,7 @@
     <string name="stop_monitoring_a_user">Stop monitoring a user</string>
     <string name="stop_a_user_from_monitoring_me">Stop a user from monitoring me</string>
     <string name="see_who_i_monitor">See Who I Monitor</string>
-    <string name="see_who_monitors_me">See Who Monitors Me</string>
+    <string name="see_who_monitors_me">Monitors</string>
 
     <!--Main Menu Strings-->
     <string name="login">Login</string>
@@ -39,7 +39,7 @@
 
     <!--Group Strings-->
     <string name="groupTitle">Group Name</string>
-    <string name="manage_groups">Manage Groups</string>
+    <string name="manage_groups">My Groups</string>
     <string name="welcome_to_the_walking_school_bus_app">Welcome to the Walking School Bus App!</string>
     <string name="leave_group">Leave Group</string>
     <string name="enter_group_you_want_to_leave">Enter Group You Want To Leave</string>

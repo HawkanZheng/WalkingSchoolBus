@@ -9,6 +9,7 @@ import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.ApiException;
@@ -27,6 +28,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -88,6 +90,7 @@ public class ParentMapsActivity extends FragmentActivity implements OnMapReadyCa
         List<User> monitoring = user.getMonitorsUsers();
         for(int i = 0; i < monitoring.size(); i++){
             User u = monitoring.get(i);
+            Log.i("DisplayUsers", u.getName() + " " + u.getLastGpsLocation().toString());
             //Only create user blips who have a last location registered.
             if(u.getLastGpsLocation() != null){
                 Call<User> caller = proxy.getUserById(u.getId());
@@ -98,7 +101,7 @@ public class ParentMapsActivity extends FragmentActivity implements OnMapReadyCa
 
     private void createUserBlips(User u){
         LatLng lastLocation = new LatLng(u.getLastGpsLocation().getLat(), u.getLastGpsLocation().getLng());
-        MarkerOptions userMarker = gMapsInterface.makeMarker(lastLocation,HUE_AZURE,u.getName());
+        MarkerOptions userMarker = gMapsInterface.makeMarker(lastLocation,HUE_AZURE,u.getName(),"Last upload: " + u.getLastGpsLocation().getTimestamp().toString());
         mMap.addMarker(userMarker);
     }
 
