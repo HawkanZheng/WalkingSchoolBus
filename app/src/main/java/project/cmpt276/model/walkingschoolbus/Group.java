@@ -40,7 +40,7 @@ public class Group {
         this.leader = leader;
     }
 
-    @JsonIgnore
+    //@JsonIgnore
     public List<User> getMemberUsers() {
         return memberUsers;
     }
