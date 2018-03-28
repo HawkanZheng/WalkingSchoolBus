@@ -59,7 +59,7 @@ public class CustomizeMarkerFragment extends AppCompatDialogFragment {
     //Manages markers on the map so that only two exist at a time.
     private void manageMarkers(){
         //Create marker options.
-        MarkerOptions options = gMapsOption.makeMarker(coordinates,type,"");
+        MarkerOptions options = gMapsOption.makeMarker(coordinates,type,"",null);
         //Manage start markers
         if(buttons[0].isChecked()){
             if(fragmentData.getStartMarker() != null){

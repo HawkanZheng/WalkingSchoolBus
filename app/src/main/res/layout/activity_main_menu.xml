@@ -10,29 +10,27 @@
 
     <Button
         android:id="@+id/goToMap"
-        android:layout_width="0dp"
+        android:layout_width="150dp"
         android:layout_height="60dp"
-        android:layout_marginBottom="48dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:drawableStart="@android:drawable/ic_menu_mapmode"
         android:text="@string/map"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/whoMonitorsMeBtn"
-        app:layout_constraintTop_toBottomOf="@+id/manageGroupsBtn" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/whoIMonitorBtn"
-        android:layout_width="0dp"
+        android:layout_width="150dp"
         android:layout_height="60dp"
         android:layout_marginBottom="76dp"
-        android:layout_marginEnd="9dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginStart="16dp"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:drawableStart="@android:drawable/ic_menu_myplaces"
         android:text="Parents Dashboard"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/goToMap"
-        app:layout_constraintStart_toStartOf="@+id/whoMonitorsMeBtn"
-        app:layout_constraintTop_toBottomOf="@+id/btnMessagingActivity" />
+        app:layout_constraintStart_toStartOf="parent" />
     android:layout_marginBottom="36dp"
     android:layout_marginTop="33dp"
     android:text="@string/see_who_i_monitor"
@@ -43,111 +41,113 @@
 
     <Button
         android:id="@+id/whoMonitorsMeBtn"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
         android:layout_marginBottom="16dp"
-        android:layout_marginEnd="62dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:drawableStart="@android:drawable/ic_menu_view"
         android:text="@string/see_who_monitors_me"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/goToMap"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/whoIMonitorBtn" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/logoutBtn"
-        android:layout_width="0dp"
-        android:layout_height="41dp"
-        android:layout_marginEnd="7dp"
-        android:layout_marginStart="16dp"
-        android:text="@string/logout"
-        app:layout_constraintBaseline_toBaselineOf="@+id/editInfoBtn"
-        app:layout_constraintEnd_toStartOf="@+id/editInfoBtn"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/manageGroupsBtn"
-        android:layout_width="0dp"
+        android:layout_width="150dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="80dp"
-        android:layout_marginTop="70dp"
-        android:text="@string/manage_groups"
-        app:layout_constraintBottom_toBottomOf="@+id/whoIMonitorBtn"
-        app:layout_constraintEnd_toEndOf="@+id/greeting"
-        app:layout_constraintStart_toStartOf="@+id/goToMap"
-        app:layout_constraintTop_toTopOf="@+id/btnMessagingActivity" />
-
-    <TextView
-        android:id="@+id/greeting"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="38dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
-        android:text="@string/welcome_to_the_walking_school_bus_app"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/btnSendEmergencyText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btnMessagingActivity"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginEnd="17dp"
-        android:layout_marginStart="14dp"
-        android:text="@string/messages"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/manageGroupsBtn"
-        app:layout_constraintStart_toStartOf="@+id/edtEmergencyMessage"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:drawableStart="@android:drawable/ic_input_delete"
+        android:text="@string/logout"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/editInfoBtn"
+        android:id="@+id/manageGroupsBtn"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="140dp"
+        android:layout_marginStart="16dp"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:drawableStart="@android:drawable/ic_menu_sort_by_size"
+        android:text="@string/manage_groups"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/greeting"
         android:layout_width="wrap_content"
-        android:layout_height="41dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="124dp"
+        android:text="@string/welcome_to_the_walking_school_bus_app"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnMessagingActivity"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="76dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:drawableStart="@android:drawable/sym_action_email"
+        android:text="@string/messages"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/editInfoBtn"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:drawableStart="@android:drawable/ic_menu_edit"
         android:text="Edit my Info"
-        app:layout_constraintEnd_toStartOf="@+id/btnPanic"
-        app:layout_constraintStart_toEndOf="@+id/logoutBtn"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnPanic"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="16dp"
-        android:background="@android:color/holo_red_dark"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="@android:color/holo_red_dark"
+        android:drawableStart="@android:drawable/stat_notify_error"
         android:text="@string/emergency"
-        app:layout_constraintBottom_toBottomOf="@+id/editInfoBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editInfoBtn"
-        app:layout_constraintTop_toTopOf="@+id/editInfoBtn" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/edtEmergencyMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="21dp"
-        android:layout_marginStart="6dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="232dp"
         android:ems="10"
         android:hint="@string/emergency_message"
         android:inputType="textMultiLine"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/btnMessagingActivity"
-        app:layout_constraintStart_toStartOf="@+id/greeting" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnSendEmergencyText"
         android:layout_width="wrap_content"
-        android:layout_height="44dp"
-        android:layout_marginEnd="6dp"
-        android:background="@android:color/holo_red_dark"
+        android:layout_height="45dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="232dp"
+        android:backgroundTint="@android:color/holo_red_dark"
         android:text="@string/send"
         android:visibility="invisible"
-        app:layout_constraintBaseline_toBaselineOf="@+id/edtEmergencyMessage"
-        app:layout_constraintEnd_toEndOf="@+id/greeting" />
+        app:layout_constraintStart_toEndOf="@+id/edtEmergencyMessage"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

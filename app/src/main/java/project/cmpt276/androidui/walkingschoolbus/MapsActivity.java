@@ -43,7 +43,10 @@ import com.google.android.gms.tasks.Task;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -108,7 +111,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
     private static final long LOCATION_UPDATE_RATE_IN_MS = 10000;
     private static final int UPLOAD_RATE_MS = 30000;
-    private static final int CANCEL_DURATION = 60000;
+    private static final int CANCEL_DURATION = 600000;
 
     private WGServerProxy proxy;
     private GroupCollection groupList;
@@ -194,7 +197,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                         DownloadDataFromUrl.execute(URL);
 
-                        grpEndLocationMarker =  mMap.addMarker(gMapsInterface.makeMarker(grpEnd,END_TYPE,"End Location"));
+                        grpEndLocationMarker =  mMap.addMarker(gMapsInterface.makeMarker(grpEnd,END_TYPE,"End Location",null));
                         grpEndLocationCircle = gMapsInterface.generateLocationRadius(mMap,grpEndLocationMarker.getPosition(), Color.BLUE);
                         /*
                         mapSelectedGroupPath mapSelectedGroupPath = new mapSelectedGroupPath();
@@ -319,16 +322,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     if(sharedValues.getGroup() != null) {
                         //Colors the currently selected group, if there is one, yellow.
                         if (sharedValues.getGroup().getId() == grp.getId()) {
-                            Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, HUE_YELLOW, grp.getGroupDescription()));
+                            Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, HUE_YELLOW, grp.getGroupDescription(), null));
                             marker.setTag(grp);
                             groupMarkersPlaced.add(marker);
                         }else{
-                            Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, GROUP_TYPE, grp.getGroupDescription()));
+                            Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, GROUP_TYPE, grp.getGroupDescription(),null));
                             marker.setTag(grp);
                             groupMarkersPlaced.add(marker);
                         }
                     } else {
-                        Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, GROUP_TYPE, grp.getGroupDescription()));
+                        Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, GROUP_TYPE, grp.getGroupDescription(),null));
                         marker.setTag(grp);
                         groupMarkersPlaced.add(marker);
                     }
@@ -353,6 +356,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onResume(){
         super.onResume();
         startLocationUpdates();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        //When user leaves this activity, wipe previous data and shut down any services not in use to prevent overlap with another user.
+        sharedValues.setGroup(null);
+        locationService.removeLocationUpdates(locationCallback);
+        uploadLocationService.removeLocationUpdates(uploadTask);
+        Log.i("OnDestroy", "User left MapsActivity, shutting down services and wiping overlapping data");
     }
 
     //Initialize the locationRequest object.
@@ -424,6 +437,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 lastGpsLocation lastLoc = user.getLastGpsLocation();
                 lastLoc.setLat(l.getLatitude());
                 lastLoc.setLng(l.getLongitude());
+                lastLoc.setTimestamp(timeConversion());
                 Call<lastGpsLocation> caller = proxy.setLastGpsLocation(user.getId(), lastLoc);
                 ProxyBuilder.callProxy(MapsActivity.this, caller, returnedLocation -> locResponse(returnedLocation));
 
@@ -435,14 +449,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         //Get the end marker and compare it to the user's current location.
                         if (gMapsInterface.isUserInRadius(deviceLocation, grpEnd) && !gMapsInterface.timerIsUploading()) {
                             Log.i("Uploader", "Preparing to stop upload: user is within endLocation");
+                            gMapsInterface.getTimer();
                             timer.schedule(makeCancellationTask(), CANCEL_DURATION);
                             gMapsInterface.toggleTimer(true);
+                        }
+                        if(!gMapsInterface.isUserInRadius(deviceLocation, grpEnd) && gMapsInterface.timerIsUploading()){
+                            timer.cancel();
+                            timer.purge();
+                            timer = null;
+                            gMapsInterface.toggleTimer(false);
                         }
                     }
                 }
             }
 
         };
+    }
+
+    private Date timeConversion(){
+        Date d = new Date();
+        d.setTime(System.currentTimeMillis());
+        Log.i("TimeStamp", d.toString());
+        return d;
     }
 
     //Response to set last gps location server call
@@ -523,7 +551,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Log.i("OnPostExecute","Could not draw");
                 }
             }
-           grpEndLocationMarker =  mMap.addMarker(gMapsInterface.makeMarker(waypointsToBeMapped.get(waypointsToBeMapped.size()-1),END_TYPE,"End Location"));
+           grpEndLocationMarker =  mMap.addMarker(gMapsInterface.makeMarker(waypointsToBeMapped.get(waypointsToBeMapped.size()-1),END_TYPE,"End Location",null));
         }
     }
 

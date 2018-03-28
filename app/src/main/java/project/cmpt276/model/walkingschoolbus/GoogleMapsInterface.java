@@ -108,8 +108,8 @@ public class GoogleMapsInterface {
         return locationRadius;
     }
     //Generalized custom marker.
-    public MarkerOptions makeMarker(LatLng location, float type, String title){
-        return new MarkerOptions().position(location).icon(BitmapDescriptorFactory.defaultMarker(type)).title(title);
+    public MarkerOptions makeMarker(LatLng location, float type, String title, String snip){
+        return new MarkerOptions().position(location).icon(BitmapDescriptorFactory.defaultMarker(type)).title(title).snippet(snip);
     }
 
     //Generalized camera settings.
