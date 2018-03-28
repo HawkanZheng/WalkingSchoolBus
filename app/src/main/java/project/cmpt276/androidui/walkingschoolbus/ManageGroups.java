@@ -40,10 +40,10 @@ public class ManageGroups extends AppCompatActivity {
 
     private void getMemberOfGroups(User currUser) {
         currUser.setMemberOfGroupsString(new ArrayList<String>());
-        for(int i = 0; i < currUser.getMemberOfGroups().size(); i++){
-            Group aGroup = currUser.getMemberOfGroups().get(i);
-            Call<Group> caller = proxy.getGroupById(aGroup.getId());
-            ProxyBuilder.callProxy(ManageGroups.this, caller, returnedGroup -> groupResponse(returnedGroup));
+        for(Group group : user.getMemberOfGroups()){
+            user.addMemberOfGroupsString(group.groupToListString());
+//            Call<Group> caller = proxy.getGroupById(aGroup.getId());
+//            ProxyBuilder.callProxy(ManageGroups.this, caller, returnedGroup -> groupResponse(returnedGroup));
         }
         populateList();
     }

@@ -1,5 +1,6 @@
 package project.cmpt276.model.walkingschoolbus;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -39,6 +40,7 @@ public class Group {
         this.leader = leader;
     }
 
+//    @JsonIgnore
     public List<User> getMemberUsers() {
         return memberUsers;
     }
@@ -80,12 +82,14 @@ public class Group {
     }
 
     //Needed to pull the group's starting location.
+    @JsonIgnore
     public LatLng getStartLocation(){
         LatLng startLatLng = new LatLng(getRouteLatArray().get(0),getRouteLngArray().get(0));
         return startLatLng;
     }
 
     //Needed to pull the group's end location.
+    @JsonIgnore
     public LatLng getEndLocation(){
         LatLng endLatLng = new LatLng(getRouteLatArray().get(1),getRouteLngArray().get(1));
         return endLatLng;
