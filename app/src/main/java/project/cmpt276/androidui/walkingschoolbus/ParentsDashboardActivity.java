@@ -92,6 +92,7 @@ public class ParentsDashboardActivity extends AppCompatActivity {
                 Call<User> caller = proxy.getUserByEmail(text.getText().toString());
                 ProxyBuilder.callProxy(ParentsDashboardActivity.this, caller, returnedUser -> removeUserResponse(returnedUser));
             }
+
         });
     }
 
@@ -185,6 +186,19 @@ public class ParentsDashboardActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+                user = User.getInstance();
+                Log.i("Monitoring:",sharedValues.getUserList().toString() );
+                sharedValues.setUser(sharedValues.getUserList().get(position));
+                Intent intent = editChildInfo.makeIntent(ParentsDashboardActivity.this);
+                startActivity(intent);
+                return true;
+            }
+        });
+
 
     }
 

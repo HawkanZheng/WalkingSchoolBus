@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context="project.cmpt276.androidui.walkingschoolbus.editChildInfo"
+    tools:layout_editor_absoluteY="81dp">
+
+    <EditText
+        android:id="@+id/updateChildAddress"
+        android:layout_width="215dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="16dp"
+        android:ems="10"
+        android:hint="New Address"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/updateChildHomeNumber"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/updateChildName" />
+
+    <Button
+        android:id="@+id/doneChildBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Done"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/updateChildEmergencyInfo"
+        app:layout_constraintTop_toBottomOf="@+id/updateChildGrade" />
+
+    <EditText
+        android:id="@+id/updateChildHomeNumber"
+        android:layout_width="238dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:ems="10"
+        android:hint="New Home Phone Number"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/updateChildCellNumber"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/updateChildAddress" />
+
+    <EditText
+        android:id="@+id/updateChildCellNumber"
+        android:layout_width="238dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:ems="10"
+        android:hint="New Cellphone Number"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/updateChildGrade"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/updateChildHomeNumber" />
+
+    <EditText
+        android:id="@+id/updateChildTeacher"
+        android:layout_width="157dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="New Teacher's Name"
+        android:inputType="textPersonName"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/updateChildCellNumber" />
+
+    <TextView
+        android:id="@+id/updateChildBirthDay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:text="Edit Birth Day (MM/YY)"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:layout_editor_absoluteY="291dp" />
+
+    <EditText
+        android:id="@+id/updateChildEmergencyInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="55dp"
+        android:layout_marginEnd="89dp"
+        android:layout_marginStart="24dp"
+        android:ems="10"
+        android:hint="New Emergency Info"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/doneChildBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/updateChildYear" />
+
+    <Spinner
+        android:id="@+id/updateChildMonth"
+        android:layout_width="0dp"
+        android:layout_height="27dp"
+        android:layout_marginBottom="110dp"
+        android:layout_marginEnd="29dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="113dp"
+        app:layout_constraintBottom_toBottomOf="@+id/updateChildEmergencyInfo"
+        app:layout_constraintEnd_toStartOf="@+id/updateChildYear"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/updateChildTeacher"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Spinner
+        android:id="@+id/updateChildYear"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="67dp"
+        android:layout_marginEnd="45dp"
+        app:layout_constraintBottom_toTopOf="@+id/updateChildEmergencyInfo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/updateChildMonth"
+        app:layout_constraintTop_toBottomOf="@+id/updateChildBirthDay" />
+
+    <Spinner
+        android:id="@+id/updateChildGrade"
+        android:layout_width="176dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="198dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="206dp"
+        app:layout_constraintBottom_toTopOf="@+id/doneChildBtn"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/updateChildName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="New Name"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/updateChildAddress"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</android.support.constraint.ConstraintLayout>

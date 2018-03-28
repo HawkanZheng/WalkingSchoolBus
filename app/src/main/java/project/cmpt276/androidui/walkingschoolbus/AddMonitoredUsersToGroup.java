@@ -43,30 +43,30 @@ public class AddMonitoredUsersToGroup extends AppCompatDialogFragment {
         sharedValues = SharedValues.getInstance();
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
         groupList = GroupCollection.getInstance();
-        getMemberOfGroups(user);
+//        getMemberOfGroups(user);
         getMonitorsUsers(user);
         currGroup = fragmentData.getGroupToBeAdded();
         setFinishBtn();
         return new AlertDialog.Builder(getActivity()).setView(v).create();
     }
 
-    private void getMemberOfGroups(User currUser) {
-        currUser.setMemberOfGroupsString(new ArrayList<String>());
-
-        for(int i = 0; i < currUser.getMemberOfGroups().size(); i++){
-            Group aGroup = currUser.getMemberOfGroups().get(i);
-            user.addMemberOfGroupsString(aGroup.groupToListString());
-            Log.i("MonitorFragment","GroupCall # :" +aGroup.getId() + "\nString Group: " + aGroup.groupToListString());
-            Call<Group> caller = proxy.getGroupById(aGroup.getId());
-
-            int finalI = i;
-            ProxyBuilder.callProxy(getActivity(), caller, returnedGroup -> groupResponse(returnedGroup, finalI));
-        }
-    }
-
-    private void groupResponse(Group returnedGroup, int i) {
-        user.setMemberInList(i,returnedGroup.groupToListString());
-    }
+//    private void getMemberOfGroups(User currUser) {
+//        currUser.setMemberOfGroupsString(new ArrayList<String>());
+//
+//        for(int i = 0; i < currUser.getMemberOfGroups().size(); i++){
+//            Group aGroup = currUser.getMemberOfGroups().get(i);
+//            user.addMemberOfGroupsString(aGroup.groupToListString());
+//            Log.i("MonitorFragment","GroupCall # :" +aGroup.getId() + "\nString Group: " + aGroup.groupToListString());
+//            Call<Group> caller = proxy.getGroupById(aGroup.getId());
+//
+//            int finalI = i;
+//            ProxyBuilder.callProxy(getActivity(), caller, returnedGroup -> groupResponse(returnedGroup, finalI));
+//        }
+//    }
+//
+//    private void groupResponse(Group returnedGroup, int i) {
+//        user.setMemberInList(i,returnedGroup.groupToListString());
+//    }
 
 
 
