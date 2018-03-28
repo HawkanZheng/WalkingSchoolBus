@@ -52,7 +52,6 @@
         <activity android:name=".ManageGroups" />
         <activity android:name=".monitoredUserGroupsActivity" />
         <activity android:name=".signUpOptionalInfo" />
-        <activity android:name=".monitoredUserGroupsActivity" />
         <activity
             android:name=".ParentDashUserInfoActivity"
             android:windowSoftInputMode="adjustPan" />
@@ -67,12 +66,10 @@
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".editUserInfo" />
         <activity
-            android:name=".SendUserMessageActivity"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
             android:name=".ParentMapsActivity"
             android:label="@string/title_activity_parent_maps" />
-        <activity android:name=".editChildInfo"></activity>
+        <activity android:name=".editChildInfo"/>
+        <activity android:name=".GroupsLeaderActivity"></activity>
     </application>
 
 </manifest>

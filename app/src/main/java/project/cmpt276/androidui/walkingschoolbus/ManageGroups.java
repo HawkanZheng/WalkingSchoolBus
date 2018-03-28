@@ -36,6 +36,8 @@ public class ManageGroups extends AppCompatActivity {
         getMemberOfGroups(user);
         setUpReturnToMainMenuButton();
         setupLeaveGroupButton();
+        setupListCallback();
+        setupGroupLeadBtn();
     }
 
     private void getMemberOfGroups(User currUser) {
@@ -69,6 +71,20 @@ public class ManageGroups extends AppCompatActivity {
                 Call<Group> caller = proxy.getGroupById(aGroup.getId());
                 ProxyBuilder.callProxy(ManageGroups.this, caller, response -> saveGroupDataLocal(response));
                 return false;
+            }
+        });
+    }
+
+    private void setupListCallback() {
+        ListView list = findViewById(R.id.myGroupsList);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                // TODO: extract the group selected and then populate the UserInfo accordingly
+
+                Intent intent = new Intent(ManageGroups.this, ParentDashUserInfoActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -115,6 +131,17 @@ public class ManageGroups extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+    }
+
+    private void setupGroupLeadBtn() {
+        Button btn = findViewById(R.id.btnGroupsILead);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ManageGroups.this, GroupsLeaderActivity.class);
+                startActivity(intent);
             }
         });
     }
