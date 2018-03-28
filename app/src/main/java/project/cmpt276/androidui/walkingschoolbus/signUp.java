@@ -60,6 +60,7 @@ public class signUp extends AppCompatActivity {
         getInput();
         setupSignUpBtn();
         previousLogin();
+        setUpNextButton();
     }
 
     private void setupSignUpBtn() {
@@ -128,7 +129,7 @@ public class signUp extends AppCompatActivity {
 
     private void loginResponse(Void returnedNothing) {
         Log.w(TAG, "Server replied to login request (no content was expected).");
-        Toast.makeText(signUp.this, "You have created and account and logged in.", Toast.LENGTH_LONG).show();
+        Toast.makeText(signUp.this, "You have created an account and logged in.", Toast.LENGTH_LONG).show();
 
     }
 
@@ -233,4 +234,28 @@ public class signUp extends AppCompatActivity {
             password = "";
         }
     }
+
+
+    private void setUpNextButton()
+    {
+
+        Button button = findViewById(R.id.nextStepSignUp);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                setUserInfo();
+                if(!errorCheck()) {
+
+
+//                Intent intent = new Intent(signUp.this, signUpOptionalInfo.class);
+                    Intent intent = signUpOptionalInfo.makeIntent(signUp.this, name, password, userName);
+                    startActivity(intent);
+
+                }
+            }
+        });
+    }
+
 }

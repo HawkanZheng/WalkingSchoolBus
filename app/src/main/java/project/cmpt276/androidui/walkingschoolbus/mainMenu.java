@@ -65,6 +65,7 @@ public class mainMenu extends AppCompatActivity {
         setUpManageGroupsBtn();
         setupEmergencyBtn();
         setupEmergencySendBtn();
+        setUpEditButton();
     }
 
     private void setupGreeting() {
@@ -80,6 +81,7 @@ public class mainMenu extends AppCompatActivity {
             users[i] = returnedUsers.get(i).toString();
         }
     }
+
 
     private void setUpMapButton()
     {
@@ -160,6 +162,19 @@ public class mainMenu extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void setUpEditButton()
+    {
+        Button button = findViewById(R.id.editInfoBtn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mainMenu.this, editUserInfo.class);
+                startActivity(intent);
+                setupGreeting();
+            }
+        });
     }
 
     private String getEmergencyMessage(){
