@@ -15,6 +15,7 @@ public class SharedValues {
     private  String token;
     private Group group;
     private User user;
+    private int numMessagesUnread;
     private List<User> userList = new ArrayList<>();
     private static SharedValues instance;
 
@@ -58,6 +59,14 @@ public class SharedValues {
 
     public void setUserList(List<User> userList) {
         this.userList = userList;
+    }
+
+    public void storeMessagesUnread(int n){
+        numMessagesUnread = n;
+    }
+
+    public int getMessagesUnread(){
+        return numMessagesUnread;
     }
 
 }

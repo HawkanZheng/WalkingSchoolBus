@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import project.cmpt276.model.walkingschoolbus.Group;
 import project.cmpt276.model.walkingschoolbus.GroupCollection;
@@ -71,14 +73,14 @@ public class mainMenu extends AppCompatActivity {
         setupEmergencyBtn();
         setupEmergencySendBtn();
         setUpEditButton();
+        getUnreadMessages();
     }
 
     //refresh name in greeting after it has been modified in the edit user activity
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
-
+        getUnreadMessages();
         setupGreeting();
     }
 
@@ -86,17 +88,13 @@ public class mainMenu extends AppCompatActivity {
     private void setupGreeting() {
         user = User.getInstance();
         TextView view = findViewById(R.id.greeting);
-
-        if(!user.getName().equals(""))
-        {
+        if(!user.getName().equals("")) {
             view.setText(getString(R.string.hi) + " " + user.getName() + ". " + getString(R.string.welcome_to_the_walking_school_bus_app));
     }
 
-        else
-        {
+        else {
             view.setText(getString(R.string.hi) + ". " + getString(R.string.welcome_to_the_walking_school_bus_app));
         }
-
     }
 
     private void response(List<User> returnedUsers) {
@@ -291,14 +289,28 @@ public class mainMenu extends AppCompatActivity {
 
     //server call that gets all the unread messages
     private void getUnreadMessages(){
-        Call<List<Message>> caller = proxy.getMessagesToUserUnread(user.getId(), "unread");
-        ProxyBuilder.callProxy(mainMenu.this, caller, returnedMessages -> messagesResponse(returnedMessages));
+        Button messagesBtn = findViewById(R.id.btnMessagingActivity);
+        messagesBtn.setText("Messages (" + sharedValues.getMessagesUnread() + ")");
+        //Timer to refresh the UI for messages notification.
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                //Pull from the server every minute
+                Call<List<Message>> caller = proxy.getMessagesToUserUnread(user.getId(), "unread");
+                ProxyBuilder.callProxy(mainMenu.this, caller, returnedMessages -> messagesResponse(returnedMessages));
+            }
+        }, 0,60000);
+
     }
 
     private void messagesResponse(List<Message> returnedMessages) {
         //number of unread messages
+        Button messagesBtn = findViewById(R.id.btnMessagingActivity);
         int numNewMessages = returnedMessages.size();
-        //TODO: Put number in Textview notification that says how many unread messages the user has
+        sharedValues.storeMessagesUnread(numNewMessages);
+        messagesBtn.setText("Messages (" + sharedValues.getMessagesUnread() + ")");
+        Log.i("MessagesBtn", "Refreshing button");
     }
 
     @Override
@@ -307,6 +319,3 @@ public class mainMenu extends AppCompatActivity {
         moveTaskToBack(true);
     }
 }
-
-
-
