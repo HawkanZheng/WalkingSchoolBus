@@ -73,6 +73,7 @@ public class mainMenu extends AppCompatActivity {
         setUpEditButton();
     }
 
+    //refresh name in greeting after it has been modified in the edit user activity
     @Override
     protected void onResume()
     {
@@ -81,6 +82,7 @@ public class mainMenu extends AppCompatActivity {
         setupGreeting();
     }
 
+    //set message with user's name
     private void setupGreeting() {
         user = User.getInstance();
         TextView view = findViewById(R.id.greeting);
