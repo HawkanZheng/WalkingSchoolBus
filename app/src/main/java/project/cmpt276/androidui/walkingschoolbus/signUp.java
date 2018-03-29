@@ -152,6 +152,7 @@ public class signUp extends AppCompatActivity {
     }
 
 
+    //sets the error message depending on what the user is missing
     private void changeError(String error){
         TextView test = findViewById(R.id.errorMessages);
         test.setText(error);
@@ -177,11 +178,13 @@ public class signUp extends AppCompatActivity {
         editor.apply();
     }
 
+    //user for keeping the user signed in
     static public String getSavedPassword(Context context){
         SharedPreferences prefs = context.getSharedPreferences("user info", MODE_PRIVATE);
         return prefs.getString("password", "");
     }
 
+    //user for keeping the user signed in
     static public String getSavedUserName(Context context){
         SharedPreferences prefs = context.getSharedPreferences("user info", MODE_PRIVATE);
         return prefs.getString("user name", "");

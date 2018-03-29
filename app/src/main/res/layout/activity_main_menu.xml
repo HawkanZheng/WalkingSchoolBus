@@ -28,7 +28,7 @@
         android:layout_marginStart="16dp"
         android:backgroundTint="@android:color/holo_blue_dark"
         android:drawableStart="@android:drawable/ic_menu_myplaces"
-        android:text="Parents Dashboard"
+        android:text="@string/parents_dashboard"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
     android:layout_marginBottom="36dp"
@@ -109,7 +109,7 @@
         android:layout_marginTop="60dp"
         android:backgroundTint="@android:color/holo_blue_dark"
         android:drawableStart="@android:drawable/ic_menu_edit"
-        android:text="Edit my Info"
+        android:text="@string/edit_my_info"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
