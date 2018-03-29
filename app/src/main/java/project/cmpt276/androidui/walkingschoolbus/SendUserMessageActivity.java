@@ -83,7 +83,7 @@ public class SendUserMessageActivity extends AppCompatActivity {
 
                 //Server call
                 sendMessageToGroup(message);
-                Toast.makeText(SendUserMessageActivity.this,getMessage(),Toast.LENGTH_SHORT).show();
+
 
             }
         });
@@ -97,7 +97,7 @@ public class SendUserMessageActivity extends AppCompatActivity {
              String message = getMessage();
                 //Server call
                 sendMessageToParents(message);
-                Toast.makeText(SendUserMessageActivity.this,getMessage(),Toast.LENGTH_SHORT).show();
+
 
             }
         });
@@ -173,5 +173,6 @@ public class SendUserMessageActivity extends AppCompatActivity {
     //response to message server call
     private void messageResponse(Message returnedMessage) {
         Log.i("Returned Message", "Message returned " + returnedMessage.getText() + "\n");
+        Toast.makeText(SendUserMessageActivity.this,getMessage(),Toast.LENGTH_SHORT).show();
     }
 }
