@@ -30,6 +30,7 @@ public class MessagingActivity extends AppCompatActivity {
     private User user;
 
     ArrayList<String> unreadMessages = new ArrayList<>();
+    ArrayList<Boolean> readMessageMap = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,10 +122,14 @@ public class MessagingActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
 
-                //Clicked messages are considered 'Read'
-                parent.getChildAt(position).setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
-                Call<User> caller = proxy.markMessage(user.getUnreadMessages().get(position).getId(), user.getId(), true);
-                ProxyBuilder.callProxy(MessagingActivity.this, caller, returnedUser -> userResponse(returnedUser));
+                if(!readMessageMap.get(position)){
+                    //Clicked messages are considered 'Read'
+                    parent.getChildAt(position).setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
+                    Call<User> caller = proxy.markMessage(user.getUnreadMessages().get(position).getId(), user.getId(), true);
+                    ProxyBuilder.callProxy(MessagingActivity.this, caller, returnedUser -> userResponse(returnedUser));
+
+                    readMessageMap.set(position,true);
+                }
             }
         });
     }
@@ -148,6 +153,7 @@ public class MessagingActivity extends AppCompatActivity {
          */
         for(Message message: returnedMessages){
             unreadMessages.add(message.messageToString());
+            readMessageMap.add(false);
         }
         populateList();
     }
