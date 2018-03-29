@@ -46,10 +46,7 @@ public class signUpOptionalInfo extends AppCompatActivity implements AdapterView
 
     private String password;
     private String userName;
-
     private String name;
-//    private String email;
-
 
     private Integer birthYear = null;
     private Integer birthMonth = null;
@@ -115,11 +112,10 @@ public class signUpOptionalInfo extends AppCompatActivity implements AdapterView
         });
     }
 
+    //create a new user with all the info provided
     private void setNewUser() {
         user.setPassword(password);
-//        user.setu(userName);
         user.setName(name);
-//        user.set
         user.setEmail(userName);
         user.setBirthYear(birthYear);
         user.setBirthMonth(birthMonth);
@@ -232,6 +228,7 @@ public class signUpOptionalInfo extends AppCompatActivity implements AdapterView
 
     }
 
+    //set user info from the item selected in each spinner
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String info = adapterView.getItemAtPosition(i).toString();
@@ -299,6 +296,7 @@ public class signUpOptionalInfo extends AppCompatActivity implements AdapterView
     }
 
 
+    //displays message when the user logs in
     private void greetingMessage(){
         TextView message = findViewById(R.id.greetingMessage);
         new CountDownTimer(3000, 1000) {
