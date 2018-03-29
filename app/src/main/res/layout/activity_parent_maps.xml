@@ -5,4 +5,14 @@
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="project.cmpt276.androidui.walkingschoolbus.ParentMapsActivity" />
+    tools:context="project.cmpt276.androidui.walkingschoolbus.ParentMapsActivity">
+
+    <Button
+        android:id="@+id/nextUserBtn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:backgroundTint="@android:color/holo_green_light"
+        android:drawableStart="@android:drawable/ic_media_ff"
+        android:gravity="top|left"
+        android:textAlignment="center" />
+</fragment>
