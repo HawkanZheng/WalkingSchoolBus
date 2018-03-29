@@ -287,6 +287,7 @@ public class mainMenu extends AppCompatActivity {
     private void getUnreadMessages(){
         Button messagesBtn = findViewById(R.id.btnMessagingActivity);
         messagesBtn.setText("Messages (" + sharedValues.getMessagesUnread() + ")");
+        //Timer to refresh the
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -295,7 +296,7 @@ public class mainMenu extends AppCompatActivity {
                 Call<List<Message>> caller = proxy.getMessagesToUserUnread(user.getId(), "unread");
                 ProxyBuilder.callProxy(mainMenu.this, caller, returnedMessages -> messagesResponse(returnedMessages));
             }
-        }, 0,30000);
+        }, 0,60000);
 
     }
 
