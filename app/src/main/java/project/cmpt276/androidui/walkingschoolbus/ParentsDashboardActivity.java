@@ -43,7 +43,7 @@ public class ParentsDashboardActivity extends AppCompatActivity {
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
 
         //Initial population of current user list
-        getMonitorsUsers(user);
+//        getMonitorsUsers(user);
 
         setUpAddButton();
         setupActionBarBack();
@@ -55,8 +55,7 @@ public class ParentsDashboardActivity extends AppCompatActivity {
 
     //refresh list on resume
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
         Log.i("Resume", "On Resume here");
         getMonitorsUsers(user);
