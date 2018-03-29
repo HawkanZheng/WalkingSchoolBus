@@ -10,14 +10,17 @@
 
     <EditText
         android:id="@+id/updateChildAddress"
-        android:layout_width="215dp"
-        android:layout_height="0dp"
+        android:layout_width="238dp"
+        android:layout_height="43dp"
         android:layout_marginLeft="16dp"
         android:ems="10"
-        android:hint="New Address"
+        android:hint="@string/new_address"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/updateChildHomeNumber"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/updateChildName" />
 
     <Button
@@ -26,118 +29,137 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Done"
+        android:layout_marginRight="16dp"
+        android:text="@string/done"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/updateChildEmergencyInfo"
-        app:layout_constraintTop_toBottomOf="@+id/updateChildGrade" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/updateChildGrade"
+        app:layout_constraintVertical_bias="1.0" />
 
     <EditText
         android:id="@+id/updateChildHomeNumber"
-        android:layout_width="238dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
         android:ems="10"
-        android:hint="New Home Phone Number"
+        android:hint="@string/new_home_phone_number"
         android:inputType="number"
         app:layout_constraintBottom_toTopOf="@+id/updateChildCellNumber"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/updateChildAddress"
+        app:layout_constraintStart_toStartOf="@+id/updateChildAddress"
         app:layout_constraintTop_toBottomOf="@+id/updateChildAddress" />
 
     <EditText
         android:id="@+id/updateChildCellNumber"
-        android:layout_width="238dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
         android:ems="10"
-        android:hint="New Cellphone Number"
+        android:hint="@string/new_cellphone_number"
         android:inputType="number"
-        app:layout_constraintBottom_toTopOf="@+id/updateChildGrade"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/updateChildHomeNumber"
+        app:layout_constraintEnd_toEndOf="@+id/updateChildHomeNumber"
+        app:layout_constraintStart_toStartOf="@+id/updateChildHomeNumber"
         app:layout_constraintTop_toBottomOf="@+id/updateChildHomeNumber" />
 
     <EditText
         android:id="@+id/updateChildTeacher"
-        android:layout_width="157dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="13dp"
+        android:layout_marginEnd="17dp"
+        android:layout_marginStart="19dp"
         android:ems="10"
-        android:hint="New Teacher's Name"
+        android:hint="@string/new_teacher_s_name"
         android:inputType="textPersonName"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updateChildCellNumber" />
+        app:layout_constraintBottom_toTopOf="@+id/updateChildBirthDay"
+        app:layout_constraintEnd_toStartOf="@+id/updateChildGrade"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changeChildInfoGreeting" />
 
     <TextView
         android:id="@+id/updateChildBirthDay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:text="Edit Birth Day (MM/YY)"
-        app:layout_constraintLeft_toLeftOf="parent"
-        tools:layout_editor_absoluteY="291dp" />
+        android:text="@string/edit_birth_day_mm_yy"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/updateChildMonth"
+        app:layout_constraintStart_toStartOf="@+id/updateChildMonth"
+        app:layout_constraintTop_toBottomOf="@+id/updateChildTeacher" />
 
     <EditText
         android:id="@+id/updateChildEmergencyInfo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="55dp"
-        android:layout_marginEnd="89dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginBottom="118dp"
         android:ems="10"
-        android:hint="New Emergency Info"
+        android:hint="@string/new_emergency_info"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/doneChildBtn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updateChildYear" />
+        app:layout_constraintEnd_toEndOf="@+id/updateChildTeacher"
+        app:layout_constraintStart_toStartOf="@+id/updateChildMonth"
+        app:layout_constraintTop_toBottomOf="@+id/updateChildMonth" />
 
     <Spinner
         android:id="@+id/updateChildMonth"
         android:layout_width="0dp"
-        android:layout_height="27dp"
-        android:layout_marginBottom="110dp"
-        android:layout_marginEnd="29dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="43dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="113dp"
-        app:layout_constraintBottom_toBottomOf="@+id/updateChildEmergencyInfo"
+        app:layout_constraintBottom_toTopOf="@+id/updateChildEmergencyInfo"
         app:layout_constraintEnd_toStartOf="@+id/updateChildYear"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/updateChildTeacher"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/updateChildBirthDay" />
 
     <Spinner
         android:id="@+id/updateChildYear"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="67dp"
-        android:layout_marginEnd="45dp"
-        app:layout_constraintBottom_toTopOf="@+id/updateChildEmergencyInfo"
+        android:layout_height="0dp"
+        android:layout_marginBottom="163dp"
+        android:layout_marginEnd="31dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/updateChildMonth"
-        app:layout_constraintTop_toBottomOf="@+id/updateChildBirthDay" />
+        app:layout_constraintTop_toBottomOf="@+id/updateChildName" />
 
     <Spinner
         android:id="@+id/updateChildGrade"
-        android:layout_width="176dp"
+        android:layout_width="109dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="198dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="206dp"
+        android:layout_marginBottom="181dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="226dp"
         app:layout_constraintBottom_toTopOf="@+id/doneChildBtn"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/updateChildTeacher"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/updateChildName"
+        android:layout_width="238dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="215dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="41dp"
+        android:ems="10"
+        android:hint="@string/new_name"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/updateChildYear"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/changeChildInfoGreeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="180dp"
         android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="New Name"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/updateChildAddress"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="@string/textview"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/updateChildTeacher"
+        app:layout_constraintStart_toStartOf="@+id/updateChildName"
         app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>

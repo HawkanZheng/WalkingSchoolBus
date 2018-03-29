@@ -58,39 +58,10 @@ public class signUp extends AppCompatActivity {
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), null);
         groupList = GroupCollection.getInstance();
         getInput();
-        setupSignUpBtn();
         previousLogin();
         setUpNextButton();
     }
 
-    private void setupSignUpBtn() {
-        Button button = findViewById(R.id.join);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Build new user
-                setUserInfo();
-                if(!errorCheck()) {
-                    greetingMessage();
-                    user.setPassword(password);
-                    user.setEmail(userName);
-                    user.setName(name);
-                    Call<User> caller = proxy.createNewUser(user);
-                    ProxyBuilder.callProxy(signUp.this, caller, returnedUser -> response(returnedUser));
-
-
-                    SharedPreferences prefs = getSharedPreferences("user info", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString("user name", userName);
-                    editor.putString("password", password);
-                    editor.apply();
-
-
-
-                }
-            }
-        });
-    }
 
     public static Intent makeIntent(Context context) {
         return new Intent(context, signUp.class);

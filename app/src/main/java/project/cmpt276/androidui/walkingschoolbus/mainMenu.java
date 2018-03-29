@@ -1,9 +1,13 @@
 package project.cmpt276.androidui.walkingschoolbus;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Looper;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,6 +49,7 @@ public class mainMenu extends AppCompatActivity {
     private SharedValues sharedValues;
 
     private boolean isEmergencyVisible = false;
+    private final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
 
 
     @Override
@@ -83,7 +88,7 @@ public class mainMenu extends AppCompatActivity {
         TextView view = findViewById(R.id.greeting);
         if(!user.getName().equals("")) {
             view.setText(getString(R.string.hi) + " " + user.getName() + ". " + getString(R.string.welcome_to_the_walking_school_bus_app));
-        }
+    }
 
         else {
             view.setText(getString(R.string.hi) + ". " + getString(R.string.welcome_to_the_walking_school_bus_app));
@@ -107,8 +112,14 @@ public class mainMenu extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mainMenu.this, MapsActivity.class);
-                startActivity(intent);
+                if (ActivityCompat.checkSelfPermission(mainMenu.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        Intent intent = new Intent(mainMenu.this, MapsActivity.class);
+                        startActivity(intent);
+
+                }else {
+                    //Prompt user for access to their device's location.
+                    ActivityCompat.requestPermissions(mainMenu.this, perms, 076);
+                }
             }
         });
     }
