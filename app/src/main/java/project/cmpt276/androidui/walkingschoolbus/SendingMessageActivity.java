@@ -117,7 +117,7 @@ public class SendingMessageActivity extends AppCompatActivity {
                     groupSelected = user.getLeadsGroups().get(position);
                 }
 
-                Toast.makeText(SendingMessageActivity.this, "Clicked " + position,Toast.LENGTH_SHORT).show();
+                Toast.makeText(SendingMessageActivity.this, getString(R.string.sending_messaging_activity_clicked) + position,Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -174,13 +174,13 @@ public class SendingMessageActivity extends AppCompatActivity {
             message.setEmergency(false);
             Call<Message> caller = proxy.groupMessage(groupSelected.getId(), message);
             ProxyBuilder.callProxy(SendingMessageActivity.this, caller, returnedMessage -> messageResponse(returnedMessage));
-            Toast.makeText(SendingMessageActivity.this, "Message: " + text, Toast.LENGTH_SHORT).show();
+            Toast.makeText(SendingMessageActivity.this, getString(R.string.sending_message_activity_Message) + text, Toast.LENGTH_SHORT).show();
         }
         else if(groupSelected.getId() == 0){
-            Toast.makeText(SendingMessageActivity.this, "You must select a group you lead", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SendingMessageActivity.this, R.string.sending_message_activity_you_must_leader, Toast.LENGTH_SHORT).show();
         }
         else if(text.isEmpty()){
-            Toast.makeText(SendingMessageActivity.this, "Message has no text. Message not sent.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SendingMessageActivity.this, R.string.sending_message_activity_no_text_message, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -202,7 +202,7 @@ public class SendingMessageActivity extends AppCompatActivity {
             }
         }
         else{
-            Toast.makeText(SendingMessageActivity.this, "Message has no text. Message not sent.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SendingMessageActivity.this, R.string.sending_message_activity_message_can_be_sent, Toast.LENGTH_SHORT).show();
         }
     }
 }

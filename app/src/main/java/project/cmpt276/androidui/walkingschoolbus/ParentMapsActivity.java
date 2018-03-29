@@ -216,7 +216,7 @@ public class ParentMapsActivity extends FragmentActivity implements OnMapReadyCa
                 if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 } else {
                     ActivityCompat.requestPermissions(this,perms ,LOCATION_PERMISSION_REQUESTCODE);
-                    Toast.makeText(this, "Please allow device location", Toast.LENGTH_LONG);
+                    Toast.makeText(this, R.string.parent_map_activity, Toast.LENGTH_LONG);
                 }
                 return;
             }

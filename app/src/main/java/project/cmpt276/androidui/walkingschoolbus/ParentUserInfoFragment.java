@@ -56,7 +56,7 @@ public class ParentUserInfoFragment extends AppCompatDialogFragment {
 
         // Build Dialog
         return new AlertDialog.Builder(getActivity())
-                .setTitle("User Info")
+                .setTitle(R.string.parent_fragment_user_info_title)
                 .setView(v)
                 .setPositiveButton(android.R.string.ok,listener)
                 .create();

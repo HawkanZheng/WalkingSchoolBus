@@ -159,4 +159,13 @@
     <string name="join_with_optional_info">Join</string>
     <string name="emergency_info">Emergency Info</string>
     <string name="my_groups_press_and_hold_on_a_group_to_set_it_as_your_current_group">My Groups, press and hold on a group to set it as your current group</string>
+    <string name="parent_fragment_user_info_title">User Info</string>
+    <string name="sending_messaging_activity_clicked">Clicked</string>
+    <string name="sending_message_activity_Message">Message:</string>
+    <string name="sending_message_activity_you_must_leader">You must select a group you lead</string>
+    <string name="sending_message_activity_no_text_message">Message has no text. Message not sent.</string>
+    <string name="sending_message_activity_message_can_be_sent">Message has no text. Message not sent.</string>
+    <string name="send_userMessage_activity_message_body">Message has no text. Message not sent.</string>
+    <string name="R.string.send_userMessage_activity_you_must_leader">You must select a group you lead</string>
+    <string name="parent_map_activity">Please allow device location</string>
 </resources>
