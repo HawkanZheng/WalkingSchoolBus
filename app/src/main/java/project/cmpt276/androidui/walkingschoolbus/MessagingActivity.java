@@ -67,7 +67,7 @@ public class MessagingActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.i("RESUME MESSAGING","MESSAGING REFRESHING");
-        user = User.getInstance();
+        //user = User.getInstance();
         getMessagesForUser();
     }
 
@@ -135,8 +135,9 @@ public class MessagingActivity extends AppCompatActivity {
                     //Clicked messages are considered 'Read'
 
                     parent.getChildAt(position).setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
-                    Call<User> caller = proxy.markMessage(user.getUnreadMessages().get(position).getId(), user.getId(), true);
-                    ProxyBuilder.callProxy(MessagingActivity.this, caller, returnedUser -> userResponse(returnedUser));
+                    Call<List<Message>> caller = proxy.getMessagesToUserUnread(user.getId(), "unread");
+                    ProxyBuilder.callProxy(MessagingActivity.this, caller, returnedMessages -> messagesMarkResponse(returnedMessages, position));
+
 
                     readMessageMap.set(position,true);
                     if(sharedValues.getMessagesUnread() > 0){
@@ -147,10 +148,17 @@ public class MessagingActivity extends AppCompatActivity {
         });
     }
 
+    private void messagesMarkResponse(List<Message> returnedMessages, int position) {
+        Call<User> caller = proxy.markMessage(returnedMessages.get(position).getId(), user.getId(), true);
+        ProxyBuilder.callProxy(MessagingActivity.this, caller, returnedUser -> userResponse(returnedUser));
+
+    }
+
     private void userResponse(User returnedUser) {
         Log.i("Message Marked:", "Message now read");
         Toast.makeText(MessagingActivity.this, "Message now read.",Toast.LENGTH_SHORT).show();
-        User.setUser(returnedUser);
+        getMessagesForUser();
+        //User.setUser(returnedUser);
 
     }
 

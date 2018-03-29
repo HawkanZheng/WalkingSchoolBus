@@ -161,7 +161,7 @@ public class SendUserMessageActivity extends AppCompatActivity {
             Call<Message> caller = proxy.groupMessage(groupSelected.getId(), message);
             ProxyBuilder.callProxy(SendUserMessageActivity.this, caller, returnedMessage -> messageResponse(returnedMessage));
         }
-        else if(groupSelected == null){
+        else if(groupSelected.getId() == 0){
             Toast.makeText(SendUserMessageActivity.this, "You must select a group you lead", Toast.LENGTH_SHORT).show();
     }
         else if(text.isEmpty()){

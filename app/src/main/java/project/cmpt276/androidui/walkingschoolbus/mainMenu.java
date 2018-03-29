@@ -272,6 +272,9 @@ public class mainMenu extends AppCompatActivity {
                     }
                     Toast.makeText(mainMenu.this, "Message Sent: " + getEmergencyMessage(), Toast.LENGTH_SHORT).show();
                 }
+                else{
+                    Toast.makeText(mainMenu.this, "Message has no text. Message not sent.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
