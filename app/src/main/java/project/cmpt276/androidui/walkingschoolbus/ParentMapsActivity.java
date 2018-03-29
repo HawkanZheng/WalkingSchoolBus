@@ -3,7 +3,6 @@ package project.cmpt276.androidui.walkingschoolbus;
 import android.Manifest;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
@@ -33,6 +32,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import project.cmpt276.model.walkingschoolbus.GoogleMapsInterface;
@@ -44,7 +44,6 @@ import project.cmpt276.server.walkingschoolbus.WGServerProxy;
 import retrofit2.Call;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_AZURE;
-import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED;
 
 public class ParentMapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -62,6 +61,8 @@ public class ParentMapsActivity extends FragmentActivity implements OnMapReadyCa
     private static final long LOCATION_UPDATE_RATE_IN_MS = 10000;
     private static final int LOCATION_PERMISSION_REQUESTCODE = 076;
     private final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
+    private ArrayList<Marker> markers;
+    private List<User> monitoring;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,12 +70,12 @@ public class ParentMapsActivity extends FragmentActivity implements OnMapReadyCa
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-
         user = User.getInstance();
         sharedValues = SharedValues.getInstance();
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
         gMapsInterface = GoogleMapsInterface.getInstance(this);
         locationService = LocationServices.getFusedLocationProviderClient(this);
+        markers = new ArrayList<Marker>();
         checkLocationsEnabled();
         mapFragment.getMapAsync(this);
     }
@@ -83,26 +84,49 @@ public class ParentMapsActivity extends FragmentActivity implements OnMapReadyCa
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         displayMonitoredUsers();
+        displayMonitoredUsersLeaders();
     }
 
-    //Pull monitored users from the user's list of monitored users and displays them on this map.
+    //Pull monitoring users from the user's list of monitoring users and displays them on this map.
     private void displayMonitoredUsers(){
-        List<User> monitoring = user.getMonitorsUsers();
+        monitoring = user.getMonitorsUsers();
         for(int i = 0; i < monitoring.size(); i++){
-            User u = monitoring.get(i);
-            Log.i("DisplayUsers", u.getName() + " " + u.getLastGpsLocation().toString());
-            //Only create user blips who have a last location registered.
-            if(u.getLastGpsLocation() != null){
-                Call<User> caller = proxy.getUserById(u.getId());
-                ProxyBuilder.callProxy(this, caller, returnedUser -> createUserBlips(u));
-            }
+            //Get monitored user
+            User monitoredUser = monitoring.get(i);
+            Call<User> caller = proxy.getUserById(monitoredUser.getId());
+            ProxyBuilder.callProxy(this, caller, returnedUser -> createUserBlips(monitoredUser));
+        }
+    }
+
+    private void displayMonitoredUsersLeaders(){
+        for(int i = 0; i < monitoring.size(); i++){
+            //Get a monitored user's groups.
+            User monitoredUser = monitoring.get(i);
+            List<Group> groupsOfMonitored = monitoredUser.getMemberOfGroups();
+                for(int j = 0; j < groupsOfMonitored.size(); j++){
+                    if(groupsOfMonitored.get(j) != null && !groupsOfMonitored.isEmpty()){
+                        Call<Group> caller = proxy.getGroupById(groupsOfMonitored.get(j).getId());
+                        ProxyBuilder.callProxy(this, caller, returnedGroup -> createUserBlips(returnedGroup.getLeader()));
+                    }
+                }
         }
     }
 
     private void createUserBlips(User u){
-        LatLng lastLocation = new LatLng(u.getLastGpsLocation().getLat(), u.getLastGpsLocation().getLng());
-        MarkerOptions userMarker = gMapsInterface.makeMarker(lastLocation,HUE_AZURE,u.getName(),"Last upload: " + u.getLastGpsLocation().getTimestamp().toString());
-        mMap.addMarker(userMarker);
+        //Make sure the user has a last location registered.
+        Log.i("DebugParentsDash", u.getLastGpsLocation().toString());
+        if(u.getLastGpsLocation().getLat() != null && u.getLastGpsLocation().getLng()  != null &&  u.getLastGpsLocation().getTimestamp() != null) {
+            LatLng lastLocation = new LatLng(u.getLastGpsLocation().getLat(), u.getLastGpsLocation().getLng());
+            MarkerOptions userMarker = gMapsInterface.makeMarker(lastLocation, HUE_AZURE, "User: " + u.getName(), "Last upload: " + u.getLastGpsLocation().getTimestamp().toString());
+            Marker m = mMap.addMarker(userMarker);
+            //Add it to a list of markers so we can traverse through all the markers by moving the camera to the marker.
+            markers.add(m);
+        }
+    }
+
+
+    private void traverseMonitoredUsers(){
+        gMapsInterface.cameraSettings(markers.get(0).getPosition(),0.15f);
     }
 
     //Begin listening for updates.
