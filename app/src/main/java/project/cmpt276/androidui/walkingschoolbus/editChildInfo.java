@@ -24,6 +24,9 @@ import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
 import retrofit2.Call;
 
+/**
+ * class that allows the user to edit the info of someone they monitor
+ */
 public class editChildInfo extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private SharedValues sharedValues;
     private User user;
@@ -49,7 +52,6 @@ public class editChildInfo extends AppCompatActivity implements AdapterView.OnIt
         sharedValues = SharedValues.getInstance();
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
         user = sharedValues.getUser();
-//        getUser(user);
         setCurrentInfo();
         setUpDoneButton();
         setUpMonthSpinner();
@@ -57,20 +59,6 @@ public class editChildInfo extends AppCompatActivity implements AdapterView.OnIt
         setUpGradeSpinner();
         setUpGreeting();
     }
-
-
-//    private void getUser(User aUser) {
-//        Call<User> caller = proxy.getUserById(aUser.getId());
-//        ProxyBuilder.callProxy(editChildInfo.this, caller, returnedUser -> userResponse(returnedUser));
-//    }
-//
-//    private void userResponse(User returnedUser) {
-//        //Set text view
-////        setView(returnedUser);
-//        sharedValues.setUser(returnedUser);
-//        user = sharedValues.getUser();
-////        getMemberOfGroups(user);
-//    }
 
     private void setUpDoneButton()
     {
@@ -245,6 +233,7 @@ public class editChildInfo extends AppCompatActivity implements AdapterView.OnIt
         return new Intent(context, editChildInfo.class);
     }
 
+    //customizes the greeting at the top with the child's name
     private void setUpGreeting()
     {
         TextView greeting = findViewById(R.id.changeChildInfoGreeting);
