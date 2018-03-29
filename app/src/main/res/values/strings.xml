@@ -158,4 +158,5 @@
     <string name="birthday_mm_yy">Birthday (MM/YY)</string>
     <string name="join_with_optional_info">Join</string>
     <string name="emergency_info">Emergency Info</string>
+    <string name="my_groups_press_and_hold_on_a_group_to_set_it_as_your_current_group">My Groups, press and hold on a group to set it as your current group</string>
 </resources>
