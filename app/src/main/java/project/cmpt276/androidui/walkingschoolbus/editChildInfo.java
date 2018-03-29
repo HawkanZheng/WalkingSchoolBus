@@ -55,6 +55,7 @@ public class editChildInfo extends AppCompatActivity implements AdapterView.OnIt
         setUpMonthSpinner();
         setUpYearSpinner();
         setUpGradeSpinner();
+        setUpGreeting();
     }
 
 
@@ -155,7 +156,6 @@ public class editChildInfo extends AppCompatActivity implements AdapterView.OnIt
         ArrayList<String> years = new ArrayList<>();
         years.add("Year");
         int currentYear = 2018;
-//        int yearForCalculation = currentYear++;
         int minYear = 1900;
         for(int i = currentYear; i>=minYear; i--)
         {
@@ -243,5 +243,11 @@ public class editChildInfo extends AppCompatActivity implements AdapterView.OnIt
 
     public static Intent makeIntent(Context context){
         return new Intent(context, editChildInfo.class);
+    }
+
+    private void setUpGreeting()
+    {
+        TextView greeting = findViewById(R.id.changeChildInfoGreeting);
+        greeting.setText("Change " + user.getName()+ "'s info");
     }
 }

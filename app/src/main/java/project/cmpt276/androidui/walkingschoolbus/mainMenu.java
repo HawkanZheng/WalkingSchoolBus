@@ -82,7 +82,7 @@ public class mainMenu extends AppCompatActivity {
         if(!user.getName().equals(""))
         {
             view.setText(getString(R.string.hi) + " " + user.getName() + ". " + getString(R.string.welcome_to_the_walking_school_bus_app));
-        }
+    }
 
         else
         {
