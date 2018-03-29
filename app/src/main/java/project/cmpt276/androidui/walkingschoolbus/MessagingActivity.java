@@ -131,7 +131,6 @@ public class MessagingActivity extends AppCompatActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
-
                 if(!readMessageMap.get(position)){
                     //Clicked messages are considered 'Read'
 
@@ -140,6 +139,9 @@ public class MessagingActivity extends AppCompatActivity {
                     ProxyBuilder.callProxy(MessagingActivity.this, caller, returnedUser -> userResponse(returnedUser));
 
                     readMessageMap.set(position,true);
+                    if(sharedValues.getMessagesUnread() > 0){
+                        sharedValues.storeMessagesUnread(sharedValues.getMessagesUnread()-1);
+                    }
                 }
             }
         });

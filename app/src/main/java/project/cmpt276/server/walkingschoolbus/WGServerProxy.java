@@ -85,7 +85,6 @@ public interface WGServerProxy {
     Call<Group> createGroup(@Body Group group);
 
 
-
     @GET("/groups/{id}")
     Call<Group> getGroupById(@Path("id") long groupId);
 
