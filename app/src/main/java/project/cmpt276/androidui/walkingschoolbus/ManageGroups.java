@@ -92,7 +92,7 @@ public class ManageGroups extends AppCompatActivity {
 
     private void saveGroupDataLocal(Group grp){
         sharedValues.setGroup(grp);
-        Toast.makeText(ManageGroups.this, "Current Group is: " + grp.getGroupDescription(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(ManageGroups.this, getString(R.string.manage_current_group) + grp.getGroupDescription(), Toast.LENGTH_SHORT).show();
         Log.i("GroupsList", grp.groupToListString());
     }
 
@@ -108,7 +108,7 @@ public class ManageGroups extends AppCompatActivity {
                     Call<Void> caller = proxy.deleteGroupMember(id, user.getId());
                     ProxyBuilder.callProxy(ManageGroups.this, caller, returnedNothing -> leaveGroupResponse(returnedNothing));
                 }else{
-                    Toast.makeText(ManageGroups.this, "Please enter a Group ID", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ManageGroups.this, R.string.Enter_group_id_manage, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -117,7 +117,7 @@ public class ManageGroups extends AppCompatActivity {
     private void leaveGroupResponse(Void returnedNothing) {
         Call<User> caller = proxy.getUserByEmail(user.getEmail());
         ProxyBuilder.callProxy(ManageGroups.this, caller, returnedUser -> userResponse(returnedUser));
-        Toast.makeText(ManageGroups.this, "Left Group.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(ManageGroups.this, R.string.left_group_manage, Toast.LENGTH_SHORT).show();
     }
 
     private void userResponse(User returnedUser) {

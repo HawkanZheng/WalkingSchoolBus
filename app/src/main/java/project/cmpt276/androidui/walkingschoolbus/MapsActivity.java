@@ -343,7 +343,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     //This places a marker at user's last known location... Could be used in a Panic feature.
     private void placeLastLocationMarker(Location location){
         deviceLocation = gMapsInterface.calculateDeviceLocation(location);
-        Toast.makeText(MapsActivity.this,"Adding marker at " + deviceLocation.latitude + ", " + deviceLocation.longitude, Toast.LENGTH_LONG).show();
+        Toast.makeText(MapsActivity.this,getString(R.string.add_marker_at_map) + deviceLocation.latitude + ", " + deviceLocation.longitude, Toast.LENGTH_LONG).show();
         mMap.addMarker(new MarkerOptions().position(deviceLocation).title("Your location"));
     }
 
@@ -793,7 +793,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void memberResponse(List<User> returnedMembers) {
-        Toast.makeText(MapsActivity.this, "Joined Group!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MapsActivity.this, R.string.joined_group_map, Toast.LENGTH_SHORT).show();
         refreshUser();
 
     }

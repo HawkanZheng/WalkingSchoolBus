@@ -159,6 +159,16 @@
     <string name="join_with_optional_info">Join</string>
     <string name="emergency_info">Emergency Info</string>
     <string name="my_groups_press_and_hold_on_a_group_to_set_it_as_your_current_group">My Groups, press and hold on a group to set it as your current group</string>
+    <string name="emergency_sent">Message Sent:</string>
+    <string name="emergency_notext">Message has no text. Message not sent.</string>
+    <string name="manage_current_group">Current Group is:</string>
+    <string name="left_group_manage">Left Group.</string>
+    <string name="Enter_group_id_manage">Please enter a Group ID</string>
+    <string name="joined_group_map">Joined Group!</string>
+    <string name="add_marker_at_map">Adding marker at</string>
+    <string name="message_read_messaging">Message now read.</string>
+    <string name="No_Group_ID_Monitored">Please enter a Group ID</string>
+    <string name="remove_from_group_monitored">Removed from group.</string>
     <string name="parent_fragment_user_info_title">User Info</string>
     <string name="sending_messaging_activity_clicked">Clicked</string>
     <string name="sending_message_activity_Message">Message:</string>

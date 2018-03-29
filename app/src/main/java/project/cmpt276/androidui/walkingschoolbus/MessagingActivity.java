@@ -156,7 +156,7 @@ public class MessagingActivity extends AppCompatActivity {
 
     private void userResponse(User returnedUser) {
         Log.i("Message Marked:", "Message now read");
-        Toast.makeText(MessagingActivity.this, "Message now read.",Toast.LENGTH_SHORT).show();
+        Toast.makeText(MessagingActivity.this, R.string.message_read_messaging,Toast.LENGTH_SHORT).show();
         getMessagesForUser();
         //User.setUser(returnedUser);
 

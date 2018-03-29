@@ -270,10 +270,10 @@ public class mainMenu extends AppCompatActivity {
                         Call<Message> caller = proxy.parentMessage(user.getId(), message);
                         ProxyBuilder.callProxy(mainMenu.this, caller, returnedMessage -> emergencyResponse(returnedMessage));
                     }
-                    Toast.makeText(mainMenu.this, "Message Sent: " + getEmergencyMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mainMenu.this, getString(R.string.emergency_sent) + getEmergencyMessage(), Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    Toast.makeText(mainMenu.this, "Message has no text. Message not sent.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mainMenu.this, R.string.emergency_notext, Toast.LENGTH_SHORT).show();
                 }
             }
         });

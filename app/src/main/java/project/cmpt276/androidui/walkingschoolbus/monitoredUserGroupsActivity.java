@@ -106,14 +106,14 @@ public class monitoredUserGroupsActivity extends AppCompatActivity {
                     Call<Void> caller = proxy.deleteGroupMember(id, user.getId());
                     ProxyBuilder.callProxy(monitoredUserGroupsActivity.this, caller, returnedNothing -> leaveGroupResponse(returnedNothing));
                 }else{
-                    Toast.makeText(monitoredUserGroupsActivity.this, "Please enter a Group ID", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(monitoredUserGroupsActivity.this, R.string.No_Group_ID_Monitored, Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
     private void leaveGroupResponse(Void returnedNothing) {
-        Toast.makeText(monitoredUserGroupsActivity.this, "Removed from group.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(monitoredUserGroupsActivity.this, R.string.remove_from_group_monitored, Toast.LENGTH_SHORT).show();
         Call<User> caller = proxy.getUserById(user.getId());
         ProxyBuilder.callProxy(monitoredUserGroupsActivity.this, caller, returnedUser -> userResponse(returnedUser));
     }
