@@ -289,7 +289,7 @@ public class mainMenu extends AppCompatActivity {
     private void getUnreadMessages(){
         Button messagesBtn = findViewById(R.id.btnMessagingActivity);
         messagesBtn.setText("Messages (" + sharedValues.getMessagesUnread() + ")");
-        //Timer to refresh the
+        //Timer to refresh the UI for messages notification.
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -317,6 +317,3 @@ public class mainMenu extends AppCompatActivity {
         moveTaskToBack(true);
     }
 }
-
-
-
