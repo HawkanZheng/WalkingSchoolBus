@@ -24,7 +24,6 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
 
 
     private WGServerProxy proxy;
-    private static final String TAG = "Test";
     private User user;
     private GroupCollection groupList;
     private SharedValues sharedValues;
@@ -78,6 +77,7 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
         finish();
     }
 
+    //set current views on start activity
     private void setCurrentInfo()
     {
         updateName = findViewById(R.id.updateName);
@@ -100,10 +100,10 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
-
+//set new user info
     private void setNewInfo()
     {
-        // TODO: 2018-03-27  make it so all changed info is saved on the server
+
         String newName = updateName.getText().toString();
         user.setName(newName);
 
@@ -125,7 +125,7 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
 
 
     }
-
+//month spinner for birthday
     private void setUpMonthSpinner()
     {
         Spinner spinner = findViewById(R.id.updateMonth);
@@ -135,7 +135,7 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
         spinner.setSelection(user.getBirthMonth());
         spinner.setOnItemSelectedListener(this);
     }
-
+//year spinner for birthday
     private void setUpYearSpinner()
     {
         ArrayList<String> years = new ArrayList<>();
@@ -161,7 +161,7 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
 
         spinner.setOnItemSelectedListener(this);
     }
-
+//grade spinner for grade
     private void setUpGradeSpinner()
     {
         Spinner spinner = findViewById(R.id.updateGrade);
@@ -177,11 +177,11 @@ public class editUserInfo extends AppCompatActivity implements AdapterView.OnIte
         spinner.setOnItemSelectedListener(this);
 
     }
-
+//when spinner item selected, set user info
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
-        // TODO: 2018-03-27 make it so changed info from spinners is saved on the server
+
         String info = adapterView.getItemAtPosition(i).toString();
 
         switch (adapterView.getId())

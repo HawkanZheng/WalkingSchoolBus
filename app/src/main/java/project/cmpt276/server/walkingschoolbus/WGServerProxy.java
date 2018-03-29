@@ -155,7 +155,7 @@ public interface WGServerProxy {
     @DELETE("/messages/{id}")
     Call<Void> deleteMessage(@Path("id") long id);
 
-    //Mark message as read/unread by user, true for unread and false for read
+    //Mark message as read/unread by user, false for unread and true for read
     @POST("/messages/{messageId}/readby/{userId}")
     Call<User> markMessage(@Path("messageId") long messageId, @Path("userId") Long userId, @Body boolean read);
 }

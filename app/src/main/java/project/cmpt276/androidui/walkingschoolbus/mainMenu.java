@@ -77,6 +77,7 @@ public class mainMenu extends AppCompatActivity {
     }
 
     private void setupGreeting() {
+        user = User.getInstance();
         TextView view = findViewById(R.id.greeting);
 
         if(!user.getName().equals(""))
