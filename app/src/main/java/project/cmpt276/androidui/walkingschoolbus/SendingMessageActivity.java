@@ -146,7 +146,7 @@ public class SendingMessageActivity extends AppCompatActivity {
 
                 //Server Send message;
                 sendMessageToParents(message);
-                Toast.makeText(SendingMessageActivity.this, "Message:" + message, Toast.LENGTH_SHORT).show();
+
             }
         });
     }
@@ -160,7 +160,7 @@ public class SendingMessageActivity extends AppCompatActivity {
 
                 //Server Send message;
                 sendMessageToGroup(message);
-                Toast.makeText(SendingMessageActivity.this, "Message: " + message, Toast.LENGTH_SHORT).show();
+
 
             }
         });
@@ -168,17 +168,25 @@ public class SendingMessageActivity extends AppCompatActivity {
 
 //Send message to chosen group
     public void sendMessageToGroup(String text){
-        Message message = new Message();
-        message.setText(text);
-        message.setEmergency(false);
-        Call<Message> caller = proxy.groupMessage(groupSelected.getId(), message);
-        ProxyBuilder.callProxy(SendingMessageActivity.this, caller, returnedMessage -> messageResponse(returnedMessage) );
-
-
+        if(groupSelected != null && !text.isEmpty()) {
+            Message message = new Message();
+            message.setText(text);
+            message.setEmergency(false);
+            Call<Message> caller = proxy.groupMessage(groupSelected.getId(), message);
+            ProxyBuilder.callProxy(SendingMessageActivity.this, caller, returnedMessage -> messageResponse(returnedMessage));
+            Toast.makeText(SendingMessageActivity.this, "Message: " + text, Toast.LENGTH_SHORT).show();
+        }
+        else if(groupSelected == null){
+            Toast.makeText(SendingMessageActivity.this, "You must select a group you lead", Toast.LENGTH_SHORT).show();
+        }
+        else if(text.isEmpty()){
+            Toast.makeText(SendingMessageActivity.this, "Message has no text. Message not sent.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void messageResponse(Message returnedMessage) {
         Log.i("Returned Message", "Message returned " + returnedMessage.getText() + "\n");
+
     }
 
     //Send message to group members' parents
@@ -186,9 +194,15 @@ public class SendingMessageActivity extends AppCompatActivity {
         Message message = new Message();
         message.setText(text);
         message.setEmergency(false);
-        for(User member : groupSelected.getMemberUsers()) {
-            Call<Message> caller = proxy.parentMessage(member.getId(), message);
-            ProxyBuilder.callProxy(SendingMessageActivity.this, caller, returnedMessage -> messageResponse(returnedMessage));
+        if(!text.isEmpty()) {
+            for (User member : groupSelected.getMemberUsers()) {
+                Call<Message> caller = proxy.parentMessage(member.getId(), message);
+                ProxyBuilder.callProxy(SendingMessageActivity.this, caller, returnedMessage -> messageResponse(returnedMessage));
+                Toast.makeText(SendingMessageActivity.this, "Message: " + text, Toast.LENGTH_SHORT).show();
+            }
+        }
+        else{
+            Toast.makeText(SendingMessageActivity.this, "Message has no text. Message not sent.", Toast.LENGTH_SHORT).show();
         }
     }
 }

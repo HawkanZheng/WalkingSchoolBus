@@ -74,15 +74,16 @@ public class ManageGroups extends AppCompatActivity {
             }
         });
     }
-
+//on click takes you to view members of the group
     private void setupListCallback() {
         ListView list = findViewById(R.id.myGroupsList);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                // TODO: extract the group selected and then populate the UserInfo accordingly
-
+                //extract the group selected and then populate the UserInfo accordingly
+                Group group = user.getMemberOfGroups().get(i);
+                sharedValues.setGroup(group);
                 Intent intent = new Intent(ManageGroups.this, ParentDashUserInfoActivity.class);
                 startActivity(intent);
             }

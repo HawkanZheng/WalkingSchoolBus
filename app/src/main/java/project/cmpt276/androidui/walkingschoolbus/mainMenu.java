@@ -241,24 +241,26 @@ public class mainMenu extends AppCompatActivity {
                 //refresh user
                 user = User.getInstance();
                 //Emergency message Server Calls
-                Message message = new Message();
-                message.setText(getEmergencyMessage());
-                message.setEmergency(true);
-                //if user is part of at least one group, sent to group leader, group members and parents
-                if(!user.getMemberOfGroups().isEmpty()) {
+                if (!getEmergencyMessage().isEmpty()){
+                    Message message = new Message();
+                    message.setText(getEmergencyMessage());
+                    message.setEmergency(true);
+                    //if user is part of at least one group, sent to group leader, group members and parents
+                    if (!user.getMemberOfGroups().isEmpty()) {
 
-                    for (Group group : user.getMemberOfGroups()) {
-                        Call<Message> caller = proxy.groupMessage(group.getId(), message);
+                        for (Group group : user.getMemberOfGroups()) {
+                            Call<Message> caller = proxy.groupMessage(group.getId(), message);
+                            ProxyBuilder.callProxy(mainMenu.this, caller, returnedMessage -> emergencyResponse(returnedMessage));
+                        }
+                    }
+                    //if user is not part of any group, send to parents
+                    else {
+
+                        Call<Message> caller = proxy.parentMessage(user.getId(), message);
                         ProxyBuilder.callProxy(mainMenu.this, caller, returnedMessage -> emergencyResponse(returnedMessage));
                     }
+                    Toast.makeText(mainMenu.this, "Message Sent: " + getEmergencyMessage(), Toast.LENGTH_SHORT).show();
                 }
-                //if user is not part of any group, send to parents
-                else{
-
-                    Call<Message> caller = proxy.parentMessage(user.getId(), message);
-                    ProxyBuilder.callProxy(mainMenu.this, caller, returnedMessage -> emergencyResponse(returnedMessage));
-                }
-                Toast.makeText(mainMenu.this, "Message Sent: " + getEmergencyMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

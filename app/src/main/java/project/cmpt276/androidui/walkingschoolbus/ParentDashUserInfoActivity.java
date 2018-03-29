@@ -86,6 +86,7 @@ public class ParentDashUserInfoActivity extends AppCompatActivity {
         list.setAdapter(adapter);
     }
 
+    //on list click takes you to view user parents
     private void setListCallback() {
         ListView list = findViewById(R.id.lstUserInGroupSelected);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
