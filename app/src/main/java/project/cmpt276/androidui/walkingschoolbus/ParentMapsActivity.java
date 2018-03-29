@@ -9,6 +9,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.ApiException;
@@ -60,6 +62,7 @@ public class ParentMapsActivity extends FragmentActivity implements OnMapReadyCa
     private static final int REQUEST_CHECK_SETTINGS = 100 ;
     private static final long LOCATION_UPDATE_RATE_IN_MS = 10000;
     private static final int LOCATION_PERMISSION_REQUESTCODE = 076;
+    private static int cycle = 0;
     private final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
     private ArrayList<Marker> markers;
     private List<User> monitoring;
@@ -77,6 +80,7 @@ public class ParentMapsActivity extends FragmentActivity implements OnMapReadyCa
         locationService = LocationServices.getFusedLocationProviderClient(this);
         markers = new ArrayList<Marker>();
         checkLocationsEnabled();
+        traverseMonitoredUsers();
         mapFragment.getMapAsync(this);
     }
 
@@ -126,7 +130,15 @@ public class ParentMapsActivity extends FragmentActivity implements OnMapReadyCa
 
 
     private void traverseMonitoredUsers(){
-        gMapsInterface.cameraSettings(markers.get(0).getPosition(),0.15f);
+        Button btn = findViewById(R.id.nextUserBtn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(markers != null && !markers.isEmpty()){
+                    mMap.moveCamera(gMapsInterface.cameraSettings(markers.get(cycle++%markers.size()).getPosition(),15.0f));
+                }
+            }
+        });
     }
 
     //Begin listening for updates.
