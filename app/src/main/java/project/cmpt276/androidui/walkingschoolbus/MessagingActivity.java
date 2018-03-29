@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class MessagingActivity extends AppCompatActivity {
         //Get proxy
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
         //Get messages
-        getMessagesForUser();
+        //getMessagesForUser();
         setupActionBarBack();
         setupOldMessagesBtn();
         setupSendAMessageAsLeaderBtn();
@@ -59,6 +60,15 @@ public class MessagingActivity extends AppCompatActivity {
         for(int i = 0;i<10;i++){
             unreadMessages.add("" + i);
         }
+    }
+
+    //refresh messaging list on resume
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i("RESUME MESSAGING","MESSAGING REFRESHING");
+        user = User.getInstance();
+        getMessagesForUser();
     }
 
     // Add a Back button on the Action Bar
@@ -124,6 +134,7 @@ public class MessagingActivity extends AppCompatActivity {
 
                 if(!readMessageMap.get(position)){
                     //Clicked messages are considered 'Read'
+
                     parent.getChildAt(position).setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
                     Call<User> caller = proxy.markMessage(user.getUnreadMessages().get(position).getId(), user.getId(), true);
                     ProxyBuilder.callProxy(MessagingActivity.this, caller, returnedUser -> userResponse(returnedUser));
@@ -136,6 +147,7 @@ public class MessagingActivity extends AppCompatActivity {
 
     private void userResponse(User returnedUser) {
         Log.i("Message Marked:", "Message now read");
+        Toast.makeText(MessagingActivity.this, "Message now read.",Toast.LENGTH_SHORT).show();
         User.setUser(returnedUser);
 
     }
@@ -148,13 +160,17 @@ public class MessagingActivity extends AppCompatActivity {
 
     private void messagesResponse(List<Message> returnedMessages) {
         Log.i("Response", "Call to server successful");
-        /*
-        FILL MESSAGE LIST
-         */
+
+        //reset list and boolean map
+        unreadMessages = new ArrayList<>();
+        readMessageMap = new ArrayList<>();
+
+        //FILL MESSAGE LIST
         for(Message message: returnedMessages){
             unreadMessages.add(message.messageToString());
             readMessageMap.add(false);
         }
+        Log.i("BOOLEAN MAP:", readMessageMap.toString());
         populateList();
     }
 
