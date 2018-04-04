@@ -4,6 +4,7 @@ import java.util.List;
 
 import project.cmpt276.model.walkingschoolbus.Group;
 import project.cmpt276.model.walkingschoolbus.Message;
+import project.cmpt276.model.walkingschoolbus.PermissionRequest;
 import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.model.walkingschoolbus.lastGpsLocation;
 import retrofit2.Call;
@@ -157,4 +158,27 @@ public interface WGServerProxy {
     //Mark message as read/unread by user, false for unread and true for read
     @POST("/messages/{messageId}/readby/{userId}")
     Call<User> markMessage(@Path("messageId") long messageId, @Path("userId") Long userId, @Body boolean read);
+
+
+//Permissions
+
+    @GET("/permissions")
+    Call<List<PermissionRequest>> getPermissions();
+
+    @GET("/permissions/{id}")
+    Call<PermissionRequest> getPermissionById(@Path("id") long permissionId);
+
+    @POST("/permissions/{id}")
+    Call<PermissionRequest> approveOrDenyPermissionRequest(
+            @Path("id") long permissionId,
+            @Body PermissionStatus status
+    );
+
+    enum PermissionStatus {
+        PENDING,
+        APPROVED,
+        DENIED
+    }
+
+
 }
