@@ -88,7 +88,7 @@ public class ParentMapsActivity extends FragmentActivity implements OnMapReadyCa
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         displayMonitoredUsers();
-        displayMonitoredUsersLeaders();
+
     }
 
     //Pull monitoring users from the user's list of monitoring users and displays them on this map.
@@ -100,6 +100,7 @@ public class ParentMapsActivity extends FragmentActivity implements OnMapReadyCa
             Call<User> caller = proxy.getUserById(monitoredUser.getId());
             ProxyBuilder.callProxy(this, caller, returnedUser -> createUserBlips(monitoredUser));
         }
+        displayMonitoredUsersLeaders();
     }
 
     private void displayMonitoredUsersLeaders(){
@@ -107,18 +108,17 @@ public class ParentMapsActivity extends FragmentActivity implements OnMapReadyCa
             //Get a monitored user's groups.
             User monitoredUser = monitoring.get(i);
             List<Group> groupsOfMonitored = monitoredUser.getMemberOfGroups();
-                for(int j = 0; j < groupsOfMonitored.size(); j++){
-                    if(groupsOfMonitored.get(j) != null && !groupsOfMonitored.isEmpty()){
-                        Call<Group> caller = proxy.getGroupById(groupsOfMonitored.get(j).getId());
-                        ProxyBuilder.callProxy(this, caller, returnedGroup -> createUserBlips(returnedGroup.getLeader()));
-                    }
-                }
+            Log.i("DebugParentsDash", monitoredUser.toString());
+            for(int j = 0; j < groupsOfMonitored.size(); j++){
+                Call<Group> caller = proxy.getGroupById(groupsOfMonitored.get(j).getId());
+                ProxyBuilder.callProxy(this, caller, returnedGroup -> createUserBlips(returnedGroup.getLeader()));
+            }
         }
     }
 
     private void createUserBlips(User u){
         //Make sure the user has a last location registered.
-        Log.i("DebugParentsDash", u.getLastGpsLocation().toString());
+        Log.i("DebugParentsDash", u.getName() + ", " + u.getLastGpsLocation().toString());
         if(u.getLastGpsLocation().getLat() != null && u.getLastGpsLocation().getLng()  != null &&  u.getLastGpsLocation().getTimestamp() != null) {
             LatLng lastLocation = new LatLng(u.getLastGpsLocation().getLat(), u.getLastGpsLocation().getLng());
             MarkerOptions userMarker = gMapsInterface.makeMarker(lastLocation, HUE_AZURE, "User: " + u.getName(), "Last upload: " + u.getLastGpsLocation().getTimestamp().toString());

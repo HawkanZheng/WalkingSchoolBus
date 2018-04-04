@@ -68,8 +68,9 @@
         <activity
             android:name=".ParentMapsActivity"
             android:label="@string/title_activity_parent_maps" />
-        <activity android:name=".editChildInfo"/>
-        <activity android:name=".GroupsLeaderActivity"></activity>
+        <activity android:name=".editChildInfo" />
+        <activity android:name=".GroupsLeaderActivity" />
+        <activity android:name=".PointsStore"></activity>
     </application>
 
 </manifest>

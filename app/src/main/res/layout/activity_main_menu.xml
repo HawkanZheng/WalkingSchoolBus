@@ -150,4 +150,16 @@
         app:layout_constraintStart_toEndOf="@+id/edtEmergencyMessage"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/storeBtn"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="140dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:drawableStart="@android:drawable/ic_menu_sort_alphabetically"
+        android:text="Store"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

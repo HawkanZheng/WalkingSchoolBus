@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -73,6 +74,7 @@ public class mainMenu extends AppCompatActivity {
         setupEmergencyBtn();
         setupEmergencySendBtn();
         setUpEditButton();
+        setUpShopBtn();
         getUnreadMessages();
     }
 
@@ -204,6 +206,17 @@ public class mainMenu extends AppCompatActivity {
                 Intent intent = new Intent(mainMenu.this, editUserInfo.class);
                 startActivity(intent);
                 setupGreeting();
+            }
+        });
+    }
+
+    private void setUpShopBtn(){
+        Button btn = findViewById(R.id.storeBtn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = PointsStore.makeIntent(mainMenu.this);
+                startActivity(intent);
             }
         });
     }

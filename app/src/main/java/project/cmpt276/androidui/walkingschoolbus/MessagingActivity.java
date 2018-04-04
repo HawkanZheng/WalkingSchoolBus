@@ -151,7 +151,6 @@ public class MessagingActivity extends AppCompatActivity {
     private void messagesMarkResponse(List<Message> returnedMessages, int position) {
         Call<User> caller = proxy.markMessage(returnedMessages.get(position).getId(), user.getId(), true);
         ProxyBuilder.callProxy(MessagingActivity.this, caller, returnedUser -> userResponse(returnedUser));
-
     }
 
     private void userResponse(User returnedUser) {
@@ -159,7 +158,6 @@ public class MessagingActivity extends AppCompatActivity {
         Toast.makeText(MessagingActivity.this, R.string.message_read_messaging,Toast.LENGTH_SHORT).show();
         getMessagesForUser();
         //User.setUser(returnedUser);
-
     }
 
     private void getMessagesForUser(){
