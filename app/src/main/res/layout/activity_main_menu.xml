@@ -65,14 +65,16 @@
 
     <Button
         android:id="@+id/manageGroupsBtn"
-        android:layout_width="150dp"
+        android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginBottom="140dp"
+        android:layout_marginEnd="81dp"
         android:layout_marginStart="16dp"
         android:backgroundTint="@android:color/holo_blue_dark"
         android:drawableStart="@android:drawable/ic_menu_sort_by_size"
         android:text="@string/manage_groups"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/getPermission"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -149,5 +151,16 @@
         android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/edtEmergencyMessage"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/getPermission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="49dp"
+        android:layout_marginTop="1dp"
+        android:text="Permissions"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/manageGroupsBtn"
+        app:layout_constraintTop_toBottomOf="@+id/btnSendEmergencyText" />
 
 </android.support.constraint.ConstraintLayout>
