@@ -111,6 +111,7 @@
         <item>12</item>
     </string-array>
 
+    <string name="storeGreetingMsg">Welcome to the points store!</string>
 
     <string name="parents_dashboard">Parents Dashboard</string>
     <string name="back">Back</string>
