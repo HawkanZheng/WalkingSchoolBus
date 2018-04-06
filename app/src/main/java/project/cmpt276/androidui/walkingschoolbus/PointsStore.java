@@ -3,6 +3,7 @@ package project.cmpt276.androidui.walkingschoolbus;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -23,8 +24,8 @@ public class PointsStore extends AppCompatActivity {
 
     //Conversion: px = dp * (dpi / 160)
 
-    private final int row = 20;
-    private final int col = 3;
+    private final int row = 10;
+    private final int col = 2;
     private Button[][] buttons = new Button[row][col];
 
     private int imgW = 90;
@@ -38,6 +39,7 @@ public class PointsStore extends AppCompatActivity {
         displayCurrency();
     }
 
+    //Displays the user's currency.
     private void displayCurrency() {
         //TODO -- Grab user's points from server.
         int points = 0;
@@ -81,12 +83,16 @@ public class PointsStore extends AppCompatActivity {
 
     //Applies images to the button.
     private void applyImages(){
-        //Setting image.
+        int itr = 0;
         for(int i = 0; i < row; i++){
             for(int j = 0; j < col; j++){
-                Bitmap originalImage = BitmapFactory.decodeResource(getResources(),R.drawable.batman);
-                Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, imgW,imgH,true);
                 Resources resources = getResources();
+                //Obtain the images from an xml array.
+                TypedArray imgArr = resources.obtainTypedArray(R.array.avatars);
+                //Create and scale the image.
+                Bitmap originalImage = BitmapFactory.decodeResource(getResources(),imgArr.getResourceId(itr++,-1));
+                Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, imgW,imgH,true);
+                //Adds the obtained image and set a border background.
                 buttons[i][j].setForeground(new BitmapDrawable(resources,scaledImage));
                 buttons[i][j].setBackgroundResource(R.drawable.button_border);
             }

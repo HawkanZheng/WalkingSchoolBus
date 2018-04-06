@@ -2,6 +2,5 @@
 <!--https://stackoverflow.com/questions/7690416/android-border-for-button-->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <corners android:radius="3dp" />
-    <stroke android:width="5px" android:color="#000000" />
+    <stroke android:width="1px" android:color="#000000" />
 </shape>

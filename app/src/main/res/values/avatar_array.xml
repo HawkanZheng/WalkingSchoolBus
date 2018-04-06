@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name = "avatars">
+        <item>@drawable/aquaman</item>
+        <item>@drawable/batman</item>
+        <item>@drawable/black_canary</item>
+        <item>@drawable/black_widow</item>
+        <item>@drawable/captain_america</item>
+        <item>@drawable/flash</item>
+        <item>@drawable/green_arrow</item>
+        <item>@drawable/green_lantern</item>
+        <item>@drawable/hawkeye</item>
+        <item>@drawable/hulk</item>
+        <item>@drawable/ironman</item>
+        <item>@drawable/martian_manhunter</item>
+        <item>@drawable/ms_marvel</item>
+        <item>@drawable/red_tornado</item>
+        <item>@drawable/sentry</item>
+        <item>@drawable/spider_woman</item>
+        <item>@drawable/spiderman</item>
+        <item>@drawable/superman</item>
+        <item>@drawable/thor</item>
+        <item>@drawable/wonder_woman</item>
+    </integer-array>
+</resources>

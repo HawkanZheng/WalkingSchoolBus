@@ -15,7 +15,7 @@
         android:layout_marginTop="8dp"
         android:addStatesFromChildren="false"
         android:scrollbarStyle="outsideOverlay"
-        android:scrollbarThumbHorizontal="@android:color/holo_purple"
+        android:scrollbarThumbHorizontal="@android:color/holo_blue_dark"
         android:scrollbarTrackHorizontal="@android:color/darker_gray"
         android:scrollbars="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
