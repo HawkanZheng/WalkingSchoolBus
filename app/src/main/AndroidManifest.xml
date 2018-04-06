@@ -71,6 +71,8 @@
         <activity android:name=".editChildInfo" />
         <activity android:name=".GroupsLeaderActivity" />
         <activity android:name=".PointsStore" />
+        <activity android:name=".LeaderBoardActivity"></activity>
+        <activity android:name=".PointsStore" />
     </application>
 
 </manifest>
