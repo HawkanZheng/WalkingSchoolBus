@@ -70,7 +70,7 @@
             android:label="@string/title_activity_parent_maps" />
         <activity android:name=".editChildInfo" />
         <activity android:name=".GroupsLeaderActivity" />
-        <activity android:name=".PointsStore"></activity>
+        <activity android:name=".PointsStore" />
     </application>
 
 </manifest>

@@ -1,5 +1,7 @@
 package project.cmpt276.model.walkingschoolbus;
 
+import android.graphics.drawable.Drawable;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ public class SharedValues {
     private User user;
     private int numMessagesUnread;
     private List<User> userList = new ArrayList<>();
+    private Drawable userAvatar;
     private static SharedValues instance;
 
     private SharedValues(){
@@ -67,6 +70,14 @@ public class SharedValues {
 
     public int getMessagesUnread(){
         return numMessagesUnread;
+    }
+
+    public void setUserAvatar(Drawable d){
+        userAvatar = d;
+    }
+
+    public Drawable getUserAvatar(){
+        return userAvatar;
     }
 
 }

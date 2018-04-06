@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,6 +66,7 @@ public class mainMenu extends AppCompatActivity {
 
         //Set up Main Menu views.
         setupGreeting();
+        setUserAvatar();
         setUpMapButton();
         setUpMessagingButton();
         setUpWhoIMonitorBtn();
@@ -78,12 +80,13 @@ public class mainMenu extends AppCompatActivity {
         getUnreadMessages();
     }
 
-    //refresh name in greeting after it has been modified in the edit user activity
+    //refresh name in greeting after it has been modified in the edit user activity and avatar.
     @Override
     protected void onResume() {
         super.onResume();
         getUnreadMessages();
         setupGreeting();
+        setUserAvatar();
     }
 
     //set message with user's name
@@ -195,6 +198,13 @@ public class mainMenu extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void setUserAvatar(){
+        ImageView iv = findViewById(R.id.userAvatar);
+        if(sharedValues.getUserAvatar() != null){
+            iv.setBackground(sharedValues.getUserAvatar());
+        }
     }
 
     private void setUpEditButton()

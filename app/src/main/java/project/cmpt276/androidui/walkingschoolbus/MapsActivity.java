@@ -43,9 +43,7 @@ import com.google.android.gms.tasks.Task;
 
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -376,6 +374,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     //Create the listener to listen to locational updates and update the map accordingly.
+    //TODO -- Make Avatar appear on map.
     private void createLocationCallback(){
         locationCallback = new LocationCallback(){
             @Override

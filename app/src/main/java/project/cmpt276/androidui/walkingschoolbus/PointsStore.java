@@ -8,24 +8,24 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
-import android.widget.GridLayout;
-import android.widget.ImageButton;
-import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import project.cmpt276.model.walkingschoolbus.SharedValues;
+
 public class PointsStore extends AppCompatActivity {
 
     //Conversion: px = dp * (dpi / 160)
-
-    private final int row = 10;
-    private final int col = 2;
+    private SharedValues sharedValues;
+    private final int row = 2;
+    private final int col = 10;
     private Button[][] buttons = new Button[row][col];
 
     private int imgW = 90;
@@ -35,6 +35,7 @@ public class PointsStore extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_points_store);
+        sharedValues = SharedValues.getInstance();
         createStoreStock();
         displayCurrency();
     }
@@ -51,15 +52,16 @@ public class PointsStore extends AppCompatActivity {
     //Set up table to display items in the shop.
     private void createStoreStock(){
         TableLayout table = findViewById(R.id.storeStock);
-        for(int i = 0; i < col; i++){
+        for(int i = 0; i < row; i++){
             TableRow tableRow = new TableRow(this);
             table.addView(tableRow);
-            for(int j = 0; j < row; j++){
+            for(int j = 0; j < col; j++){
                 final Button item = new Button(this);
                 final int r = i;
                 final int c = j;
-                item.setOnClickListener(v -> buttonAction(r,c));
-                buttons[c][r] = item;
+                item.setOnClickListener(v -> purchasingAvatar(r,c));
+                item.setOnLongClickListener(v -> setAvatar(r,c));
+                buttons[r][c] = item;
                 tableRow.addView(item);
             }
         }
@@ -80,7 +82,6 @@ public class PointsStore extends AppCompatActivity {
         }
     }
 
-
     //Applies images to the button.
     private void applyImages(){
         int itr = 0;
@@ -100,10 +101,42 @@ public class PointsStore extends AppCompatActivity {
     }
 
     //Update the currency on click if a transaction is made.
-    private void buttonAction(int i, int j){
+    private void purchasingAvatar(int i, int j){
         //TODO -- Purchasing an avatar logic.
+        //Open purchase confirmation dialog
+        ConfirmPurchaseFragment fragment = new ConfirmPurchaseFragment();
+        fragment.setPosition(i,j);
+        Log.i("PointsStore","Index: " + i + " " + j);
+        android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
+        fragment.show(manager,"ConfirmPurchase");
         displayCurrency();
         Toast.makeText(PointsStore.this,"Selected " + i +", "+ j, Toast.LENGTH_SHORT).show();
+    }
+
+    private boolean setAvatar(int i, int j){
+        //TODO -- Needs to find out if the user owns the selected avatar before setting it.
+        //Avoids duplicate buttons being highlighted.
+        cleanButtons();
+        //Shows which avatar is in use.
+        Button btn = buttons[i][j];
+        btn.setBackgroundResource(R.drawable.button_border_current);
+        //TODO -- Upload to server in order to save on login.
+        //Get selected image to save to sharedValues.
+        Resources resources = getResources();
+        TypedArray imgArr = resources.obtainTypedArray(R.array.avatars);
+        Drawable d = imgArr.getDrawable((10*i)+j);
+        sharedValues.setUserAvatar(d);
+        Log.i("SettingImg", d.toString());
+        return true;
+    }
+
+    private void cleanButtons(){
+        for(int i = 0; i < row; i++){
+            for(int j = 0; j < col; j++){
+                //Set back to the default background.
+                buttons[i][j].setBackgroundResource(R.drawable.button_border);
+            }
+        }
     }
 
     //Intent to reach the shop activity.
