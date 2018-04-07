@@ -1,8 +1,11 @@
 package project.cmpt276.androidui.walkingschoolbus;
 
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,26 +14,62 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class Permissions extends AppCompatActivity {
+import project.cmpt276.model.walkingschoolbus.PermissionRequest;
+import project.cmpt276.model.walkingschoolbus.SharedValues;
+import project.cmpt276.model.walkingschoolbus.User;
+import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
+import project.cmpt276.server.walkingschoolbus.WGServerProxy;
+import retrofit2.Call;
+
+import static project.cmpt276.server.walkingschoolbus.WGServerProxy.PermissionStatus.PENDING;
+
+public class Permissions extends AppCompatActivity implements DialogInterface.OnDismissListener {
 
 
+    private ArrayList<String> items = new ArrayList<>();
+    private int listPosition;
+    private String message;
+    private User user;
+    private WGServerProxy proxy;
+    private SharedValues sharedValues;
 
-    ArrayList<String> items = new ArrayList<>();
-    int listPosition;
-    String message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Get Instances
+        user = User.getInstance();
+        sharedValues = SharedValues.getInstance();
 
-        items.add("person A wants permission");
-        items.add("person B want permission");
-        items.add("person C wants permission");
-        items.add("person D wants permission");
+        //Get server proxy
+        proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
+
+
         setContentView(R.layout.activity_permissions);
-        populateList(items);
+        getPendingPermissions();
+        setupActionBarBack();
         listClickCallback();
+
+    }
+
+
+
+    //get permissions from server
+    private void getPendingPermissions() {
+        Call<List<PermissionRequest>> caller = proxy.getPermissionFoUserPending(user.getId(), PENDING);
+        ProxyBuilder.callProxy(Permissions.this, caller, returnedPermissions -> permissionsResponse(returnedPermissions));
+    }
+
+    //server response
+    private void permissionsResponse(List<PermissionRequest> returnedPermissions) {
+        items = new ArrayList<>();
+        for(PermissionRequest request : returnedPermissions){
+            items.add(request.getMessage());
+        }
+        sharedValues.setRequests(returnedPermissions);
+        populateList(items);
 
     }
 
@@ -74,8 +113,39 @@ public class Permissions extends AppCompatActivity {
     public void deleteItem(int position)
     {
         items.remove(position);
+        getPendingPermissions();
+    }
+
+    // Add a Back button on the Action Bar
+    private void setupActionBarBack() {
+        // set the button to be visible
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    // On back button click, finish the activity
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        if(id == android.R.id.home){
+            this.finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    //on dialog fragment dismiss refresh list
+    @Override
+    public void onDismiss(final DialogInterface dialog){
+        Log.i("On Dismiss", "On Dismiss Refresh list");
+        items = new ArrayList<>();
+        for(PermissionRequest request : sharedValues.getRequests()){
+            items.add(request.getMessage());
+        }
         populateList(items);
     }
+
+
 
 
 

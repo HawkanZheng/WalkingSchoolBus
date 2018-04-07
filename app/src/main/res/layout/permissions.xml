@@ -3,4 +3,4 @@
     android:id="@+id/approvalMessage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:text="Do you want to grant permission for this action?"></TextView>
+    android:text="@string/do_you_want_to_grant_permission_for_this_action"></TextView>

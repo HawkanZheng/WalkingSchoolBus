@@ -97,7 +97,7 @@ public class GroupCreationFragment extends AppCompatDialogFragment {
         sharedValues.setGroup(returnedGroup);
         groupList.addGroup(returnedGroup);
         //Get updated user
-        Toast.makeText(getActivity(),"New Group Saved!", Toast.LENGTH_SHORT).show();
+
         Call<User> caller = proxy.getUserByEmail(user.getEmail());
         ProxyBuilder.callProxy(getActivity(), caller, returnedUser -> userResponse(returnedUser));
     }
@@ -114,6 +114,12 @@ public class GroupCreationFragment extends AppCompatDialogFragment {
 
     private void userResponse(User returnedUser) {
         User.setUser(returnedUser);
+        if(returnedUser.getMonitoredByUsers().isEmpty()) {
+            Toast.makeText(getActivity(), "New Group Saved! You are the Leader!", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(getActivity(), "New group leader permission request pending.", Toast.LENGTH_SHORT).show();
+        }
         //Dismiss the dialog once a group is successfully made.
         dismiss();
 //        Call<List<User>> caller = proxy.addNewMember(sharedValues.getGroup().getId(), returnedUser);
