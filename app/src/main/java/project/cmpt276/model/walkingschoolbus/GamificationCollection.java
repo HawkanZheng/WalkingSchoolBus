@@ -6,9 +6,12 @@ import java.util.ArrayList;
  * Created by Jorawar on 4/3/2018.
  */
 
-class GamificationCollection {
-    private static final GamificationCollection ourInstance = new GamificationCollection();
-    static GamificationCollection getInstance() {
+public class GamificationCollection {
+    private static GamificationCollection ourInstance = new GamificationCollection();
+    public static GamificationCollection getInstance() {
+        if(ourInstance == null){
+            ourInstance = new GamificationCollection();
+        }
         return ourInstance;
     }
 
