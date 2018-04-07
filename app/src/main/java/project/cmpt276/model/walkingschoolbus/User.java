@@ -45,6 +45,10 @@ public class User {
     private List<Message> unreadMessages = new ArrayList<>();
     private List<Message> readMessages = new ArrayList<>();
 
+    // Game Data
+    private int currentPoints;
+    private int totalPointsEarned;
+
     /*
     Singleton Support
     */
@@ -296,5 +300,21 @@ public class User {
                 ", monitorsUsers=" + monitorsUsers +
                 ", memberOfGroups=" + memberOfGroups +
                 '}';
+    }
+
+
+    // User Rewarding functions
+
+    // This can be a negative, so long as it does not make the user's current points negative
+    public void addUserPoints(int points) throws ArithmeticException{
+        if((currentPoints + points) < 0){
+            throw new ArithmeticException("Not enough current points");
+        }
+        else{
+            currentPoints += points;
+            if(points > 0){
+                totalPointsEarned += points;
+            }
+        }
     }
 }

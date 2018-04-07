@@ -12,7 +12,8 @@ class GamificationCollection {
         return ourInstance;
     }
 
-    private RewardsCollection userRewards = new RewardsCollection();
+    private RewardsAvatarCollection userRewards = new RewardsAvatarCollection();
+    private RewardAvatar lastAvatarSelected = new RewardAvatar();
 
     private GamificationCollection() {
         // Singleton Pattern
@@ -31,5 +32,13 @@ class GamificationCollection {
     // get a specific avatar
     public RewardAvatar getAvatar(String avatarName){
         return userRewards.getAvatar(avatarName);
+    }
+
+    public RewardAvatar getLastAvatarSelected() {
+        return lastAvatarSelected;
+    }
+
+    public void setLastAvatarSelected(RewardAvatar lastAvatarSelected) {
+        this.lastAvatarSelected = lastAvatarSelected;
     }
 }

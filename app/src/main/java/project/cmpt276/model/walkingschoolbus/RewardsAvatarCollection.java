@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by Jorawar on 4/3/2018.
  */
 
-public class RewardsCollection {
+public class RewardsAvatarCollection {
 
     private int defaultCost = 150;
 
@@ -22,7 +22,7 @@ public class RewardsCollection {
     private ArrayList<RewardAvatar> rewardList = new ArrayList<>();
 
 
-    public RewardsCollection() {
+    public RewardsAvatarCollection() {
         for(int i = 0; i < avatarNames.length; i++){
             RewardAvatar tmp = new RewardAvatar();
             tmp.setAvatarName(avatarNames[i]);
