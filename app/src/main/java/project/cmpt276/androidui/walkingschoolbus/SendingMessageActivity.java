@@ -31,12 +31,16 @@ public class SendingMessageActivity extends AppCompatActivity {
     private WGServerProxy proxy;
     private SharedValues sharedValues;
     private User user;
+    private GamificationCollection gamificationCollection;
+
+
 
     private ArrayList<String> groupSendList = new ArrayList<>();
     private ArrayList<Boolean> groupsSelected = new ArrayList<>();
 
     private View lastViewClicked;
     private Group groupSelected = new Group();
+
 
     public SendingMessageActivity() {
     }
@@ -63,6 +67,14 @@ public class SendingMessageActivity extends AppCompatActivity {
         // Setup Buttons
         setupSendToParentBtn();
         setupSelectedGroupsBtn();
+        //test game
+        gameTest();
+    }
+
+    /*test gamefication
+     */
+    private void gameTest(){
+        user.setCurrentPoints(100);
 
     }
 
