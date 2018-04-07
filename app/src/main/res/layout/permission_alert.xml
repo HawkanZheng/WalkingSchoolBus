@@ -9,6 +9,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="120dp"
-        android:text="Do you wnat to grant permission for this actiion?"
+        android:text="@string/do_you_want_grant_permission_for_this_action"
         android:textSize="18sp" />
 </RelativeLayout>

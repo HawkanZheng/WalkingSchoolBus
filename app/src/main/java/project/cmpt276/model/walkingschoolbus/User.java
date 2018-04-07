@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Simple User class to store the data the server expects and returns.
+ *User class to store the data the server expects and returns.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User {

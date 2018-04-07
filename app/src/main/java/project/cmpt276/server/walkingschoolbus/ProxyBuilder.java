@@ -180,6 +180,7 @@ public class ProxyBuilder {
             }
 
             builder.header("JSON-DEPTH", "1");
+            builder.header("permissions-enabled", "true");
             Request modifiedRequest = builder.build();
 
             return chain.proceed(modifiedRequest);

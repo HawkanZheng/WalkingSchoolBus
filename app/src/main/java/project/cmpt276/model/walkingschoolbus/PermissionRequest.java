@@ -1,5 +1,6 @@
 package project.cmpt276.model.walkingschoolbus;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Set;
@@ -21,6 +22,10 @@ public class PermissionRequest {
         private WGServerProxy.PermissionStatus status;
         private User userA;
         private User userB;
+        private Group groupG;
+        private User requestingUser;
+        private Set<Authorizor> authorizors;
+        private String message;
 
     public Long getId() {
         return id;
@@ -102,10 +107,12 @@ public class PermissionRequest {
         this.message = message;
     }
 
-    private Group groupG;
-        private User requestingUser;
-        private Set<Authorizor> authorizors;
-        private String message;
+    @JsonIgnore
+    public String toPermissionListString() {
+        return message;
+    }
+
+
 
 //Authorizor class
         public static class Authorizor {

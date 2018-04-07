@@ -166,11 +166,16 @@ public interface WGServerProxy {
     Call<List<PermissionRequest>> getPermissions();
 
     @GET("/permissions/{id}")
-    Call<PermissionRequest> getPermissionById(@Path("id") long permissionId);
+    Call<PermissionRequest> getPermissionById(@Path("id") Long permissionId);
+
+    @GET("/permissions")
+    Call<List<PermissionRequest>> getPermissionFoUserPending(@Query("userId") Long userId, @Query("statusForUser") PermissionStatus pending);
+
+
 
     @POST("/permissions/{id}")
     Call<PermissionRequest> approveOrDenyPermissionRequest(
-            @Path("id") long permissionId,
+            @Path("id") Long permissionId,
             @Body PermissionStatus status
     );
 
