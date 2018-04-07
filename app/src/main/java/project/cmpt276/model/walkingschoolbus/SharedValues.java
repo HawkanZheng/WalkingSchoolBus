@@ -17,6 +17,7 @@ public class SharedValues {
     private User user;
     private int numMessagesUnread;
     private List<User> userList = new ArrayList<>();
+    private List<PermissionRequest> requests;
     private static SharedValues instance;
 
     private SharedValues(){
@@ -69,4 +70,11 @@ public class SharedValues {
         return numMessagesUnread;
     }
 
+    public List<PermissionRequest> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(List<PermissionRequest> requests) {
+        this.requests = requests;
+    }
 }

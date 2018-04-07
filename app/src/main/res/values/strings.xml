@@ -178,4 +178,6 @@
     <string name="send_userMessage_activity_message_body">Message has no text. Message not sent.</string>
     <string name="R.string.send_userMessage_activity_you_must_leader">You must select a group you lead</string>
     <string name="parent_map_activity">Please allow device location</string>
+    <string name="do_you_want_grant_permission_for_this_action">Do you want grant permission for this action?</string>
+    <string name="do_you_want_to_grant_permission_for_this_action">Do you want to grant permission for this action?</string>
 </resources>
