@@ -18,13 +18,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import project.cmpt276.model.walkingschoolbus.GamificationCollection;
 import project.cmpt276.model.walkingschoolbus.Group;
 import project.cmpt276.model.walkingschoolbus.GroupCollection;
 import project.cmpt276.model.walkingschoolbus.Message;
+import project.cmpt276.model.walkingschoolbus.RewardAvatar;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
@@ -74,6 +77,7 @@ public class mainMenu extends AppCompatActivity {
         setupEmergencySendBtn();
         setUpEditButton();
         getUnreadMessages();
+        setUpPermissionsButton();
     }
 
     //refresh name in greeting after it has been modified in the edit user activity
@@ -314,6 +318,21 @@ public class mainMenu extends AppCompatActivity {
         sharedValues.storeMessagesUnread(numNewMessages);
         messagesBtn.setText("Messages (" + sharedValues.getMessagesUnread() + ")");
         Log.i("MessagesBtn", "Refreshing button");
+    }
+
+
+    private void setUpPermissionsButton()
+    {
+        Button button = findViewById(R.id.getPermission);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mainMenu.this, Permissions.class);
+
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
