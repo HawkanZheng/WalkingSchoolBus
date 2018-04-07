@@ -8,6 +8,15 @@
     tools:context="project.cmpt276.androidui.walkingschoolbus.mainMenu"
     tools:layout_editor_absoluteY="81dp">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
     <Button
         android:id="@+id/goToMap"
         android:layout_width="150dp"
@@ -52,18 +61,6 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/logoutBtn"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:backgroundTint="@android:color/holo_blue_dark"
-        android:drawableStart="@android:drawable/ic_input_delete"
-        android:text="@string/logout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
         android:id="@+id/manageGroupsBtn"
         android:layout_width="150dp"
         android:layout_height="60dp"
@@ -102,23 +99,11 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/editInfoBtn"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="60dp"
-        android:backgroundTint="@android:color/holo_blue_dark"
-        android:drawableStart="@android:drawable/ic_menu_edit"
-        android:text="@string/edit_my_info"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
         android:id="@+id/btnPanic"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="64dp"
         android:backgroundTint="@android:color/holo_red_dark"
         android:drawableStart="@android:drawable/stat_notify_error"
         android:text="@string/emergency"
@@ -142,7 +127,7 @@
         android:id="@+id/btnSendEmergencyText"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="232dp"
         android:backgroundTint="@android:color/holo_red_dark"
         android:text="@string/send"
@@ -168,6 +153,18 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="136dp"
         android:layout_marginTop="80dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnLeaderboards"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginEnd="216dp"
+        android:layout_marginTop="64dp"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:drawableStart="@drawable/ic_supervisor_account"
+        android:text="Leaderboard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

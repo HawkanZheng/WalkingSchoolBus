@@ -180,4 +180,5 @@
     <string name="R.string.send_userMessage_activity_you_must_leader">You must select a group you lead</string>
     <string name="parent_map_activity">Please allow device location</string>
     <string name="leader_boards">Leader Boards</string>
+    <string name="action_settings">Settings</string>
 </resources>

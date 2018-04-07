@@ -9,9 +9,16 @@ import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -53,11 +60,14 @@ public class mainMenu extends AppCompatActivity {
     private boolean isEmergencyVisible = false;
     private final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+
+        // Action bar setup
+        actionBarSetup();
+
         sharedValues = SharedValues.getInstance();
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
         user = User.getInstance();
@@ -66,18 +76,35 @@ public class mainMenu extends AppCompatActivity {
 
         //Set up Main Menu views.
         setupGreeting();
+        setupLeaderboardBtn();
         setUserAvatar();
         setUpMapButton();
         setUpMessagingButton();
         setUpWhoIMonitorBtn();
         setUpWhoMonitorsMeBtn();
-        setUpLogoutBtn();
         setUpManageGroupsBtn();
         setupEmergencyBtn();
         setupEmergencySendBtn();
-        setUpEditButton();
         setUpShopBtn();
         getUnreadMessages();
+    }
+
+    private void setupLeaderboardBtn() {
+        Button btn = findViewById(R.id.btnLeaderboards);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mainMenu.this, LeaderBoardActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+
+    private void actionBarSetup() {
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        ActionBar actionbar = getSupportActionBar();
     }
 
     //refresh name in greeting after it has been modified in the edit user activity and avatar.
@@ -178,26 +205,52 @@ public class mainMenu extends AppCompatActivity {
         });
     }
 
-    private void setUpLogoutBtn(){
-        Button button = findViewById(R.id.logoutBtn);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sharedValues.setToken(null);
+    private void logoutCall(){
+        sharedValues.setToken(null);
 
-                // Trash saved values
-                SharedPreferences prefs = getSharedPreferences("user info", MODE_PRIVATE) ;
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putString("user name", "");
-                editor.putString("password", "");
-                editor.apply();
+        // Trash saved values
+        SharedPreferences prefs = getSharedPreferences("user info", MODE_PRIVATE) ;
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("user name", "");
+        editor.putString("password", "");
+        editor.apply();
 
-                Intent intent = new Intent(mainMenu.this, Login.class);
+        Intent intent = new Intent(mainMenu.this, Login.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.toolbar_main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // User chose the "Settings" item, show the app settings UI...
+                Toast.makeText(mainMenu.this, "Settings not yet supported", Toast.LENGTH_SHORT).show();
+                return true;
+
+            case R.id.action_edit_info:
+                // start the edit info activity
+                Intent intent = new Intent(mainMenu.this, editUserInfo.class);
                 startActivity(intent);
-                finish();
-            }
-        });
+                return true;
 
+            case R.id.action_logout:
+                logoutCall();
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
     private void setUserAvatar(){
@@ -207,18 +260,6 @@ public class mainMenu extends AppCompatActivity {
         }
     }
 
-    private void setUpEditButton()
-    {
-        Button button = findViewById(R.id.editInfoBtn);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(mainMenu.this, editUserInfo.class);
-                startActivity(intent);
-                setupGreeting();
-            }
-        });
-    }
 
     private void setUpShopBtn(){
         Button btn = findViewById(R.id.storeBtn);
