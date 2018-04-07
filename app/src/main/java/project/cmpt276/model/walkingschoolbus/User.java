@@ -342,4 +342,20 @@ public class User {
                 ", memberOfGroups=" + memberOfGroups +
                 '}';
     }
+
+
+    // User Rewarding functions
+
+    // This can be a negative, so long as it does not make the user's current points negative
+    public void addUserPoints(int points) throws ArithmeticException{
+        if((currentPoints + points) < 0){
+            throw new ArithmeticException("Not enough current points");
+        }
+        else{
+            currentPoints += points;
+            if(points > 0){
+                totalPointsEarned += points;
+            }
+        }
+    }
 }
