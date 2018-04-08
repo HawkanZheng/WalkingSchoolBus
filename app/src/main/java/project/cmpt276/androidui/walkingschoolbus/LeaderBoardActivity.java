@@ -7,8 +7,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import project.cmpt276.model.walkingschoolbus.SharedValues;
+import project.cmpt276.model.walkingschoolbus.User;
+import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
+import project.cmpt276.server.walkingschoolbus.WGServerProxy;
+import retrofit2.Call;
 
 public class LeaderBoardActivity extends AppCompatActivity {
+    private WGServerProxy proxy;
+    private SharedValues sharedValues;
+    private User user;
 
     ArrayList<String> leaderBoardData = new ArrayList<>();
 
@@ -16,9 +26,38 @@ public class LeaderBoardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leader_board);
+        //Get instances
+        user = User.getInstance();
+        sharedValues = SharedValues.getInstance();
+
+        //get proxy
+        proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
 
         setupActionBarBack();
-        populateList();
+        getAllUsers();
+    }
+
+    //Get users from server
+    private void getAllUsers() {
+        Call<List<User>> caller = proxy.getUsers();
+        ProxyBuilder.callProxy(LeaderBoardActivity.this, caller, returnedUsers -> response(returnedUsers));
+    }
+
+    //response to user server call
+    private void response(List<User> returnedUsers) {
+        leaderBoardData = new ArrayList<>();
+        String info;
+        int i = 1;
+
+        for(User curr : returnedUsers){
+            info = i + ". Name: " + user.getName() +
+                    "\n   Current Points: " + user.getCurrentPoints() +
+                    "\n   Total Points Earned: " + user.getTotalPointsEarned();
+
+        }
+
+
+
     }
 
     // Add a Back button on the Action Bar
