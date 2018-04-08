@@ -68,9 +68,6 @@ public class mainMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        // Action bar setup
-        actionBarSetup();
-        setupNavigationDrawer();
 
         sharedValues = SharedValues.getInstance();
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
@@ -78,15 +75,16 @@ public class mainMenu extends AppCompatActivity {
         Log.i(TAG, ""+user.toString());
         groupList = GroupCollection.getInstance();
 
+
+        // Action bar setup
+        actionBarSetup();
+        setupNavigationDrawer();
+
         //Set up Main Menu views.
-        setupGreeting();
         setupLeaderboardBtn();
         setUserAvatar();
         setUpMapButton();
         setUpMessagingButton();
-        setUpWhoIMonitorBtn();
-        setUpWhoMonitorsMeBtn();
-        setUpManageGroupsBtn();
         setupEmergencyBtn();
         setupEmergencySendBtn();
         setUpShopBtn();
@@ -116,8 +114,17 @@ public class mainMenu extends AppCompatActivity {
 
     private void setupNavigationDrawer() {
         mDrawerLayout = findViewById(R.id.drawer_layout);
+        user = User.getInstance();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+        View v = navigationView.getHeaderView(0);
+
+        TextView email = v.findViewById(R.id.txtNavEmailHeader);
+        TextView name = v.findViewById(R.id.txtNavNameHeader);
+
+        name.setText(user.getName());
+        email.setText(user.getEmail());
+
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -133,19 +140,16 @@ public class mainMenu extends AppCompatActivity {
                             case R.id.nav_Monitors:
                                 i = WhoMonitorsMe.makeIntent(mainMenu.this);
                                 startActivity(i);
-                                Toast.makeText(mainMenu.this,"Monitors",Toast.LENGTH_SHORT).show();
                                 return true;
 
                             case R.id.nav_mygroups:
                                 i = ManageGroups.makeIntent(mainMenu.this);
                                 startActivity(i);
-                                Toast.makeText(mainMenu.this,"My Groups",Toast.LENGTH_SHORT).show();
                                 return true;
 
                             case R.id.nav_parentdash:
                                 i = ParentsDashboardActivity.makeIntent(mainMenu.this);
                                 startActivity(i);
-                                Toast.makeText(mainMenu.this,"Parent Dash",Toast.LENGTH_SHORT).show();
                                 return true;
                         }
                         return true;
@@ -158,21 +162,7 @@ public class mainMenu extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getUnreadMessages();
-        setupGreeting();
         setUserAvatar();
-    }
-
-    //set message with user's name
-    private void setupGreeting() {
-        user = User.getInstance();
-        TextView view = findViewById(R.id.greeting);
-        if(!user.getName().equals("")) {
-            view.setText(getString(R.string.hi) + " " + user.getName() + ". " + getString(R.string.welcome_to_the_walking_school_bus_app));
-    }
-
-        else {
-            view.setText(getString(R.string.hi) + ". " + getString(R.string.welcome_to_the_walking_school_bus_app));
-        }
     }
 
     private void response(List<User> returnedUsers) {
@@ -217,39 +207,6 @@ public class mainMenu extends AppCompatActivity {
         });
     }
 
-
-    private void setUpWhoIMonitorBtn(){
-        Button button = findViewById(R.id.whoIMonitorBtn);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = ParentsDashboardActivity.makeIntent(mainMenu.this);
-                startActivity(intent);
-            }
-        });
-    }
-
-    private void setUpWhoMonitorsMeBtn(){
-        Button button = findViewById(R.id.whoMonitorsMeBtn);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = WhoMonitorsMe.makeIntent(mainMenu.this);
-                startActivity(intent);
-            }
-        });
-    }
-
-    private  void  setUpManageGroupsBtn(){
-        Button button = findViewById(R.id.manageGroupsBtn);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = ManageGroups.makeIntent(mainMenu.this);
-                startActivity(intent);
-            }
-        });
-    }
 
     private void logoutCall(){
         sharedValues.setToken(null);
