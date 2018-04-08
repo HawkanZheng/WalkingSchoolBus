@@ -89,6 +89,7 @@ public class mainMenu extends AppCompatActivity {
         setupEmergencySendBtn();
         setUpShopBtn();
         getUnreadMessages();
+        setUpPermissionsButton();
     }
 
     private void setupLeaderboardBtn() {
@@ -383,6 +384,21 @@ public class mainMenu extends AppCompatActivity {
         sharedValues.storeMessagesUnread(numNewMessages);
         messagesBtn.setText("Messages (" + sharedValues.getMessagesUnread() + ")");
         Log.i("MessagesBtn", "Refreshing button");
+    }
+
+
+    private void setUpPermissionsButton()
+    {
+        Button button = findViewById(R.id.getPermission);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mainMenu.this, Permissions.class);
+
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

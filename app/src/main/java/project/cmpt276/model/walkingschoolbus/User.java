@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Simple User class to store the data the server expects and returns.
+ *User class to store the data the server expects and returns.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
@@ -45,6 +45,17 @@ public class User {
     private List<Message> unreadMessages = new ArrayList<>();
     private List<Message> readMessages = new ArrayList<>();
 
+
+    // Gamification Support
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    private Integer currentPoints;
+    private Integer totalPointsEarned;
+    private String customJson;
+
+    // Permissions
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    private List<PermissionRequest> pendingPermissionRequests;
+
     /*
     Singleton Support
     */
@@ -63,6 +74,7 @@ public class User {
         instance = user;
     }
 
+    //Getters and setters
     public Long getId() {
         return id;
     }
@@ -171,8 +183,41 @@ public class User {
     public void setLastGpsLocation (lastGpsLocation lastGpsLocation) {
         this.lastGpsLocation = lastGpsLocation;
     }
+//Geters and setters for gamefication
+    public Integer getCurrentPoints() {
+        return currentPoints;
+    }
 
-//Getters and setters for UI display arrays
+    public void setCurrentPoints(Integer currentPoints) {
+        this.currentPoints = currentPoints;
+    }
+
+    public Integer getTotalPointsEarned() {
+        return totalPointsEarned;
+    }
+
+    public void setTotalPointsEarned(Integer totalPointsEarned) {
+        this.totalPointsEarned = totalPointsEarned;
+    }
+
+    public String getCustomJson() {
+        return customJson;
+    }
+
+    public void setCustomJson(String customJson) {
+        this.customJson = customJson;
+    }
+//getters and setters for permissions
+    public List<PermissionRequest> getPendingPermissionRequests() {
+        return pendingPermissionRequests;
+    }
+
+    public void setPendingPermissionRequests(List<PermissionRequest> pendingPermissionRequests) {
+        this.pendingPermissionRequests = pendingPermissionRequests;
+    }
+
+
+    //Getters and setters for UI display arrays
 @JsonIgnore
     public String[] getMonitorsUsersString() {
         return monitorsUsersString;
@@ -296,5 +341,21 @@ public class User {
                 ", monitorsUsers=" + monitorsUsers +
                 ", memberOfGroups=" + memberOfGroups +
                 '}';
+    }
+
+
+    // User Rewarding functions
+
+    // This can be a negative, so long as it does not make the user's current points negative
+    public void addUserPoints(int points) throws ArithmeticException{
+        if((currentPoints + points) < 0){
+            throw new ArithmeticException("Not enough current points");
+        }
+        else{
+            currentPoints += points;
+            if(points > 0){
+                totalPointsEarned += points;
+            }
+        }
     }
 }

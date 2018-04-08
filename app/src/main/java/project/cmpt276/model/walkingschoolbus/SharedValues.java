@@ -20,6 +20,7 @@ public class SharedValues {
     private int numMessagesUnread;
     private List<User> userList = new ArrayList<>();
     private Drawable userAvatar;
+    private List<PermissionRequest> requests;
     private static SharedValues instance;
 
     private SharedValues(){
@@ -80,4 +81,11 @@ public class SharedValues {
         return userAvatar;
     }
 
+    public List<PermissionRequest> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(List<PermissionRequest> requests) {
+        this.requests = requests;
+    }
 }
