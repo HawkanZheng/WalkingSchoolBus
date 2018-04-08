@@ -1,5 +1,7 @@
 package project.cmpt276.model.walkingschoolbus;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 
 /**
@@ -22,12 +24,17 @@ public class GamificationCollection {
             "Spider Woman", "Spider Man", "Superman",
             "Thor"};
 
+    public boolean[] getAvatarUnlockState() {
+        return avatarUnlockState;
+    }
+
     private boolean[] avatarUnlockState = new boolean[avatarNames.length];
 
     private GamificationCollection() {
         // Singleton Pattern
     }
 
+    @JsonIgnore
     public int getNumRewards(){
         return avatarNames.length;
     }
@@ -46,7 +53,7 @@ public class GamificationCollection {
             avatarUnlockState[pos] = state;
         }
     }
-
+    @JsonIgnore
     public boolean getAvatarStateByName(String avatarName){
         boolean state = false;
         int numAvatar = getNumRewards();
@@ -57,7 +64,7 @@ public class GamificationCollection {
         }
         return state;
     }
-
+    @JsonIgnore
     public boolean getAvatarStateByPosition(int pos){
         if(0 <= pos && pos < getNumRewards()){
             return avatarUnlockState[pos];
@@ -66,7 +73,7 @@ public class GamificationCollection {
             return false;
         }
     }
-
+    @JsonIgnore
     // Returns -1 if error
     public int getPostionOfAvatar(String avatarName){
         int pos = -1;
@@ -78,7 +85,7 @@ public class GamificationCollection {
         }
         return pos;
     }
-
+    @JsonIgnore
     public String getAvatarAtPostion(int position){
         return avatarNames[position];
     }
