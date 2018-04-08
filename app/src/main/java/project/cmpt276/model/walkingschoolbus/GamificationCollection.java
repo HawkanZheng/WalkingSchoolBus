@@ -14,34 +14,73 @@ public class GamificationCollection {
         }
         return ourInstance;
     }
+    private String[] avatarNames = {"Aquaman", "Batman", "Black Canary",
+            "Black Widow", "Captain America", "Flash",
+            "Green Arrow", "Green Lantern", "Hawkeye",
+            "Hulk", "Iron Man", "Martian Manhunter",
+            "Ms. Marvel", "Red Tornado", "Sentry",
+            "Spider Woman", "Spider Man", "Superman",
+            "Thor"};
 
-    private RewardsAvatarCollection userRewards = new RewardsAvatarCollection();
-    private RewardAvatar lastAvatarSelected = new RewardAvatar();
+    private boolean[] avatarUnlockState = new boolean[avatarNames.length];
 
     private GamificationCollection() {
         // Singleton Pattern
     }
 
-    // Set user rewards by name
-    public void setUserRewards(String avatarName, Boolean unlockState){
-        userRewards.setUnlockValueOfAvatar(avatarName, unlockState);
+    public int getNumRewards(){
+        return avatarNames.length;
     }
 
-    // get all avatars and their state
-    public ArrayList<RewardAvatar> returnAllAvatars(){
-        return userRewards.returnAllAvatars();
+    public void setAvatarUnlockStateByName(String avatarName, boolean state){
+        int numAvatar = getNumRewards();
+        for(int i = 0; i<numAvatar;i++){
+            if(avatarName.equals(avatarNames[i])){
+                avatarUnlockState[i] = state;
+            }
+        }
     }
 
-    // get a specific avatar
-    public RewardAvatar getAvatar(String avatarName){
-        return userRewards.getAvatar(avatarName);
+    public void setAvatarUnlockStateByPos(int pos, boolean state){
+        if(0 <= pos && pos < getNumRewards()){
+            avatarUnlockState[pos] = state;
+        }
     }
 
-    public RewardAvatar getLastAvatarSelected() {
-        return lastAvatarSelected;
+    public boolean getAvatarStateByName(String avatarName){
+        boolean state = false;
+        int numAvatar = getNumRewards();
+        for(int i = 0; i<numAvatar;i++){
+            if(avatarName.equals(avatarNames[i])){
+                state = avatarUnlockState[i];
+            }
+        }
+        return state;
     }
 
-    public void setLastAvatarSelected(RewardAvatar lastAvatarSelected) {
-        this.lastAvatarSelected = lastAvatarSelected;
+    public boolean getAvatarStateByPosition(int pos){
+        if(0 <= pos && pos < getNumRewards()){
+            return avatarUnlockState[pos];
+        }
+        else{
+            return false;
+        }
     }
+
+    // Returns -1 if error
+    public int getPostionOfAvatar(String avatarName){
+        int pos = -1;
+        int numAvatar = getNumRewards();
+        for(int i = 0; i<numAvatar; i++){
+            if(avatarName.equals(avatarNames[i])){
+                pos = i;
+            }
+        }
+        return pos;
+    }
+
+    public String getAvatarAtPostion(int position){
+        return avatarNames[position];
+    }
+
 }
