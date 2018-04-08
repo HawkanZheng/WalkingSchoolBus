@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Looper;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -60,6 +61,8 @@ public class mainMenu extends AppCompatActivity {
     private boolean isEmergencyVisible = false;
     private final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
 
+    private DrawerLayout mDrawerLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +70,7 @@ public class mainMenu extends AppCompatActivity {
 
         // Action bar setup
         actionBarSetup();
+        setupNavigationDrawer();
 
         sharedValues = SharedValues.getInstance();
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
@@ -100,11 +104,49 @@ public class mainMenu extends AppCompatActivity {
         });
     }
 
-
     private void actionBarSetup() {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         ActionBar actionbar = getSupportActionBar();
+
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+    }
+
+
+    private void setupNavigationDrawer() {
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        menuItem.setChecked(true);
+                        // close drawer when item is tapped
+                        mDrawerLayout.closeDrawers();
+
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+                        switch (menuItem.getItemId()){
+                            case R.id.nav_Monitors:
+                                Toast.makeText(mainMenu.this,"Monitors",Toast.LENGTH_SHORT).show();
+                                return true;
+
+                            case R.id.nav_mygroups:
+                                Toast.makeText(mainMenu.this,"My Groups",Toast.LENGTH_SHORT).show();
+                                return true;
+
+                            case R.id.nav_parentdash:
+                                Toast.makeText(mainMenu.this,"Parent Dash",Toast.LENGTH_SHORT).show();
+                                return true;
+
+                        }
+
+                        return true;
+                    }
+                });
     }
 
     //refresh name in greeting after it has been modified in the edit user activity and avatar.
@@ -243,6 +285,10 @@ public class mainMenu extends AppCompatActivity {
 
             case R.id.action_logout:
                 logoutCall();
+                return true;
+
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
 
             default:
