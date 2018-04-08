@@ -126,24 +126,28 @@ public class mainMenu extends AppCompatActivity {
                         menuItem.setChecked(true);
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
-
+                        Intent i;
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
                         switch (menuItem.getItemId()){
                             case R.id.nav_Monitors:
+                                i = WhoMonitorsMe.makeIntent(mainMenu.this);
+                                startActivity(i);
                                 Toast.makeText(mainMenu.this,"Monitors",Toast.LENGTH_SHORT).show();
                                 return true;
 
                             case R.id.nav_mygroups:
+                                i = ManageGroups.makeIntent(mainMenu.this);
+                                startActivity(i);
                                 Toast.makeText(mainMenu.this,"My Groups",Toast.LENGTH_SHORT).show();
                                 return true;
 
                             case R.id.nav_parentdash:
+                                i = ParentsDashboardActivity.makeIntent(mainMenu.this);
+                                startActivity(i);
                                 Toast.makeText(mainMenu.this,"Parent Dash",Toast.LENGTH_SHORT).show();
                                 return true;
-
                         }
-
                         return true;
                     }
                 });
@@ -397,8 +401,6 @@ public class mainMenu extends AppCompatActivity {
         Intent intent = new Intent(context, mainMenu.class);
         return intent;
     }
-
-    //TODO: Make a textview that shows the number of unread messages for the user and refreshes every minute
 
     //server call that gets all the unread messages
     private void getUnreadMessages(){
