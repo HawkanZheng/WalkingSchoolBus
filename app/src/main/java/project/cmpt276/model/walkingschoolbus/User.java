@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -363,6 +364,15 @@ public class User implements Comparable<User>{
 
     @Override
     public int compareTo(@NonNull User user) {
-        return 0;
+        return Comparators.POINTS.compare(this, user);
+    }
+
+    public static  class Comparators {
+        public static Comparator<User> POINTS = new Comparator<User>() {
+            @Override
+            public int compare(User user, User t1) {
+                return user.totalPointsEarned - t1.totalPointsEarned;
+            }
+        };
     }
 }

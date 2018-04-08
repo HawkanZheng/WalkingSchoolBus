@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import project.cmpt276.model.walkingschoolbus.SharedValues;
@@ -45,16 +46,23 @@ public class LeaderBoardActivity extends AppCompatActivity {
 
     //response to user server call
     private void response(List<User> returnedUsers) {
+        //sort user list with total points earned
+//        Collections.sort(returnedUsers, User.Comparators.POINTS);
+//        Collections.reverse(returnedUsers);
         leaderBoardData = new ArrayList<>();
         String info;
         int i = 1;
 
         for(User curr : returnedUsers){
-            info = i + ". Name: " + user.getName() +
-                    "\n   Current Points: " + user.getCurrentPoints() +
-                    "\n   Total Points Earned: " + user.getTotalPointsEarned();
-
+            //create string to display on leaderboard
+            info = i + ". Name: " + curr.getName() +
+                    "\n   Current Points: " + curr.getCurrentPoints() +
+                    "\n   Total Points Earned: " + curr.getTotalPointsEarned();
+            i++;
+            leaderBoardData.add(info);
         }
+
+        populateList();
 
 
 
