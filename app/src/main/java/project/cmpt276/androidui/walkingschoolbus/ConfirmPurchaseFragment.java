@@ -1,7 +1,9 @@
 package project.cmpt276.androidui.walkingschoolbus;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -63,9 +65,18 @@ public class ConfirmPurchaseFragment extends AppCompatDialogFragment {
         return new AlertDialog.Builder(getActivity()).setView(v).create();
     }
 
-    public void setPosition(int i, int j){
-        //Converts the 2d array index to a 1d array index.
-        position = (PointsStore.getNumColRewards() * i) + j;
+    @Override
+    public void onDismiss(final DialogInterface dialog) {
+        super.onDismiss(dialog);
+        final Activity activity = getActivity();
+        if (activity instanceof DialogInterface.OnDismissListener) {
+            ((DialogInterface.OnDismissListener) activity).onDismiss(dialog);
+        }
+    }
+
+
+    public void setPosition(int i){
+        position = i;
     }
 
     private void setRewardInfo(){
@@ -97,9 +108,10 @@ public class ConfirmPurchaseFragment extends AppCompatDialogFragment {
         if(temp - 150 >= 0){
             //Checks if the user has enough currency to buy the avatar. If so, flip the switch to say it is unlocked.
             gameCollection.setAvatarUnlockStateByPos(position,true);
+            user.addUserPoints(-150);
             Call<User> transactionCall = proxy.editUser(user, user.getId());
-            ProxyBuilder.callProxy(v.getContext(), transactionCall, returnedUser -> returnedUser.addUserPoints(-150));
-            Toast.makeText(v.getContext(), "Purchased!", Toast.LENGTH_SHORT).show();
+            ProxyBuilder.callProxy(v.getContext(), transactionCall, returnedUser -> Toast.makeText(v.getContext(), "Purchased!", Toast.LENGTH_SHORT).show());
+            //TODO -- Tell server that this avatar is unlocked.
             dismiss();
         }else{
             Toast.makeText(v.getContext(), "Not enough points to unlock", Toast.LENGTH_SHORT).show();
