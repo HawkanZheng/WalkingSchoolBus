@@ -14,11 +14,16 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import project.cmpt276.model.walkingschoolbus.GamificationCollection;
 import project.cmpt276.model.walkingschoolbus.Group;
 import project.cmpt276.model.walkingschoolbus.Message;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
@@ -31,12 +36,16 @@ public class SendingMessageActivity extends AppCompatActivity {
     private WGServerProxy proxy;
     private SharedValues sharedValues;
     private User user;
+//    private GamificationCollection gamificationCollection;
+
+
 
     private ArrayList<String> groupSendList = new ArrayList<>();
     private ArrayList<Boolean> groupsSelected = new ArrayList<>();
 
     private View lastViewClicked;
     private Group groupSelected = new Group();
+
 
     public SendingMessageActivity() {
     }
@@ -48,6 +57,7 @@ public class SendingMessageActivity extends AppCompatActivity {
         //Get instances
         user = User.getInstance();
         sharedValues = SharedValues.getInstance();
+        //gamificationCollection = GamificationCollection.getInstance();
 
         //get proxy
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
@@ -63,8 +73,40 @@ public class SendingMessageActivity extends AppCompatActivity {
         // Setup Buttons
         setupSendToParentBtn();
         setupSelectedGroupsBtn();
-
+        //test custom json serialization
+        //gameTest();
     }
+
+//    /*test gamefication
+//     */
+//    private void gameTest(){
+//        user.setCurrentPoints(100);
+//        gamificationCollection.setAvatarUnlockStateByName("Aquaman", true);
+//        try{
+//            String customAsJson = new ObjectMapper().writeValueAsString(gamificationCollection);
+//            user.setCustomJson(customAsJson);
+//        }catch(JsonProcessingException e){
+//            e.printStackTrace();
+//        }
+//
+//        Call<User> caller = proxy.editUser(user, user.getId());
+//        ProxyBuilder.callProxy(SendingMessageActivity.this, caller, returnedUser -> userResponse(returnedUser));
+//
+//    }
+//
+//    private void userResponse(User returnedUser) {
+//        try{
+//            GamificationCollection rewardFromServer =
+//                    new ObjectMapper().readValue(
+//                            returnedUser.getCustomJson(),
+//                            GamificationCollection.class);
+//            Toast.makeText(SendingMessageActivity.this, returnedUser.getCustomJson(), Toast.LENGTH_LONG).show();
+//
+//        }catch(IOException e){
+//            e.printStackTrace();
+//        }
+//
+//    }
 
     // Add a Back button on the Action Bar
     private void setupActionBarBack() {

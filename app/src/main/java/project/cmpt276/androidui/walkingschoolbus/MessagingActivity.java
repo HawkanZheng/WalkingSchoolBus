@@ -40,7 +40,6 @@ public class MessagingActivity extends AppCompatActivity {
         //Get instances
         user = User.getInstance();
         sharedValues = SharedValues.getInstance();
-
         //Get proxy
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
         //Get messages
