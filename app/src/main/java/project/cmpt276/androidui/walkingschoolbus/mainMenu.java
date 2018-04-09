@@ -179,6 +179,16 @@ public class mainMenu extends AppCompatActivity {
         super.onResume();
         getUnreadMessages();
         setUserAvatar();
+        getGroups();
+
+    }
+    private void getGroups() {
+        Call<List<Group>> caller = proxy.getGroups();
+        ProxyBuilder.callProxy(mainMenu.this, caller, returnedGroups ->groupsResponse(returnedGroups));
+    }
+
+    private void groupsResponse(List<Group> returnedGroups) {
+        groupList.setGroups(returnedGroups);
     }
 
     private void response(List<User> returnedUsers) {

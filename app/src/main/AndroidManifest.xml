@@ -74,7 +74,9 @@
         <activity android:name=".GroupsLeaderActivity" />
         <activity android:name=".PointsStore" />
         <activity android:name=".LeaderBoardActivity"/>
+        <activity android:name=".PreviousPermissions"/>
         <activity android:name=".Permissions"></activity>
+
     </application>
 
 </manifest>

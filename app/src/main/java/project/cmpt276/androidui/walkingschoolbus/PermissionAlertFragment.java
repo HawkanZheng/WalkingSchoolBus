@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.List;
 
 import project.cmpt276.model.walkingschoolbus.PermissionRequest;
@@ -58,9 +59,6 @@ public class PermissionAlertFragment extends DialogFragment {
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.permissions, null);
         String message = ((Permissions) getActivity()).getMessage();
 
-//        TextView textView = getActivity().findViewById(R.id.appr)
-
-
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -72,20 +70,27 @@ public class PermissionAlertFragment extends DialogFragment {
                     case DialogInterface.BUTTON_POSITIVE:
                         //server call
                         Call<PermissionRequest> approveCaller = proxy.approveOrDenyPermissionRequest(requests.get(position).getId(), APPROVED);
-                        ProxyBuilder.callProxy(getActivity(), approveCaller, returnedPermission -> approvePermissionResponse(returnedPermission, position));
                         requests.remove(position);
+
                         sharedValues.setRequests(requests);
+
+
+                        ((Permissions) getActivity()).permissionsResponse(requests);
                         Toast.makeText(getActivity(), "Permission Granted", Toast.LENGTH_SHORT).show();
+                        ProxyBuilder.callProxy(getActivity(), approveCaller, returnedPermission -> approvePermissionResponse(returnedPermission, position));
                         break;
 
                     //Deny permission request
                     case DialogInterface.BUTTON_NEGATIVE:
                         //server call
                         Call<PermissionRequest> denyCaller = proxy.approveOrDenyPermissionRequest(requests.get(position).getId(), DENIED);
-                        ProxyBuilder.callProxy(getActivity(), denyCaller, returnedPermission -> denyPermissionResponse(returnedPermission, position));
+
                         requests.remove(position);
                         sharedValues.setRequests(requests);
+
+                        ((Permissions) getActivity()).permissionsResponse(requests);
                         Toast.makeText(getActivity(), "Permission Denied", Toast.LENGTH_SHORT).show();
+                        ProxyBuilder.callProxy(getActivity(), denyCaller, returnedPermission -> denyPermissionResponse(returnedPermission, position));
                         break;
 
                     //Cancel alert
