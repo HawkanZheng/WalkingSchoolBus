@@ -125,10 +125,12 @@ public class signUpOptionalInfo extends AppCompatActivity implements AdapterView
         user.setTeacherName(teacherName);
         user.setEmergencyContactInfo(emergencyContactInfo);
         user.setGrade(grade);
+        user.setCurrentPoints(0);
+        user.setTotalPointsEarned(0);
     }
 
     private void response(User returnedUser) {
-        user.setName(null);
+        //user.setName(null);
         Log.w(TAG, "Server replied with user: " + user.toString());
         ProxyBuilder.setOnTokenReceiveCallback(this::onReceiveToken);
         Call<Void> caller = proxy.login(user);
@@ -152,8 +154,8 @@ public class signUpOptionalInfo extends AppCompatActivity implements AdapterView
 
     private void userResponse(User returnedUser) {
         Log.i(TAG, "userResponse used here");
-        finish();
         User.setUser(returnedUser);
+        finish();
         Intent intent = mainMenu.makeIntent(signUpOptionalInfo.this);
         startActivity(intent);
     }
