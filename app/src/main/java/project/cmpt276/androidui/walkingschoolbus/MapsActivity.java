@@ -299,42 +299,45 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Group grp = new Group();
             grp = groupCollection.getGroup(i);
 
-            List<Double> grpLatLocation = new ArrayList<Double>();
-            List<Double> grpLngLocation = new ArrayList<Double>();
+            if(grp.getLeader() != null){
+                List<Double> grpLatLocation = new ArrayList<Double>();
+                List<Double> grpLngLocation = new ArrayList<Double>();
 
-            grpLatLocation = grp.getRouteLatArray();
-            grpLngLocation = grp.getRouteLngArray();
-
-
-            Log.i("grpLatNull","" + (grp.getRouteLatArray() == null));
-            Log.i("grpLngNull","" + (grpLatLocation == null));
+                grpLatLocation = grp.getRouteLatArray();
+                grpLngLocation = grp.getRouteLngArray();
 
 
-            if(grpLatLocation != null && grpLngLocation != null && !grpLatLocation.isEmpty() && !grpLngLocation.isEmpty()){
-                LatLng grpStartLocation = new LatLng(grpLatLocation.get(0), grpLngLocation.get(0));
-                Log.i("grp@",""+grpStartLocation);
-                Log.i("isLocationInRadius","" + gMapsInterface.isLocationInRadius(deviceLocation,grpStartLocation));
-                //gMapsInterface.makeMarker(grpStartLocation,GROUP_TYPE,grp.getGroupDescription());
-                if (gMapsInterface.isLocationInRadius(deviceLocation, grpStartLocation)) {
-                    groupInRadius.add(grp);
-                    if(sharedValues.getGroup() != null) {
-                        //Colors the currently selected group, if there is one, yellow.
-                        if (sharedValues.getGroup().getId() == grp.getId()) {
-                            Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, HUE_YELLOW, grp.getGroupDescription(), null));
-                            marker.setTag(grp);
-                            groupMarkersPlaced.add(marker);
-                        }else{
+                Log.i("grpLatNull","" + (grp.getRouteLatArray() == null));
+                Log.i("grpLngNull","" + (grpLatLocation == null));
+
+
+                if(grpLatLocation != null && grpLngLocation != null && !grpLatLocation.isEmpty() && !grpLngLocation.isEmpty()){
+                    LatLng grpStartLocation = new LatLng(grpLatLocation.get(0), grpLngLocation.get(0));
+                    Log.i("grp@",""+grpStartLocation);
+                    Log.i("isLocationInRadius","" + gMapsInterface.isLocationInRadius(deviceLocation,grpStartLocation));
+                    //gMapsInterface.makeMarker(grpStartLocation,GROUP_TYPE,grp.getGroupDescription());
+                    if (gMapsInterface.isLocationInRadius(deviceLocation, grpStartLocation)) {
+                        groupInRadius.add(grp);
+                        if(sharedValues.getGroup() != null) {
+                            //Colors the currently selected group, if there is one, yellow.
+                            if (sharedValues.getGroup().getId() == grp.getId()) {
+                                Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, HUE_YELLOW, grp.getGroupDescription(), null));
+                                marker.setTag(grp);
+                                groupMarkersPlaced.add(marker);
+                            }else{
+                                Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, GROUP_TYPE, grp.getGroupDescription(),null));
+                                marker.setTag(grp);
+                                groupMarkersPlaced.add(marker);
+                            }
+                        } else {
                             Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, GROUP_TYPE, grp.getGroupDescription(),null));
                             marker.setTag(grp);
                             groupMarkersPlaced.add(marker);
                         }
-                    } else {
-                        Marker marker = mMap.addMarker(gMapsInterface.makeMarker(grpStartLocation, GROUP_TYPE, grp.getGroupDescription(),null));
-                        marker.setTag(grp);
-                        groupMarkersPlaced.add(marker);
                     }
                 }
             }
+
         }
     }
 
