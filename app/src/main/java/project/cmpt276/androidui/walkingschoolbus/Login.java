@@ -166,19 +166,21 @@ public class Login extends AppCompatActivity {
         Log.i(TAG, "userResponse used here");
         User.setUser(returnedUser);
         //get gamification data
-        try{
-            GamificationCollection gamefactionFromServer =
-                    new ObjectMapper().readValue(
-                            returnedUser.getCustomJson(),
-                            GamificationCollection.class);
-            //Toast.makeText(Login.this, returnedUser.getCustomJson(), Toast.LENGTH_LONG).show();
-            GamificationCollection.setOurInstance(gamefactionFromServer);
+        if(returnedUser.getCustomJson() != null) {
+            try {
+                GamificationCollection gamefactionFromServer =
+                        new ObjectMapper().readValue(
+                                returnedUser.getCustomJson(),
+                                GamificationCollection.class);
+                //Toast.makeText(Login.this, returnedUser.getCustomJson(), Toast.LENGTH_LONG).show();
+                GamificationCollection.setOurInstance(gamefactionFromServer);
 
-        }catch(IOException e){
-            e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        Intent intent = mainMenu.makeIntent(Login.this);
-        startActivity(intent);
+            Intent intent = mainMenu.makeIntent(Login.this);
+            startActivity(intent);
     }
 
     private void getGroups() {

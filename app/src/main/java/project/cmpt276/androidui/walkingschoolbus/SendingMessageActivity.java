@@ -36,7 +36,7 @@ public class SendingMessageActivity extends AppCompatActivity {
     private WGServerProxy proxy;
     private SharedValues sharedValues;
     private User user;
-//    private GamificationCollection gamificationCollection;
+
 
 
 
@@ -57,7 +57,6 @@ public class SendingMessageActivity extends AppCompatActivity {
         //Get instances
         user = User.getInstance();
         sharedValues = SharedValues.getInstance();
-//        gamificationCollection = GamificationCollection.getInstance();
 
         //get proxy
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
@@ -73,44 +72,8 @@ public class SendingMessageActivity extends AppCompatActivity {
         // Setup Buttons
         setupSendToParentBtn();
         setupSelectedGroupsBtn();
-        //test custom json serialization
-        //gameTest();
     }
-//
-////    /*test gamefication
-////     */
-//    private void gameTest(){
-////        user.setCurrentPoints(100);
-////        gamificationCollection.setAvatarUnlockStateByName("Batman", true);
-////        gamificationCollection.setAvatarSelectedPosition(0);
-////        try{
-////            String customAsJson = new ObjectMapper().writeValueAsString(gamificationCollection);
-////            user.setCustomJson(customAsJson);
-////        }catch(JsonProcessingException e){
-////            e.printStackTrace();
-////        }
-//
-//        Call<User> caller = proxy.getUserByEmail(user.getEmail());
-//        ProxyBuilder.callProxy(SendingMessageActivity.this, caller, returnedUser -> userResponse(returnedUser));
-//
-//    }
-//
-//    private void userResponse(User returnedUser) {
-//        try{
-//            GamificationCollection rewardFromServer =
-//                    new ObjectMapper().readValue(
-//                            returnedUser.getCustomJson(),
-//                            GamificationCollection.class);
-//            Toast.makeText(SendingMessageActivity.this, returnedUser.getCustomJson(), Toast.LENGTH_LONG).show();
-//            GamificationCollection.setOurInstance(rewardFromServer);
-//
-//        }catch(IOException e){
-//            e.printStackTrace();
-//        }
-//
-//        gamificationCollection = GamificationCollection.getInstance();
-//        Log.i("TESTING", "Unlock Array: " + Arrays.toString(gamificationCollection.getAvatarUnlockState()) + "\nSelected: " + gamificationCollection.getAvatarSelectedPosition() );
-//    }
+
 
     // Add a Back button on the Action Bar
     private void setupActionBarBack() {
