@@ -1,15 +1,18 @@
 package project.cmpt276.model.walkingschoolbus;
 
+import android.support.annotation.NonNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
  *User class to store the data the server expects and returns.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class User {
+public class User implements Comparable<User>{
     //Variables
     private Long id;
     private String name;
@@ -357,5 +360,19 @@ public class User {
                 totalPointsEarned += points;
             }
         }
+    }
+
+    @Override
+    public int compareTo(@NonNull User user) {
+        return Comparators.POINTS.compare(this, user);
+    }
+
+    public static  class Comparators {
+        public static Comparator<User> POINTS = new Comparator<User>() {
+            @Override
+            public int compare(User user, User t1) {
+                return user.totalPointsEarned - t1.totalPointsEarned;
+            }
+        };
     }
 }

@@ -79,8 +79,8 @@ public class signUpOptionalInfo extends AppCompatActivity implements AdapterView
         extractDataFromIntent();
         user = User.getInstance();
         gameCollection = GamificationCollection.getInstance();
+        gameCollection = GamificationCollection.trashInstance();
         sharedValues = SharedValues.getInstance();
-        groupList = GroupCollection.getInstance();
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), null);
         groupList = GroupCollection.getInstance();
 

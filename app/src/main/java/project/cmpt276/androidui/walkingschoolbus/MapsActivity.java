@@ -5,7 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,19 +38,20 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -53,6 +59,7 @@ import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import project.cmpt276.model.walkingschoolbus.GamificationCollection;
 import project.cmpt276.model.walkingschoolbus.GoogleMapsInterface;
 import project.cmpt276.model.walkingschoolbus.Group;
 import project.cmpt276.model.walkingschoolbus.GroupCollection;
@@ -103,6 +110,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationCallback locationCallback;
     private LocationSettingsRequest locationSettings;
     private Circle userRadius;
+    private Marker avatarMarker;
     private LocationRequest uploader;
     private LocationCallback uploadTask;
     private Timer timer;
@@ -117,6 +125,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GroupCollection groupList;
     private User user;
     private SharedValues sharedValues;
+    private GamificationCollection gameCollection;
+    private BitmapDescriptor bm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Map stuffs
@@ -128,6 +138,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationService = LocationServices.getFusedLocationProviderClient(this);
         uploadLocationService = LocationServices.getFusedLocationProviderClient(this);
         gMapsInterface =  GoogleMapsInterface.getInstance(this);
+        gameCollection = GamificationCollection.getInstance();
         checkLocationsEnabled();
         // Setup  buttons -- These need to come after the map creation
         setupSaveButton();
@@ -225,7 +236,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             case LOCATION_PERMISSION_REQUESTCODE: {
                 if (grantResults.length == 1 &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    addUserBlip();
+                        moveCameraToUser();
                 } else {
                     ActivityCompat.requestPermissions(this,perms ,LOCATION_PERMISSION_REQUESTCODE);
                     Toast.makeText(this, "Please allow device location", Toast.LENGTH_LONG);
@@ -253,7 +264,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SettingsClient client = LocationServices.getSettingsClient(this);
         Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
         //If locations successfully received, start by adding the user's location.
-        task.addOnSuccessListener(this, e -> addUserBlip());
+        task.addOnSuccessListener(this, e -> moveCameraToUser());
         //Otherwise start handling the failure.
         task.addOnFailureListener(this, e -> locationsNotOn((ApiException) e));
     }
@@ -281,17 +292,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (ActivityCompat.checkSelfPermission(this, perms[0]) == PackageManager.PERMISSION_GRANTED) {
             //This sets up a user location blip.
             mMap.setMyLocationEnabled(true);
-            locationService.getLastLocation().addOnSuccessListener(l -> moveCameraToUser(l));
+            locationService.getLastLocation().addOnSuccessListener(l -> moveCameraToUser());
         } else {
             //Prompt user for access to their device's location.
             ActivityCompat.requestPermissions(this, perms, LOCATION_PERMISSION_REQUESTCODE);
         }
     }
 
-    private void moveCameraToUser(Location location){
-        deviceLocation = gMapsInterface.calculateDeviceLocation(location);
-        mMap.moveCamera(gMapsInterface.cameraSettings(deviceLocation,15.0f));
-        displayNearbyGroups();
+    private void moveCameraToUser(){
+        if (ActivityCompat.checkSelfPermission(this, perms[0]) == PackageManager.PERMISSION_GRANTED) {
+            locationService.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    deviceLocation = gMapsInterface.calculateDeviceLocation(location);
+                    LatLng l = new LatLng(location.getLatitude(), location.getLongitude());
+                    mMap.moveCamera(gMapsInterface.cameraSettings(l, 15.0f));
+                    displayNearbyGroups();
+                }
+            });
+        }else {
+            //Prompt user for access to their device's location.
+            ActivityCompat.requestPermissions(this, perms, LOCATION_PERMISSION_REQUESTCODE);
+        }
+        //deviceLocation = gMapsInterface.calculateDeviceLocation(location);
+        //mMap.moveCamera(gMapsInterface.cameraSettings(deviceLocation,15.0f));
+        //displayNearbyGroups();
     }
 
     private void displayNearbyGroups() {
@@ -343,13 +368,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    //This places a marker at user's last known location... Could be used in a Panic feature.
-    private void placeLastLocationMarker(Location location){
-        deviceLocation = gMapsInterface.calculateDeviceLocation(location);
-        Toast.makeText(MapsActivity.this,getString(R.string.add_marker_at_map) + deviceLocation.latitude + ", " + deviceLocation.longitude, Toast.LENGTH_LONG).show();
-        mMap.addMarker(new MarkerOptions().position(deviceLocation).title("Your location"));
-    }
-
     /**
      * createLocationRequest, createLocationCallback, createLocationSettings, startLocationUpdates and onResume follows the Android Training Guide.
      * https://developer.android.com/training/location/receive-location-updates.html
@@ -386,15 +404,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 super.onLocationResult(locationResult);
                 Location lastLocation = locationResult.getLastLocation();
                 deviceLocation = gMapsInterface.calculateDeviceLocation(lastLocation);
-                if(userRadius == null){
-                    //If there is no circle, make one.
-                    userRadius = gMapsInterface.generateUserRadius(mMap, deviceLocation,Color.RED);
-                } else{
-                    //otherwise, recenter the circle.
-                    userRadius.setCenter(deviceLocation);
-                }
+                    if(userRadius == null){
+                        //If there is no circle, make one. Likewise for the avatar.
+                        createAvatarIcon();
+                        userRadius = gMapsInterface.generateUserRadius(mMap, deviceLocation,Color.RED);
+                    } else{
+                        //otherwise, recenter the circle and redraw the avatar.
+                        if(avatarMarker != null){
+                            avatarMarker.remove();
+                            avatarMarker = mMap.addMarker(new MarkerOptions().position(deviceLocation).icon(bm));
+                        }
+                        userRadius.setCenter(deviceLocation);
+                    }
             }
         };
+    }
+
+    private void createAvatarIcon(){
+        if(gameCollection.getAvatarSelectedPosition() != -1) {
+            //If there is an icon selected, create the bitmap of the avatar and place it on the map.
+            Resources r = getResources();
+            TypedArray imgArr = r.obtainTypedArray(R.array.avatars);
+            Bitmap img = BitmapFactory.decodeResource(getResources(), imgArr.getResourceId(gameCollection.getAvatarSelectedPosition(), -1));
+            Bitmap scaledImage = Bitmap.createScaledBitmap(img, 80, 150, true);
+            bm = BitmapDescriptorFactory.fromBitmap(scaledImage);
+            avatarMarker = mMap.addMarker(new MarkerOptions().position(deviceLocation).icon(bm));
+        }else{
+            //Otherwise use the google maps blip.
+            addUserBlip();
+        }
     }
 
     //Create the location request settings
@@ -457,6 +495,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             gMapsInterface.toggleTimer(true);
                         }
                         if(!gMapsInterface.isUserInRadius(deviceLocation, grpEnd) && gMapsInterface.timerIsUploading()){
+                            Log.i("Uploader", "User exited location while timer is running, destroying timer.");
                             timer.cancel();
                             timer.purge();
                             timer = null;
@@ -489,11 +528,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Log.i("Uploader","Duration over, upload cancelled");
                 //Removes the callback so location uploading stops indefinitely.
                 uploadLocationService.removeLocationUpdates(uploadTask);
+
                 //Cancel the timer as its no longer in use and purge the cancelled task.
                 timer.cancel();
                 timer.purge();
+
                 //timer is no longer running, set it back to false in case user decides to exit map and reenter, this allows the timer to run again.
                 gMapsInterface.toggleTimer(false);
+
+                //Award the user points once the location is reached and the task is cancelled -- ie. the walk is finished.
+                user.addUserPoints(25);
+                Call<User> caller = proxy.editUser(user, user.getId());
+                ProxyBuilder.callProxy(MapsActivity.this, caller, returnedUser -> Log.i("Uploader", "Points awarded to user"));
             }
         };
     }
