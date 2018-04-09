@@ -57,7 +57,7 @@ public class SendingMessageActivity extends AppCompatActivity {
         //Get instances
         user = User.getInstance();
         sharedValues = SharedValues.getInstance();
-        //gamificationCollection = GamificationCollection.getInstance();
+//        gamificationCollection = GamificationCollection.getInstance();
 
         //get proxy
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
@@ -76,20 +76,21 @@ public class SendingMessageActivity extends AppCompatActivity {
         //test custom json serialization
         //gameTest();
     }
-
-//    /*test gamefication
-//     */
-//    private void gameTest(){
-//        user.setCurrentPoints(100);
-//        gamificationCollection.setAvatarUnlockStateByName("Aquaman", true);
-//        try{
-//            String customAsJson = new ObjectMapper().writeValueAsString(gamificationCollection);
-//            user.setCustomJson(customAsJson);
-//        }catch(JsonProcessingException e){
-//            e.printStackTrace();
-//        }
 //
-//        Call<User> caller = proxy.editUser(user, user.getId());
+////    /*test gamefication
+////     */
+//    private void gameTest(){
+////        user.setCurrentPoints(100);
+////        gamificationCollection.setAvatarUnlockStateByName("Batman", true);
+////        gamificationCollection.setAvatarSelectedPosition(0);
+////        try{
+////            String customAsJson = new ObjectMapper().writeValueAsString(gamificationCollection);
+////            user.setCustomJson(customAsJson);
+////        }catch(JsonProcessingException e){
+////            e.printStackTrace();
+////        }
+//
+//        Call<User> caller = proxy.getUserByEmail(user.getEmail());
 //        ProxyBuilder.callProxy(SendingMessageActivity.this, caller, returnedUser -> userResponse(returnedUser));
 //
 //    }
@@ -101,11 +102,14 @@ public class SendingMessageActivity extends AppCompatActivity {
 //                            returnedUser.getCustomJson(),
 //                            GamificationCollection.class);
 //            Toast.makeText(SendingMessageActivity.this, returnedUser.getCustomJson(), Toast.LENGTH_LONG).show();
+//            GamificationCollection.setOurInstance(rewardFromServer);
 //
 //        }catch(IOException e){
 //            e.printStackTrace();
 //        }
 //
+//        gamificationCollection = GamificationCollection.getInstance();
+//        Log.i("TESTING", "Unlock Array: " + Arrays.toString(gamificationCollection.getAvatarUnlockState()) + "\nSelected: " + gamificationCollection.getAvatarSelectedPosition() );
 //    }
 
     // Add a Back button on the Action Bar

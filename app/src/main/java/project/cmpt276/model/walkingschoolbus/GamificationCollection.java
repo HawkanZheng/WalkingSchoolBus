@@ -16,6 +16,9 @@ public class GamificationCollection {
         }
         return ourInstance;
     }
+    public static void setOurInstance(GamificationCollection obj){
+        ourInstance = obj;
+    }
     private String[] avatarNames = {"Aquaman", "Batman", "Black Canary",
             "Black Widow", "Captain America", "Flash",
             "Green Arrow", "Green Lantern", "Hawkeye",
