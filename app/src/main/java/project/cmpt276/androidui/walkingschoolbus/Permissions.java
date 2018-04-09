@@ -1,10 +1,9 @@
 package project.cmpt276.androidui.walkingschoolbus;
 
 import android.app.FragmentManager;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,6 +12,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.security.Permission;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +25,12 @@ import retrofit2.Call;
 
 import static project.cmpt276.server.walkingschoolbus.WGServerProxy.PermissionStatus.PENDING;
 
-public class Permissions extends AppCompatActivity implements DialogInterface.OnDismissListener {
+public class Permissions extends AppCompatActivity /*implements DialogInterface.OnDismissListener */{
 
 
-    private ArrayList<String> items = new ArrayList<>();
+    private ArrayList<String> listPendingString = new ArrayList<>();
+    private ArrayList<PermissionRequest> listPending = new ArrayList<>();
+
     private int listPosition;
     private String message;
     private User user;
@@ -45,12 +47,13 @@ public class Permissions extends AppCompatActivity implements DialogInterface.On
 
         //Get server proxy
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
-
-
         setContentView(R.layout.activity_permissions);
+
         getPendingPermissions();
         setupActionBarBack();
         listClickCallback();
+        goToPreviousRequestsBtn();
+
 
     }
 
@@ -62,18 +65,21 @@ public class Permissions extends AppCompatActivity implements DialogInterface.On
         ProxyBuilder.callProxy(Permissions.this, caller, returnedPermissions -> permissionsResponse(returnedPermissions));
     }
 
+
+
     //server response
-    private void permissionsResponse(List<PermissionRequest> returnedPermissions) {
-        items = new ArrayList<>();
+    public void permissionsResponse(List<PermissionRequest> returnedPermissions) {
+        listPendingString = new ArrayList<>();
         for(PermissionRequest request : returnedPermissions){
-            items.add(request.getMessage());
+            listPendingString.add(request.getMessage());
         }
         sharedValues.setRequests(returnedPermissions);
-        populateList(items);
+        populateList(listPendingString);
 
     }
 
 
+    //for registering a click on an item in the list
     private void listClickCallback() {
         ListView list = (ListView) findViewById(R.id.listOfPendingPermissions);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -81,7 +87,7 @@ public class Permissions extends AppCompatActivity implements DialogInterface.On
             public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
 
                 listPosition = position;
-                message = items.get(position);
+                message = listPendingString.get(position);
                 FragmentManager manager = getFragmentManager();
                 PermissionAlertFragment dialog = new PermissionAlertFragment();
                 dialog.show(manager, "hello there");
@@ -91,29 +97,13 @@ public class Permissions extends AppCompatActivity implements DialogInterface.On
     }
 
 
-    private void populateList(ArrayList<String> info){
+    //adds values to the array list to display in the list view
+    public void populateList(ArrayList<String> info){
 
         ListView list = (ListView) findViewById(R.id.listOfPendingPermissions);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.permissions, info);
         list.setAdapter(adapter);
 
-    }
-
-    public void showGrantedToast()
-    {
-        Toast.makeText(Permissions.this, "permission granted", Toast.LENGTH_SHORT).show();
-    }
-
-    public void showDeniedToast()
-    {
-        Toast.makeText(Permissions.this, "permission denied", Toast.LENGTH_SHORT).show();
-    }
-
-
-    public void deleteItem(int position)
-    {
-        items.remove(position);
-        getPendingPermissions();
     }
 
     // Add a Back button on the Action Bar
@@ -134,42 +124,10 @@ public class Permissions extends AppCompatActivity implements DialogInterface.On
     }
 
 
-    //on dialog fragment dismiss refresh list
-    @Override
-    public void onDismiss(final DialogInterface dialog){
-        Log.i("On Dismiss", "On Dismiss Refresh list");
-        items = new ArrayList<>();
-        for(PermissionRequest request : sharedValues.getRequests()){
-            items.add(request.getMessage());
-        }
-        populateList(items);
-    }
-
-
-
-
-
-    private void addToList(String newInfo)
-    {
-        items.add(newInfo);
-        populateList(items);
-
-    }
-
 
     public int getPosition()
     {
         return listPosition;
-    }
-
-    public void grantPermission()
-    {
-
-    }
-
-    public void denyPermission()
-    {
-
     }
 
 
@@ -177,6 +135,28 @@ public class Permissions extends AppCompatActivity implements DialogInterface.On
     {
         return message;
     }
+
+
+    //set up button to go to all previous requests
+    private void goToPreviousRequestsBtn()
+    {
+        Button button = findViewById(R.id.goToPreviousRequests);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Permissions.this, PreviousPermissions.class);
+
+                startActivity(intent);
+
+            }
+        });
+    }
+
+
+
+
+
 
 
 }
