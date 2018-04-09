@@ -25,7 +25,7 @@ public class GamificationCollection {
             "Hulk", "Iron Man", "Martian Manhunter",
             "Ms. Marvel", "Red Tornado", "Sentry",
             "Spider Woman", "Spider Man", "Superman",
-            "Thor"};
+            "Thor", "Wonder Woman"};
 
     public boolean[] getAvatarUnlockState() {
         return avatarUnlockState;
@@ -100,5 +100,10 @@ public class GamificationCollection {
 
     public void setAvatarSelectedPosition(int avatarSelectedPosition) {
         this.avatarSelectedPosition = avatarSelectedPosition;
+    }
+
+    public static GamificationCollection trashInstance(){
+        ourInstance = new GamificationCollection();
+        return ourInstance;
     }
 }

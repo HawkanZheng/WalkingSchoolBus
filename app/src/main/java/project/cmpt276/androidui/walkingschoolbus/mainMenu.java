@@ -276,11 +276,14 @@ public class mainMenu extends AppCompatActivity {
     }
 
     private void setUserAvatar(){
-        ImageView iv = findViewById(R.id.userAvatar);
-        Resources resources = getResources();
-        TypedArray imgArr = resources.obtainTypedArray(R.array.avatars);
-        Drawable d = imgArr.getDrawable(gameData.getAvatarSelectedPosition());
-        iv.setBackground(d);
+        int position = gameData.getAvatarSelectedPosition();
+        if(position != -1){
+            ImageView iv = findViewById(R.id.userAvatar);
+            Resources resources = getResources();
+            TypedArray imgArr = resources.obtainTypedArray(R.array.avatars);
+            Drawable d = imgArr.getDrawable(gameData.getAvatarSelectedPosition());
+            iv.setBackground(d);
+        }
     }
 
 
