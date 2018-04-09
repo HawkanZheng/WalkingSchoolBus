@@ -6,7 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.os.Looper;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -38,6 +41,7 @@ import project.cmpt276.model.walkingschoolbus.Group;
 import project.cmpt276.model.walkingschoolbus.GroupCollection;
 import project.cmpt276.model.walkingschoolbus.Message;
 import project.cmpt276.model.walkingschoolbus.RewardAvatar;
+import project.cmpt276.model.walkingschoolbus.RewardRank;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
@@ -65,13 +69,14 @@ public class mainMenu extends AppCompatActivity {
     private final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
 
     private DrawerLayout mDrawerLayout;
+    GamificationCollection gameData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-
+        gameData = GamificationCollection.getInstance();
         sharedValues = SharedValues.getInstance();
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
         user = User.getInstance();
@@ -93,6 +98,13 @@ public class mainMenu extends AppCompatActivity {
         setUpShopBtn();
         getUnreadMessages();
         setUpPermissionsButton();
+        setupRankTextView();
+    }
+
+    private void setupRankTextView() {
+        TextView txt = findViewById(R.id.txtSetRank);
+        RewardRank rank = new RewardRank();
+        txt.setText(rank.getRankTitle(user.getTotalPointsEarned()));
     }
 
     private void setupLeaderboardBtn() {
@@ -265,7 +277,10 @@ public class mainMenu extends AppCompatActivity {
 
     private void setUserAvatar(){
         ImageView iv = findViewById(R.id.userAvatar);
-        iv.setBackground(sharedValues.getUserAvatar());
+        Resources resources = getResources();
+        TypedArray imgArr = resources.obtainTypedArray(R.array.avatars);
+        Drawable d = imgArr.getDrawable(gameData.getAvatarSelectedPosition());
+        iv.setBackground(d);
     }
 
 
