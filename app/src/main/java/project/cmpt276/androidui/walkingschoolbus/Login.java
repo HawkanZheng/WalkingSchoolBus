@@ -13,8 +13,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 import java.util.List;
 
+import project.cmpt276.model.walkingschoolbus.GamificationCollection;
 import project.cmpt276.model.walkingschoolbus.Group;
 import project.cmpt276.model.walkingschoolbus.GroupCollection;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
@@ -32,6 +36,7 @@ public class Login extends AppCompatActivity {
     private WGServerProxy proxy;
     private static final String TAG = "Test";
     private User user;
+    private GamificationCollection gameCollection;
     private SharedValues sharedValues;
     private GroupCollection groupList;
 
@@ -55,6 +60,7 @@ public class Login extends AppCompatActivity {
         password = savedPassword;
         userName =savedUserName;
         user = User.getInstance();
+        gameCollection = GamificationCollection.getInstance();
         getInput();
         sharedValues = SharedValues.getInstance();
         groupList = GroupCollection.getInstance();
@@ -159,6 +165,18 @@ public class Login extends AppCompatActivity {
     private void userResponse(User returnedUser){
         Log.i(TAG, "userResponse used here");
         User.setUser(returnedUser);
+        //get gamification data
+        try{
+            GamificationCollection gamefactionFromServer =
+                    new ObjectMapper().readValue(
+                            returnedUser.getCustomJson(),
+                            GamificationCollection.class);
+            //Toast.makeText(Login.this, returnedUser.getCustomJson(), Toast.LENGTH_LONG).show();
+            GamificationCollection.setOurInstance(gamefactionFromServer);
+
+        }catch(IOException e){
+            e.printStackTrace();
+        }
         Intent intent = mainMenu.makeIntent(Login.this);
         startActivity(intent);
     }
