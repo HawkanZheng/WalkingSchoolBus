@@ -22,7 +22,7 @@ public class GamificationCollection {
             "Hulk", "Iron Man", "Martian Manhunter",
             "Ms. Marvel", "Red Tornado", "Sentry",
             "Spider Woman", "Spider Man", "Superman",
-            "Thor"};
+            "Thor", "Wonder Woman"};
 
     public boolean[] getAvatarUnlockState() {
         return avatarUnlockState;
