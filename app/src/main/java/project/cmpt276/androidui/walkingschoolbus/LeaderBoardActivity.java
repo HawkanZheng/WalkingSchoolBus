@@ -46,14 +46,23 @@ public class LeaderBoardActivity extends AppCompatActivity {
 
     //response to user server call
     private void response(List<User> returnedUsers) {
+        //check if points null, set to 0
+        List<User> leaderBoardUserList = new ArrayList<>();
+        for(User curr : returnedUsers){
+            if(curr.getTotalPointsEarned() == null){
+                curr.setTotalPointsEarned(0);
+                curr.setCurrentPoints(0);
+            }
+            leaderBoardUserList.add(curr);
+        }
         //sort user list with total points earned
-//        Collections.sort(returnedUsers, User.Comparators.POINTS);
-//        Collections.reverse(returnedUsers);
+        Collections.sort(leaderBoardUserList, User.Comparators.POINTS);
+        Collections.reverse(leaderBoardUserList);
         leaderBoardData = new ArrayList<>();
         String info;
         int i = 1;
 
-        for(User curr : returnedUsers){
+        for(User curr : leaderBoardUserList){
             //create string to display on leaderboard
             info = i + ". Name: " + curr.getName() +
                     "\n   Current Points: " + curr.getCurrentPoints() +

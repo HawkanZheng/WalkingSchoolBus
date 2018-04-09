@@ -21,6 +21,8 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -109,6 +111,12 @@ public class ConfirmPurchaseFragment extends AppCompatDialogFragment {
             //Checks if the user has enough currency to buy the avatar. If so, flip the switch to say it is unlocked.
             gameCollection.setAvatarUnlockStateByPos(position,true);
             user.addUserPoints(-150);
+            try{
+                String customAsJson = new ObjectMapper().writeValueAsString(gameCollection);
+                user.setCustomJson(customAsJson);
+            }catch(JsonProcessingException e){
+                e.printStackTrace();
+            }
             Call<User> transactionCall = proxy.editUser(user, user.getId());
             ProxyBuilder.callProxy(v.getContext(), transactionCall, returnedUser -> Toast.makeText(v.getContext(), "Purchased!", Toast.LENGTH_SHORT).show());
             //TODO -- Tell server that this avatar is unlocked.
