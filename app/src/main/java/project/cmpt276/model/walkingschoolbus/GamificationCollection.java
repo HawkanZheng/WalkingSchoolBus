@@ -27,8 +27,8 @@ public class GamificationCollection {
     public boolean[] getAvatarUnlockState() {
         return avatarUnlockState;
     }
-
     private boolean[] avatarUnlockState = new boolean[avatarNames.length];
+    private int avatarSelectedPosition = -1;
 
     private GamificationCollection() {
         // Singleton Pattern
@@ -90,4 +90,12 @@ public class GamificationCollection {
         return avatarNames[position];
     }
 
+    public int getAvatarSelectedPosition() {
+        return avatarSelectedPosition;
+    }
+
+
+    public void setAvatarSelectedPosition(int avatarSelectedPosition) {
+        this.avatarSelectedPosition = avatarSelectedPosition;
+    }
 }
