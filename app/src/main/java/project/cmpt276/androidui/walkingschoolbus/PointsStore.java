@@ -19,6 +19,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import project.cmpt276.model.walkingschoolbus.GamificationCollection;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
@@ -157,6 +160,14 @@ public class PointsStore extends AppCompatActivity implements DialogInterface.On
             sharedValues.setUserAvatar(d);
             gameCollection.setAvatarSelectedPosition(index);
             //TODO -- Upload to server in order to save on login.
+            try{
+                String customAsJson = new ObjectMapper().writeValueAsString(gameCollection);
+                user.setCustomJson(customAsJson);
+            }catch(JsonProcessingException e){
+                e.printStackTrace();
+            }
+            Call<User> caller = proxy.editUser(user, user.getId());
+            ProxyBuilder.callProxy(PointsStore.this, caller, returnedUser -> Toast.makeText(PointsStore.this, gameCollection.getAvatarAtPostion(index) + " avatar selected!", Toast.LENGTH_SHORT).show());
             Log.i("SettingImg", d.toString());
         }else{
             Toast.makeText(this, "You do not own this...", Toast.LENGTH_SHORT);
