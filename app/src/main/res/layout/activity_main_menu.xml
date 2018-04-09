@@ -126,12 +126,12 @@
             android:id="@+id/btnLeaderboards"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:layout_marginEnd="216dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="64dp"
             android:backgroundTint="@android:color/holo_blue_dark"
             android:drawableStart="@drawable/ic_supervisor_account"
             android:text="Leaderboard"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button

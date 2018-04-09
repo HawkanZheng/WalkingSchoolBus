@@ -18,10 +18,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import project.cmpt276.model.walkingschoolbus.GamificationCollection;
 import project.cmpt276.model.walkingschoolbus.Group;
 import project.cmpt276.model.walkingschoolbus.GroupCollection;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
@@ -40,6 +45,7 @@ public class signUpOptionalInfo extends AppCompatActivity implements AdapterView
     private User user;
     private SharedValues sharedValues;
     private GroupCollection groupList;
+    private GamificationCollection gameCollection;
 
 
 
@@ -72,6 +78,7 @@ public class signUpOptionalInfo extends AppCompatActivity implements AdapterView
         setContentView(R.layout.activity_sign_up_optional_info);
         extractDataFromIntent();
         user = User.getInstance();
+        gameCollection = GamificationCollection.getInstance();
         sharedValues = SharedValues.getInstance();
         groupList = GroupCollection.getInstance();
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), null);
@@ -127,6 +134,13 @@ public class signUpOptionalInfo extends AppCompatActivity implements AdapterView
         user.setGrade(grade);
         user.setCurrentPoints(0);
         user.setTotalPointsEarned(0);
+        try{
+            String customAsJson = new ObjectMapper().writeValueAsString(gameCollection);
+            user.setCustomJson(customAsJson);
+        }catch(JsonProcessingException e){
+            e.printStackTrace();
+        }
+
     }
 
     private void response(User returnedUser) {
@@ -155,6 +169,19 @@ public class signUpOptionalInfo extends AppCompatActivity implements AdapterView
     private void userResponse(User returnedUser) {
         Log.i(TAG, "userResponse used here");
         User.setUser(returnedUser);
+        if(returnedUser.getCustomJson() != null) {
+            try {
+                GamificationCollection gameficationFromServer =
+                        new ObjectMapper().readValue(
+                                returnedUser.getCustomJson(),
+                                GamificationCollection.class);
+                Log.i("CHECK CUSTOMJSON", returnedUser.getCustomJson());
+                GamificationCollection.setOurInstance(gameficationFromServer);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         finish();
         Intent intent = mainMenu.makeIntent(signUpOptionalInfo.this);
         startActivity(intent);

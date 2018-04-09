@@ -173,10 +173,6 @@ public class PointsStore extends AppCompatActivity implements DialogInterface.On
         }
     }
 
-    public static int getNumColRewards(){
-        return col;
-    }
-
     //Intent to reach the shop activity.
     public static Intent makeIntent(Context c){
         return new Intent(c, PointsStore.class);
