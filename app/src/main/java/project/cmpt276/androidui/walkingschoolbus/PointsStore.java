@@ -51,6 +51,12 @@ public class PointsStore extends AppCompatActivity {
         displayCurrency();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        displayCurrency();
+    }
+
     //Displays the user's currency.
     private void displayCurrency() {
         Call<User> caller = proxy.getUserById(user.getId());
@@ -143,7 +149,7 @@ public class PointsStore extends AppCompatActivity {
             //Get selected image to save to sharedValues.
             Resources resources = getResources();
             TypedArray imgArr = resources.obtainTypedArray(R.array.avatars);
-            Drawable d = imgArr.getDrawable((index));
+            Drawable d = imgArr.getDrawable(index);
             sharedValues.setUserAvatar(d);
             gameCollection.setAvatarSelectedPosition(index);
             Log.i("SettingImg", d.toString());

@@ -56,6 +56,7 @@ public class ConfirmPurchaseFragment extends AppCompatDialogFragment {
         sharedValues = SharedValues.getInstance();
         user = User.getInstance();
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
+        getUserCurrency();
         setButtons();
         setImage(position);
         setRewardInfo();
@@ -92,17 +93,22 @@ public class ConfirmPurchaseFragment extends AppCompatDialogFragment {
     }
 
     private void purchaseLogic(){
-        Call<User> caller = proxy.getUserById(user.getId());
-        ProxyBuilder.callProxy(v.getContext(), caller, returnedUser -> serverResponse(returnedUser));
         int temp = currency;
         if(temp - 150 >= 0){
             //Checks if the user has enough currency to buy the avatar. If so, flip the switch to say it is unlocked.
             gameCollection.setAvatarUnlockStateByPos(position,true);
             Call<User> transactionCall = proxy.editUser(user, user.getId());
             ProxyBuilder.callProxy(v.getContext(), transactionCall, returnedUser -> returnedUser.addUserPoints(-150));
+            Toast.makeText(v.getContext(), "Purchased!", Toast.LENGTH_SHORT).show();
+            dismiss();
         }else{
             Toast.makeText(v.getContext(), "Not enough points to unlock", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void getUserCurrency(){
+        Call<User> caller = proxy.getUserById(user.getId());
+        ProxyBuilder.callProxy(v.getContext(), caller, returnedUser -> serverResponse(returnedUser));
     }
 
     private void serverResponse(User u){

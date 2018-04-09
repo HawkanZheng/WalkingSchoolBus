@@ -304,6 +304,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             locationService.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
+                    deviceLocation = gMapsInterface.calculateDeviceLocation(location);
                     LatLng l = new LatLng(location.getLatitude(), location.getLongitude());
                     mMap.moveCamera(gMapsInterface.cameraSettings(l, 15.0f));
                     displayNearbyGroups();
