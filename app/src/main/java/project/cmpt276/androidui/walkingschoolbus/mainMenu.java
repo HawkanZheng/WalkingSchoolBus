@@ -260,15 +260,12 @@ public class mainMenu extends AppCompatActivity {
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
-
         }
     }
 
     private void setUserAvatar(){
         ImageView iv = findViewById(R.id.userAvatar);
-        if(sharedValues.getUserAvatar() != null){
-            iv.setBackground(sharedValues.getUserAvatar());
-        }
+        iv.setBackground(sharedValues.getUserAvatar());
     }
 
 

@@ -20,6 +20,7 @@ public class SharedValues {
     private int numMessagesUnread;
     private List<User> userList = new ArrayList<>();
     private Drawable userAvatar;
+    private int iconIndex;
     private List<PermissionRequest> requests;
     private static SharedValues instance;
 
@@ -79,6 +80,14 @@ public class SharedValues {
 
     public Drawable getUserAvatar(){
         return userAvatar;
+    }
+
+    public void setIconIndex(int i){
+        iconIndex = i;
+    }
+
+    public int getIconIndex(){
+        return iconIndex;
     }
 
     public List<PermissionRequest> getRequests() {

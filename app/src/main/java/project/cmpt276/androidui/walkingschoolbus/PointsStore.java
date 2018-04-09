@@ -18,36 +18,53 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import project.cmpt276.model.walkingschoolbus.GamificationCollection;
 import project.cmpt276.model.walkingschoolbus.SharedValues;
+import project.cmpt276.model.walkingschoolbus.User;
+import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
+import project.cmpt276.server.walkingschoolbus.WGServerProxy;
+import retrofit2.Call;
 
 public class PointsStore extends AppCompatActivity {
 
-    //Conversion: px = dp * (dpi / 160)
     private SharedValues sharedValues;
-    private final int row = 2;
-    private final int col = 10;
+    private static final int row = 2;
+    private static final int col = 10;
     private Button[][] buttons = new Button[row][col];
 
     private int imgW = 90;
     private int imgH = 250;
+
+    private User user;
+    private WGServerProxy proxy;
+    private GamificationCollection gameCollection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_points_store);
         sharedValues = SharedValues.getInstance();
+        user = User.getInstance();
+        proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
+        gameCollection = GamificationCollection.getInstance();
         createStoreStock();
         displayCurrency();
     }
 
     //Displays the user's currency.
     private void displayCurrency() {
-        //TODO -- Grab user's points from server.
-        int points = 0;
-        TextView t = findViewById(R.id.userCurrency);
-        t.setText("Balance: " + points);
+        Call<User> caller = proxy.getUserById(user.getId());
+        ProxyBuilder.callProxy(this, caller, returnedUser -> setCurrencyText(returnedUser));
     }
 
+    private void setCurrencyText(User u){
+        TextView t = findViewById(R.id.userCurrency);
+        if(u.getCurrentPoints() == null){
+            t.setText("Balance: " + 0);
+        }else{
+            t.setText("Balance: " + u.getCurrentPoints());
+        }
+    }
 
     //Set up table to display items in the shop.
     private void createStoreStock(){
@@ -114,19 +131,25 @@ public class PointsStore extends AppCompatActivity {
     }
 
     private boolean setAvatar(int i, int j){
-        //TODO -- Needs to find out if the user owns the selected avatar before setting it.
-        //Avoids duplicate buttons being highlighted.
-        cleanButtons();
-        //Shows which avatar is in use.
-        Button btn = buttons[i][j];
-        btn.setBackgroundResource(R.drawable.button_border_current);
-        //TODO -- Upload to server in order to save on login.
-        //Get selected image to save to sharedValues.
-        Resources resources = getResources();
-        TypedArray imgArr = resources.obtainTypedArray(R.array.avatars);
-        Drawable d = imgArr.getDrawable((10*i)+j);
-        sharedValues.setUserAvatar(d);
-        Log.i("SettingImg", d.toString());
+        int index = (col * i) + j;
+        //Checks if the user owns this avatar.
+        if(gameCollection.getAvatarStateByPosition(index)){
+            //Prevents duplicate buttons being highlighted.
+            cleanButtons();
+            //Shows which avatar is in use.
+            Button btn = buttons[i][j];
+            btn.setBackgroundResource(R.drawable.button_border_current);
+            //TODO -- Upload to server in order to save on login.
+            //Get selected image to save to sharedValues.
+            Resources resources = getResources();
+            TypedArray imgArr = resources.obtainTypedArray(R.array.avatars);
+            Drawable d = imgArr.getDrawable((index));
+            sharedValues.setUserAvatar(d);
+            gameCollection.setAvatarSelectedPosition(index);
+            Log.i("SettingImg", d.toString());
+        }else{
+            Toast.makeText(this, "You do not own this...", Toast.LENGTH_SHORT);
+        }
         return true;
     }
 
@@ -137,6 +160,10 @@ public class PointsStore extends AppCompatActivity {
                 buttons[i][j].setBackgroundResource(R.drawable.button_border);
             }
         }
+    }
+
+    public static int getNumColRewards(){
+        return col;
     }
 
     //Intent to reach the shop activity.
