@@ -2,6 +2,7 @@ package project.cmpt276.androidui.walkingschoolbus;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -35,28 +36,36 @@ public class PreviousPermissions extends AppCompatActivity {
 
         //Get server proxy
         proxy = ProxyBuilder.getProxy(getString(R.string.apiKey), sharedValues.getToken());
-        getPendingPermissions();
+        getPermissions();
+        setupActionBarBack();
     }
 
 
-    private void getPendingPermissions() {
-        Call<List<PermissionRequest>> caller = proxy.getPermissionFoUserPending(user.getId(), PENDING);
+    //get all permissions for user
+    private void getPermissions() {
+        Call<List<PermissionRequest>> caller = proxy.getAllPermissionForUser(user.getId());
         ProxyBuilder.callProxy(PreviousPermissions.this, caller, returnedPermissions -> permissionsResponse(returnedPermissions));
     }
 
     //server response
     private void permissionsResponse(List<PermissionRequest> returnedPermissions) {
         listProcessedString = new ArrayList<>();
+        //put all authorized permissions in list as strings
         for (PermissionRequest request : returnedPermissions) {
+            //Authorizor string
+            String authorizors = "\nAuthorized by: ";
+            for(PermissionRequest.Authorizor authorizor : request.getAuthorizors()){
+               authorizors = authorizors.concat("\n"+ authorizor.getWhoApprovedOrDenied().getName());
+            }
 
             if(request.getStatus()!=PENDING)
             {
-                listProcessedString.add(request.getMessage() + request.getStatus().toString());
+                listProcessedString.add(request.getMessage() + "\nStatus: " + request.getStatus().toString() + authorizors);
             }
 
 
         }
-        sharedValues.setRequests(returnedPermissions);
+        //sharedValues.setRequests(returnedPermissions);
         populateList(listProcessedString);
 
     }
@@ -67,6 +76,23 @@ public class PreviousPermissions extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.permissions, info);
         list.setAdapter(adapter);
 
+    }
+
+    // Add a Back button on the Action Bar
+    private void setupActionBarBack() {
+        // set the button to be visible
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    // On back button click, finish the activity
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        if(id == android.R.id.home){
+            this.finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
