@@ -1,6 +1,7 @@
 package project.cmpt276.androidui.walkingschoolbus;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -25,7 +26,7 @@ import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
 import retrofit2.Call;
 
-public class PointsStore extends AppCompatActivity {
+public class PointsStore extends AppCompatActivity implements DialogInterface.OnDismissListener{
 
     private SharedValues sharedValues;
     private static final int row = 2;
@@ -54,6 +55,12 @@ public class PointsStore extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        displayCurrency();
+    }
+
+
+    @Override
+    public void onDismiss(final DialogInterface dialog) {
         displayCurrency();
     }
 
@@ -125,15 +132,13 @@ public class PointsStore extends AppCompatActivity {
 
     //Update the currency on click if a transaction is made.
     private void purchasingAvatar(int i, int j){
-        //TODO -- Purchasing an avatar logic.
         //Open purchase confirmation dialog
+        int index = (col * i) + j;
         ConfirmPurchaseFragment fragment = new ConfirmPurchaseFragment();
-        fragment.setPosition(i,j);
-        Log.i("PointsStore","Index: " + i + " " + j);
+        fragment.setPosition(index);
+        Log.i("PointsStore","Index: " + index);
         android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
         fragment.show(manager,"ConfirmPurchase");
-        displayCurrency();
-        Toast.makeText(PointsStore.this,"Selected " + i +", "+ j, Toast.LENGTH_SHORT).show();
     }
 
     private boolean setAvatar(int i, int j){
@@ -145,13 +150,13 @@ public class PointsStore extends AppCompatActivity {
             //Shows which avatar is in use.
             Button btn = buttons[i][j];
             btn.setBackgroundResource(R.drawable.button_border_current);
-            //TODO -- Upload to server in order to save on login.
             //Get selected image to save to sharedValues.
             Resources resources = getResources();
             TypedArray imgArr = resources.obtainTypedArray(R.array.avatars);
             Drawable d = imgArr.getDrawable(index);
             sharedValues.setUserAvatar(d);
             gameCollection.setAvatarSelectedPosition(index);
+            //TODO -- Upload to server in order to save on login.
             Log.i("SettingImg", d.toString());
         }else{
             Toast.makeText(this, "You do not own this...", Toast.LENGTH_SHORT);
