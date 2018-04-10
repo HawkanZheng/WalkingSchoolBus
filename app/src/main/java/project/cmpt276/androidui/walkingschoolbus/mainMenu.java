@@ -104,7 +104,7 @@ public class mainMenu extends AppCompatActivity {
     private void setupRankTextView() {
         TextView txt = findViewById(R.id.txtSetRank);
         RewardRank rank = new RewardRank();
-        txt.setText(rank.getRankTitle(user.getTotalPointsEarned()));
+        txt.setText("Rank: " + rank.getRankTitle(user.getTotalPointsEarned()));
     }
 
     private void setupLeaderboardBtn() {
