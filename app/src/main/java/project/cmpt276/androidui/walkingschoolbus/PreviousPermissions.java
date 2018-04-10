@@ -51,24 +51,25 @@ public class PreviousPermissions extends AppCompatActivity {
     private void permissionsResponse(List<PermissionRequest> returnedPermissions) {
         listProcessedString = new ArrayList<>();
         //put all authorized permissions in list as strings
-        for (PermissionRequest request : returnedPermissions) {
-            //Authorizor string
-            String authorizors = "\nAuthorized by: ";
 
-            for(PermissionRequest.Authorizor authorizor : request.getAuthorizors()){
-               authorizors = authorizors.concat("\n"+ authorizor.getWhoApprovedOrDenied().getName());
+        if(!returnedPermissions.isEmpty()) {
+            for (PermissionRequest request : returnedPermissions) {
+                //Authorizor string
+                String authorizors = "\nAuthorized by: ";
+                for (PermissionRequest.Authorizor authorizor : request.getAuthorizors()) {
+                    authorizors = authorizors.concat("\n" + authorizor.getWhoApprovedOrDenied().getName());
+                }
+
+                if (request.getStatus() != PENDING) {
+                    listProcessedString.add(request.getMessage() + "\nStatus: " + request.getStatus().toString() + authorizors);
+                }
+
+
             }
+            //sharedValues.setRequests(returnedPermissions);
 
-            if(request.getStatus()!=PENDING)
-            {
-                listProcessedString.add(request.getMessage() + "\nStatus: " + request.getStatus().toString() + authorizors);
-            }
-
-
+            populateList(listProcessedString);
         }
-        //sharedValues.setRequests(returnedPermissions);
-        populateList(listProcessedString);
-
     }
 
     public void populateList(ArrayList<String> info){

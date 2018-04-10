@@ -24,6 +24,16 @@ public class SharedValues {
     private List<PermissionRequest> requests;
     private static SharedValues instance;
 
+    public List<Group> getGroupList() {
+        return groupList;
+    }
+
+    public void setGroupList(List<Group> groupList) {
+        this.groupList = groupList;
+    }
+
+    private List<Group> groupList = new ArrayList<>();
+
     private SharedValues(){
     }
 
@@ -49,6 +59,7 @@ public class SharedValues {
     public void setGroup(Group group) {
         this.group = group;
     }
+
 
     public User getUser() {
         return user;

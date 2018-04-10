@@ -17,6 +17,7 @@ import project.cmpt276.model.walkingschoolbus.SharedValues;
 import project.cmpt276.model.walkingschoolbus.User;
 import project.cmpt276.server.walkingschoolbus.ProxyBuilder;
 import project.cmpt276.server.walkingschoolbus.WGServerProxy;
+import retrofit2.Call;
 
 public class GroupsLeaderActivity extends AppCompatActivity {
     private WGServerProxy proxy;
@@ -46,12 +47,19 @@ public class GroupsLeaderActivity extends AppCompatActivity {
 
 
     private void getGroupsLead() {
-        List<Group> groupsLead = user.getLeadsGroups();
+        //refresh user
+        Call<User> caller = proxy.getUserByEmail(user.getEmail());
+        ProxyBuilder.callProxy(GroupsLeaderActivity.this, caller, returnedUser -> userResponse(returnedUser));
+
+    }
+
+    private void userResponse(User returnedUser) {
+        List<Group> groupsLead = returnedUser.getLeadsGroups();
+        sharedValues.setGroupList(returnedUser.getLeadsGroups());
         for(Group group : groupsLead){
             groupsILead.add(group.groupToListString());
         }
         populateList();
-
     }
 
     // Add a Back button on the Action Bar
@@ -85,7 +93,7 @@ public class GroupsLeaderActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //extract the group selected and then populate the UserInfo accordingly
-                Group group = user.getLeadsGroups().get(i);
+                Group group = sharedValues.getGroupList().get(i);
                 sharedValues.setGroup(group);
 
                 Intent intent = new Intent(GroupsLeaderActivity.this, ParentDashUserInfoActivity.class);
