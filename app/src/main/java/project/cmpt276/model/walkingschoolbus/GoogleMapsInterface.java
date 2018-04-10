@@ -77,7 +77,6 @@ public class GoogleMapsInterface {
     }
 
     // Computes if the user is within the locationRadius.
-    //TODO Temporary function -- Make it more robust so that we're not repeating the above function.
     public boolean isUserInRadius(LatLng currentLocation, LatLng groupMeetLocation){
         // Needed to store the computed value
         float distanceResult[] = new float[2];
@@ -123,6 +122,10 @@ public class GoogleMapsInterface {
             uploader = new Timer();
         }
         return uploader;
+    }
+
+    public void killTimer(){
+        uploader = null;
     }
 
     public void toggleTimer(boolean b){

@@ -53,17 +53,12 @@ public class PointsStore extends AppCompatActivity implements DialogInterface.On
         gameCollection = GamificationCollection.getInstance();
         createStoreStock();
         displayCurrency();
+        cleanButtons();
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        displayCurrency();
-    }
-
 
     @Override
     public void onDismiss(final DialogInterface dialog) {
+        cleanButtons();
         displayCurrency();
     }
 
@@ -73,6 +68,7 @@ public class PointsStore extends AppCompatActivity implements DialogInterface.On
         ProxyBuilder.callProxy(this, caller, returnedUser -> setCurrencyText(returnedUser));
     }
 
+    //Handles a user's currency obtained from the server.
     private void setCurrencyText(User u){
         TextView t = findViewById(R.id.userCurrency);
         if(u.getCurrentPoints() == null){
@@ -121,6 +117,7 @@ public class PointsStore extends AppCompatActivity implements DialogInterface.On
         for(int i = 0; i < row; i++){
             for(int j = 0; j < col; j++){
                 Resources resources = getResources();
+                int index = col * i + j;
                 //Obtain the images from an xml array.
                 TypedArray imgArr = resources.obtainTypedArray(R.array.avatars);
                 //Create and scale the image.
@@ -136,20 +133,20 @@ public class PointsStore extends AppCompatActivity implements DialogInterface.On
     //Update the currency on click if a transaction is made.
     private void purchasingAvatar(int i, int j){
         //Open purchase confirmation dialog
-        int index = (col * i) + j;
-        ConfirmPurchaseFragment fragment = new ConfirmPurchaseFragment();
-        fragment.setPosition(index);
-        Log.i("PointsStore","Index: " + index);
-        android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
-        fragment.show(manager,"ConfirmPurchase");
+        if(!gameCollection.getAvatarStateByPosition((col*i)+j)){
+            int index = (col * i) + j;
+            ConfirmPurchaseFragment fragment = new ConfirmPurchaseFragment();
+            fragment.setPosition(index);
+            Log.i("PointsStore","Index: " + index);
+            android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
+            fragment.show(manager,"ConfirmPurchase");
+        }
     }
 
     private boolean setAvatar(int i, int j){
         int index = (col * i) + j;
         //Checks if the user owns this avatar.
         if(gameCollection.getAvatarStateByPosition(index)){
-            //Prevents duplicate buttons being highlighted.
-            cleanButtons();
             //Shows which avatar is in use.
             Button btn = buttons[i][j];
             btn.setBackgroundResource(R.drawable.button_border_current);
@@ -159,7 +156,7 @@ public class PointsStore extends AppCompatActivity implements DialogInterface.On
             Drawable d = imgArr.getDrawable(index);
             sharedValues.setUserAvatar(d);
             gameCollection.setAvatarSelectedPosition(index);
-            //TODO -- Upload to server in order to save on login.
+            //Write to the server which avatar is currently in use so it will persist on next launch.
             try{
                 String customAsJson = new ObjectMapper().writeValueAsString(gameCollection);
                 user.setCustomJson(customAsJson);
@@ -168,7 +165,8 @@ public class PointsStore extends AppCompatActivity implements DialogInterface.On
             }
             Call<User> caller = proxy.editUser(user, user.getId());
             ProxyBuilder.callProxy(PointsStore.this, caller, returnedUser -> Toast.makeText(PointsStore.this, gameCollection.getAvatarAtPostion(index) + " avatar selected!", Toast.LENGTH_SHORT).show());
-            Log.i("SettingImg", d.toString());
+            //Cleans buttons, marks purchased ones and marks a current one if it there is one.
+            cleanButtons();
         }else{
             Toast.makeText(this, "You do not own this...", Toast.LENGTH_SHORT);
         }
@@ -181,6 +179,39 @@ public class PointsStore extends AppCompatActivity implements DialogInterface.On
                 //Set back to the default background.
                 buttons[i][j].setBackgroundResource(R.drawable.button_border);
             }
+        }
+        markPurchased();
+        markCurrent();
+    }
+
+    //Marks which avatars are already unlocked.
+    private void markPurchased(){
+        for(int i = 0; i < row; i++){
+            for(int j = 0; j < col; j++){
+                int index =  (col * i) + j;
+                Log.i("PointsStoreLog", index + " " + gameCollection.getAvatarAtPostion(index));
+                if(gameCollection.getAvatarStateByPosition(index)) {
+                    buttons[i][j].setBackgroundResource(R.drawable.button_border_unlocked);
+                }
+            }
+        }
+    }
+
+    //Marks your current avatar.
+    private void markCurrent(){
+        try{
+            String current = gameCollection.getAvatarAtPostion(gameCollection.getAvatarSelectedPosition());
+            for(int i = 0; i < row; i++){
+                for(int j = 0; j < col; j++){
+                    //Set back to the default background.
+                    String avatar = gameCollection.getAvatarAtPostion((col * i) + j);
+                    if(current == avatar){
+                        buttons[i][j].setBackgroundResource(R.drawable.button_border_current);
+                    }
+                }
+            }
+        }catch(ArrayIndexOutOfBoundsException e){
+            Log.i("PointsStore", "No current avatar set.");
         }
     }
 

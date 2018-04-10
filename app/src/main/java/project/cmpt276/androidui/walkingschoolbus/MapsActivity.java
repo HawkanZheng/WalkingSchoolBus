@@ -426,7 +426,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Resources r = getResources();
             TypedArray imgArr = r.obtainTypedArray(R.array.avatars);
             Bitmap img = BitmapFactory.decodeResource(getResources(), imgArr.getResourceId(gameCollection.getAvatarSelectedPosition(), -1));
-            Bitmap scaledImage = Bitmap.createScaledBitmap(img, 80, 150, true);
+            Bitmap scaledImage = Bitmap.createScaledBitmap(img, GamificationCollection.IMGW, GamificationCollection.IMGH, true);
             bm = BitmapDescriptorFactory.fromBitmap(scaledImage);
             avatarMarker = mMap.addMarker(new MarkerOptions().position(deviceLocation).icon(bm));
         }else{
@@ -498,7 +498,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             Log.i("Uploader", "User exited location while timer is running, destroying timer.");
                             timer.cancel();
                             timer.purge();
-                            timer = null;
+                            gMapsInterface.killTimer();
                             gMapsInterface.toggleTimer(false);
                         }
                     }
@@ -535,9 +535,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 //timer is no longer running, set it back to false in case user decides to exit map and reenter, this allows the timer to run again.
                 gMapsInterface.toggleTimer(false);
-
+                gMapsInterface.killTimer();
                 //Award the user points once the location is reached and the task is cancelled -- ie. the walk is finished.
-                user.addUserPoints(25);
+                user.addUserPoints(GamificationCollection.POINTS);
                 Call<User> caller = proxy.editUser(user, user.getId());
                 ProxyBuilder.callProxy(MapsActivity.this, caller, returnedUser -> Log.i("Uploader", "Points awarded to user"));
             }

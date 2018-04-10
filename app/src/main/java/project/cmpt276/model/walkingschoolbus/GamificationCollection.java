@@ -9,6 +9,10 @@ import java.util.ArrayList;
  */
 
 public class GamificationCollection {
+
+    public static final int POINTS = 50;
+    public static final int IMGW = 80;
+    public static  final int IMGH = 120;
     private static GamificationCollection ourInstance = new GamificationCollection();
     public static GamificationCollection getInstance() {
         if(ourInstance == null){
