@@ -54,6 +54,7 @@ public class PreviousPermissions extends AppCompatActivity {
         for (PermissionRequest request : returnedPermissions) {
             //Authorizor string
             String authorizors = "\nAuthorized by: ";
+
             for(PermissionRequest.Authorizor authorizor : request.getAuthorizors()){
                authorizors = authorizors.concat("\n"+ authorizor.getWhoApprovedOrDenied().getName());
             }
